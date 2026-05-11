@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数学C ベクトル学習アプリ</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      startup: { ready() { MathJax.startup.defaultReady(); } }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --navy: #1a2744;
+      --navy-light: #253564;
+      --blue: #3b6bcc;
+      --blue-light: #5b8de8;
+      --accent: #f5a623;
+      --accent-light: #ffd07a;
+      --green: #27ae60;
+      --red: #e74c3c;
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #1a2033;
+      --text-muted: #6b7a99;
+      --border: #dde3f0;
+      --shadow: 0 2px 16px rgba(59,107,204,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Hiragino Sans', 'Noto Sans JP', 'Meiryo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: white;
+      padding: 0.4rem 1.5rem;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    header .logo { font-size: 1rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+    header .logo span { color: var(--accent-light); }
+
+    header nav { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+
+    header nav button {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.8);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    header nav button:hover,
+    header nav button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.2rem 1.5rem 3rem;
+    }
+
+    /* ── Sections ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Page Title ── */
+    .page-title {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 1.8rem 2.2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--shadow);
+    }
+
+    .page-title .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .page-title h1 { font-size: 1.7rem; margin-bottom: 0.3rem; }
+    .page-title p { opacity: 0.85; font-size: 0.9rem; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.4rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card h2 .icon {
+      width: 28px; height: 28px;
+      background: var(--blue);
+      color: white;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      color: var(--navy-light);
+      margin: 1.1rem 0 0.5rem;
+    }
+
+    /* ── Key Point Box ── */
+    .key-box {
+      background: linear-gradient(135deg, #e8effe 0%, #dce9ff 100%);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.2rem;
+      margin: 0.9rem 0;
+    }
+
+    .key-box .label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+
+    .accent-box {
+      background: linear-gradient(135deg, #fff8e8 0%, #fff3cc 100%);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.2rem;
+      margin: 0.9rem 0;
+    }
+
+    .accent-box .label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #d4870a;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── Canvas Container ── */
+    .canvas-wrap {
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      /* height はJSが制御 */
+    }
+
+    .canvas-controls {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: #eef2fb;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+
+    /* スライダーを横幅に合わせて伸縮 */
+    .canvas-controls input[type="range"] {
+      flex: 1;
+      min-width: 60px;
+      max-width: 140px;
+    }
+
+    .btn {
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.38rem 0.9rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { background: var(--navy); }
+
+    .btn-outline {
+      background: white;
+      color: var(--blue);
+      border: 1px solid var(--blue);
+    }
+
+    .btn-outline:hover { background: #eef2fb; }
+
+    .btn-accent {
+      background: var(--accent);
+      color: var(--navy);
+      border: none;
+    }
+
+    .btn-accent:hover { background: #e09010; }
+
+    /* ── 2-column grid ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.8rem 0;
+    }
+
+    th {
+      background: var(--navy);
+      color: white;
+      padding: 0.45rem 0.75rem;
+      text-align: left;
+    }
+
+    td {
+      padding: 0.45rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) td { background: #f6f8fd; }
+
+    /* ── Quiz ── */
+    .quiz-question {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 500px) { .quiz-options { grid-template-columns: 1fr; } }
+
+    .quiz-option {
+      background: #f4f6fb;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+      text-align: left;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--blue-light);
+      background: #eef2fb;
+    }
+
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: #eafaf1;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--red);
+      background: #fdf2f2;
+      color: var(--red);
+    }
+
+    .quiz-feedback {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .quiz-feedback.correct {
+      background: #eafaf1;
+      border: 1px solid #a9dfbf;
+      color: #1e8449;
+    }
+
+    .quiz-feedback.wrong {
+      background: #fdf2f2;
+      border: 1px solid #f1948a;
+      color: #c0392b;
+    }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    /* ── Step indicator ── */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin: 1rem 0;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .step {
+      flex: 1;
+      padding: 0.45rem 0.4rem;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #eef2fb;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-right: none;
+      transition: all 0.2s;
+    }
+
+    .step:last-child { border-right: 1px solid var(--border); }
+    .step.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+    /* ── Progress bar ── */
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+      font-size: 0.82rem;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1.4rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--blue-light) 100%);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Quiz Unit Selector ── */
+    .quiz-unit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .quiz-unit-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .quiz-unit-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 1rem 0.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      width: 100%;
+    }
+    .quiz-unit-btn:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .quiz-unit-btn .u-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .quiz-unit-btn .u-title {
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+      text-align: center;
+    }
+    .quiz-unit-btn .u-count {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 0.1rem 0.5rem;
+      margin-top: 0.2rem;
+    }
+    .u-no0  .u-num { color: var(--blue); }
+    .u-no1a .u-num { color: var(--accent); }
+    .u-no1b .u-num { color: #d4870a; }
+    .u-no2a .u-num { color: var(--green); }
+    .u-no2b .u-num { color: #1a9060; }
+    .u-all  .u-num { color: var(--navy); }
+    .u-all  { border-style: dashed; }
+
+    /* ── Hero for top page ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    @media (max-width: 600px) { .hero { grid-template-columns: 1fr; } }
+
+    /* ── Mobile layout ── */
+    @media (max-width: 600px) {
+      header {
+        padding: 0.4rem 0.8rem;
+        gap: 0.3rem 0.5rem;
+      }
+      header .logo {
+        width: 100%;
+        font-size: 0.95rem;
+      }
+      header nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+      header nav button {
+        flex: 1 1 auto;
+        min-height: 40px;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.78rem;
+        text-align: center;
+      }
+      .container {
+        padding: 0.8rem 0.8rem 3rem;
+      }
+      .canvas-wrap {
+        overflow: hidden;
+      }
+    }
+
+    .hero-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+
+    .hero-card.no0::before { background: var(--blue); }
+    .hero-card.no1::before { background: var(--accent); }
+    .hero-card.no2::before { background: var(--green); }
+
+    .hero-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(59,107,204,0.18);
+    }
+
+    .hero-card .num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--border);
+      position: absolute;
+      right: 1rem;
+      top: 0.5rem;
+      line-height: 1;
+    }
+
+    .hero-card h3 { font-size: 0.95rem; color: var(--navy); margin-bottom: 0.4rem; }
+    .hero-card p { font-size: 0.82rem; color: var(--text-muted); }
+
+    .topic-list {
+      list-style: none;
+      margin-top: 0.7rem;
+    }
+
+    .topic-list li {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding: 0.18rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .topic-list li::before {
+      content: '▸';
+      color: var(--blue);
+      font-size: 0.65rem;
+    }
+
+    p { margin-bottom: 0.55rem; }
+
+    .math-block {
+      text-align: center;
+      padding: 0.7rem;
+      background: #f8faff;
+      border-radius: 8px;
+      margin: 0.7rem 0;
+      overflow-x: auto;
+    }
+
+    .note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">数学C <span>ベクトル</span></div>
+  <nav>
+    <button class="active" onclick="showSection('home')">ホーム</button>
+    <button onclick="showSection('no0')">No.0 ベクトルとは</button>
+    <button onclick="showSection('no1a')">No.1① 加法・減法</button>
+    <button onclick="showSection('no1b')">No.1② 線形結合</button>
+    <button onclick="showSection('no2a')">No.2① 位置ベクトル</button>
+    <button onclick="showSection('no2b')">No.2② 分点・重心</button>
+    <button onclick="showSection('quiz')">練習問題</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- ══════════════ HOME ══════════════ -->
+  <div id="sec-home" class="section active">
+    <div class="page-title">
+      <div class="tag">数学C</div>
+      <h1>ベクトル学習アプリ</h1>
+      <p>No.0 〜 No.2 の内容をインタラクティブに学ぼう</p>
+    </div>
+
+    <div class="hero">
+      <div class="hero-card no0" onclick="showSection('no0')">
+        <span class="num">0</span>
+        <h3>No.0 ベクトルとは？</h3>
+        <p>ベクトルの基本概念を理解しよう</p>
+        <ul class="topic-list">
+          <li>ベクトルの定義（大きさ・向き）</li>
+          <li>有向線分・ベクトルの表し方</li>
+          <li>等しいベクトル</li>
+          <li>逆ベクトル・零ベクトル</li>
+          <li>ベクトルの定数倍</li>
+        </ul>
+      </div>
+      <div class="hero-card no1" onclick="showSection('no1a')">
+        <span class="num">1</span>
+        <h3>No.1 ベクトルの演算</h3>
+        <p>ベクトルの足し算・引き算を学ぼう</p>
+        <ul class="topic-list">
+          <li>ベクトルの加法（三角形の法則）</li>
+          <li>ベクトルの減法</li>
+          <li>線形結合・任意のベクトルの表現</li>
+          <li>正六角形の問題</li>
+        </ul>
+      </div>
+      <div class="hero-card no2" onclick="showSection('no2a')">
+        <span class="num">2</span>
+        <h3>No.2 位置ベクトルと分点</h3>
+        <p>座標系を使わないベクトルによる図形の表現</p>
+        <ul class="topic-list">
+          <li>位置ベクトルの定義</li>
+          <li>$\overrightarrow{AB}=\vec{b}-\vec{a}$</li>
+          <li>内分点・外分点の公式</li>
+          <li>三角形の重心</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">📖</span>このアプリの使い方</h2>
+      <p>上のメニューまたはカードをクリックして各セクションに移動できます。</p>
+      <p>各セクションには <strong>解説・インタラクティブ図・練習問題</strong> があります。最後の「練習問題」では習熟度を確認できます。</p>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.0 ══════════════ -->
+  <div id="sec-no0" class="section">
+    <div class="page-title">
+      <div class="tag">No.0</div>
+      <h1>ベクトルとは？</h1>
+      <p>大きさと向きの2つの情報を持つ量を学ぼう</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>ベクトルとは何か</h2>
+      <div class="key-box">
+        <div class="label">定義</div>
+        <p><strong>ベクトル</strong>とは、① <strong>大きさ</strong>　② <strong>向き</strong>　の2つの情報を持っている量のこと。</p>
+        <ul style="margin-left:1.2rem; margin-top:0.4rem;">
+          <li>大きさ ……矢印（線）の <strong>長さ</strong></li>
+          <li>向き ……矢印の <strong>方向</strong></li>
+        </ul>
+      </div>
+      <p>例：「北へ 50km/h で移動する」という<strong>速度</strong>はベクトル。<br>
+      一方「気温 25℃」のように向きのない量は <strong>スカラー</strong> と呼ぶ。</p>
+
+      <div class="accent-box">
+        <div class="label">重要ポイント</div>
+        <p><strong>大きさと向きが等しければ、位置が違っても同じベクトル</strong>とみなす。</p>
+        <p>（ベクトルは平行移動しても変わらない！）</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-equal" width="560" height="180"></canvas>
+        <div class="canvas-controls">
+          すべての矢印は同じベクトル $\vec{a}$（大きさ・向きが等しい）
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>ベクトルの表し方</h2>
+      <p>点 A を始点、点 B を終点とする有向線分によるベクトルを</p>
+      <div class="math-block">$$\overrightarrow{AB}$$</div>
+      <p>と表す。また、小文字に矢印をつけて $\vec{a}$ と表すこともある。</p>
+      <p>$\overrightarrow{AB}$ の大きさ（長さ）を <strong>絶対値</strong> といい、</p>
+      <div class="math-block">$$|\overrightarrow{AB}|$$</div>
+      <p>と書く。</p>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-notation" width="560" height="180"></canvas>
+        <div class="canvas-controls">
+          始点 A から終点 B への矢印が $\overrightarrow{AB}$
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>逆ベクトルと零ベクトル</h2>
+
+      <h3>逆ベクトル</h3>
+      <div class="key-box">
+        <div class="label">定義</div>
+        <p>$\overrightarrow{AB}$ と大きさが等しく、向きが逆のベクトルを <strong>逆ベクトル</strong> といい、</p>
+        <div class="math-block" style="margin:0.4rem 0;">$$-\overrightarrow{AB} = \overrightarrow{BA}$$</div>
+        <p>と表す。</p>
+      </div>
+
+      <h3>零ベクトル</h3>
+      <div class="key-box">
+        <div class="label">定義</div>
+        <p>始点と終点が一致するベクトル（大きさが 0 のベクトル）を <strong>零ベクトル</strong> といい、$\vec{0}$ と表す。向きは定めない。</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-inverse" width="560" height="190"></canvas>
+        <div class="canvas-controls">
+          青が $\overrightarrow{AB}$、赤が逆ベクトル $-\overrightarrow{AB} = \overrightarrow{BA}$
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">④</span>ベクトルの定数倍</h2>
+      <p>実数 $k$ と $\vec{a}$ に対して $k\vec{a}$ を次のように定義する：</p>
+
+      <div class="table-wrap">
+      <table>
+        <tr>
+          <th>条件</th>
+          <th>$k\vec{a}$ の向き</th>
+          <th>$k\vec{a}$ の大きさ</th>
+        </tr>
+        <tr><td>$k > 0$</td><td>$\vec{a}$ と同じ向き</td><td>$|k||\vec{a}|$</td></tr>
+        <tr><td>$k < 0$</td><td>$\vec{a}$ と逆向き</td><td>$|k||\vec{a}|$</td></tr>
+        <tr><td>$k = 0$</td><td>零ベクトル</td><td>$0$</td></tr>
+      </table>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-scalar" width="560" height="220"></canvas>
+        <div class="canvas-controls">
+          <label>倍率 k：</label>
+          <input type="range" id="scalar-k" min="-3" max="3" step="0.5" value="2" oninput="drawScalar()">
+          <span id="scalar-val" style="font-weight:700; min-width:50px; color:var(--blue);">k = 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:right; margin-top:1rem;">
+      <button class="btn" onclick="showSection('no1a')">次へ：No.1① ベクトルの加法・減法 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.1① ══════════════ -->
+  <div id="sec-no1a" class="section">
+    <div class="page-title">
+      <div class="tag">No.1①</div>
+      <h1>ベクトルの演算①</h1>
+      <p>加法と減法（足し算・引き算）</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">+</span>ベクトルの加法（足し算）</h2>
+
+      <div class="key-box">
+        <div class="label">三角形の法則</div>
+        <p>$\overrightarrow{AB} + \overrightarrow{BC} = \overrightarrow{AC}$</p>
+        <p class="note">→ 終点と始点を合わせてつなぐと、残りの矢印が和になる</p>
+      </div>
+
+      <p>同じ始点から出発する場合（<strong>平行四辺形の法則</strong>）：$\vec{a} + \vec{b}$ は隣り合う辺とする平行四辺形の対角線になる。</p>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-add" width="560" height="260"></canvas>
+        <div class="canvas-controls">
+          <button class="btn" onclick="animateAdd()">アニメーション再生</button>
+          <button class="btn btn-outline" onclick="resetAdd()">リセット</button>
+          <span id="add-info" style="font-size:0.8rem; color:var(--navy); margin-left:0.5rem; font-weight:600;"></span>
+        </div>
+      </div>
+
+      <div class="accent-box">
+        <div class="label">法則</div>
+        <p>$\vec{a} + \vec{b} = \vec{b} + \vec{a}$ （交換法則）</p>
+        <p>$(\vec{a} + \vec{b}) + \vec{c} = \vec{a} + (\vec{b} + \vec{c})$ （結合法則）</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">−</span>ベクトルの減法（引き算）</h2>
+
+      <div class="key-box">
+        <div class="label">定義</div>
+        <p>$\vec{a} - \vec{b}$ は、$\vec{b}$ の逆ベクトルを足すことで計算する。</p>
+        <div class="math-block" style="margin:0.4rem 0; background:none; padding:0;">
+          $$\vec{a} - \vec{b} = \vec{a} + (-\vec{b})$$
+        </div>
+      </div>
+
+      <p>共通の始点 O を使うと：</p>
+      <div class="math-block">$$\overrightarrow{AB} = \overrightarrow{OB} - \overrightarrow{OA}$$</div>
+      <p><strong>AB = 終点 B − 始点 A</strong> と覚えよう。非常に重要な公式！</p>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-sub" width="560" height="260"></canvas>
+        <div class="canvas-controls">
+          <button class="btn" onclick="animateSub()">アニメーション再生</button>
+          <button class="btn btn-outline" onclick="resetSub()">リセット</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">例</span>ステップで確認：$\overrightarrow{AB} = \overrightarrow{OB} - \overrightarrow{OA}$</h2>
+
+      <div class="steps">
+        <div class="step active" id="step0" onclick="setStep(0)">① $\overrightarrow{OA}$, $\overrightarrow{OB}$ を確認</div>
+        <div class="step" id="step1" onclick="setStep(1)">② $-\overrightarrow{OA}$ を描く</div>
+        <div class="step" id="step2" onclick="setStep(2)">③ $\overrightarrow{AB}$ を求める</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-step" width="560" height="240"></canvas>
+        <div class="canvas-controls">
+          <div id="step-desc" style="font-size:0.88rem; color:var(--navy);"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no0')">← No.0 に戻る</button>
+      <button class="btn" onclick="showSection('no1b')">次へ：No.1② 線形結合 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.1② ══════════════ -->
+  <div id="sec-no1b" class="section">
+    <div class="page-title">
+      <div class="tag">No.1②</div>
+      <h1>ベクトルの演算②</h1>
+      <p>線形結合：2つのベクトルで任意のベクトルを表す</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">★</span>線形結合とは</h2>
+      <div class="key-box">
+        <div class="label">重要定理</div>
+        <p><strong>平行でない</strong> 2つのベクトル $\vec{a}$、$\vec{b}$ を使うと、</p>
+        <p>平面上の <strong>どんなベクトルも</strong> 次の形で一意に表せる：</p>
+        <div class="math-block" style="margin:0.4rem 0;">$$\vec{p} = s\vec{a} + t\vec{b} \quad (s, t \text{ は実数})$$</div>
+      </div>
+
+      <p class="note">「平行」な2つのベクトルでは、ある方向のベクトルを表せないため条件が必要。</p>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-linear" width="560" height="280"></canvas>
+        <div class="canvas-controls" style="flex-wrap:wrap; gap:0.8rem;">
+          <label>s：</label>
+          <input type="range" id="s-val" min="-2" max="2" step="0.25" value="1" oninput="updateLinear()">
+          <span id="s-disp" style="min-width:24px; font-weight:700; color:var(--blue);">1</span>
+          <label>t：</label>
+          <input type="range" id="t-val" min="-2" max="2" step="0.25" value="1" oninput="updateLinear()">
+          <span id="t-disp" style="min-width:30px; font-weight:700; color:#9b59b6;">1</span>
+          <span id="linear-formula" style="font-weight:600; color:var(--green);"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">問</span>正六角形の問題（問6）</h2>
+
+      <p>正六角形 ABCDEF において、$\overrightarrow{AB} = \vec{a}$、$\overrightarrow{AF} = \vec{b}$ とするとき、各ベクトルを $\vec{a}, \vec{b}$ で表せ。</p>
+
+      <div class="two-col">
+        <div class="canvas-wrap" style="margin:0;">
+          <canvas id="canvas-hex" width="260" height="260"></canvas>
+          <div class="canvas-controls" style="justify-content:center;">
+            <span id="hex-label" style="font-size:0.78rem; color:var(--navy); font-weight:600;">↑ 問題を選ぶと図が更新</span>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; flex-direction:column; gap:0.45rem; margin-bottom:1rem;">
+            <button class="btn btn-outline" onclick="hexShow(1)" style="text-align:left;">$\overrightarrow{CD}$ を求める</button>
+            <button class="btn btn-outline" onclick="hexShow(2)" style="text-align:left;">$\overrightarrow{DE}$ を求める</button>
+            <button class="btn btn-outline" onclick="hexShow(3)" style="text-align:left;">$\overrightarrow{CF}$ を求める</button>
+            <button class="btn btn-outline" onclick="hexShow(4)" style="text-align:left;">$\overrightarrow{AD}$ を求める</button>
+            <button class="btn btn-outline" onclick="hexShow(5)" style="text-align:left;">$\overrightarrow{AC}$ を求める</button>
+          </div>
+          <div id="hex-answer" class="key-box" style="display:none;">
+            <div class="label">解答</div>
+            <div id="hex-answer-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no1a')">← No.1① に戻る</button>
+      <button class="btn" onclick="showSection('no2a')">次へ：No.2① 位置ベクトル →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.2① ══════════════ -->
+  <div id="sec-no2a" class="section">
+    <div class="page-title">
+      <div class="tag">No.2①</div>
+      <h1>位置ベクトル</h1>
+      <p>原点を基準にした点の表現と $\overrightarrow{AB}=\vec{b}-\vec{a}$</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>位置ベクトルとは</h2>
+      <div class="key-box">
+        <div class="label">定義</div>
+        <p>平面（または空間）上の固定した基準点 <strong>O（原点）</strong> を決め、各点 P の位置を <strong>有向線分</strong> $\overrightarrow{OP}$ で表したものを、<br>P の <strong>位置ベクトル</strong> という。</p>
+        <div class="math-block" style="margin:0.5rem 0;">$$\overrightarrow{OP} = \vec{p}$$</div>
+      </div>
+      <p>点 A の位置ベクトルを $\vec{a}$、点 B の位置ベクトルを $\vec{b}$ とする。</p>
+
+      <div class="accent-box">
+        <div class="label">最重要公式</div>
+        <div class="math-block">$$\overrightarrow{AB} = \vec{b} - \vec{a} \quad \text{（終点の位置ベクトル} - \text{始点の位置ベクトル）}$$</div>
+        <p>経路分解：$\overrightarrow{AB} = \overrightarrow{AO} + \overrightarrow{OB} = -\vec{a} + \vec{b} = \vec{b} - \vec{a}$</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-pos" width="560" height="220"></canvas>
+        <div class="canvas-controls">
+          O を基準とした各点の位置ベクトルと、$\overrightarrow{AB}=\vec{b}-\vec{a}$ を図示
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>位置ベクトルの利用</h2>
+      <p>位置ベクトルを使うと、<strong>座標系を設定せずに</strong>図形の性質を証明・計算できる。</p>
+
+      <div class="two-col">
+        <div class="key-box">
+          <div class="label">よく使う変換</div>
+          <ul style="margin-left:1rem; margin-top:0.3rem; line-height:2;">
+            <li>$\overrightarrow{AB} = \vec{b} - \vec{a}$</li>
+            <li>$\overrightarrow{BA} = \vec{a} - \vec{b}$</li>
+            <li>$\overrightarrow{OA} = \vec{a}$（基本）</li>
+          </ul>
+        </div>
+        <div class="key-box">
+          <div class="label">共線条件</div>
+          <p>3点 A, B, C が一直線上にある</p>
+          <p>$\Leftrightarrow\ \overrightarrow{AC} = k\,\overrightarrow{AB}$ を満たす実数 $k$ が存在する</p>
+          <p style="margin-top:0.4rem;">$\Leftrightarrow\ \vec{c} = (1-k)\vec{a} + k\vec{b}$</p>
+        </div>
+      </div>
+
+      <div class="accent-box" style="margin-top:1rem;">
+        <div class="label">例題</div>
+        <p>$\overrightarrow{OA}=\vec{a}$, $\overrightarrow{OB}=\vec{b}$ のとき、$\overrightarrow{AB}$, $\overrightarrow{BA}$ を求めよ。</p>
+        <p style="margin-top:0.5rem;"><strong>解：</strong>$\overrightarrow{AB} = \vec{b}-\vec{a}$，$\overrightarrow{BA} = \vec{a}-\vec{b}$</p>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no1b')">← No.1② に戻る</button>
+      <button class="btn" onclick="showSection('no2b')">次へ：No.2② 分点・重心 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.2② ══════════════ -->
+  <div id="sec-no2b" class="section">
+    <div class="page-title">
+      <div class="tag">No.2②</div>
+      <h1>分点と重心</h1>
+      <p>内分点・外分点の位置ベクトルと三角形の重心</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>内分点の位置ベクトル</h2>
+      <div class="key-box">
+        <div class="label">内分点の公式</div>
+        <p>点 P が線分 AB を <strong>m : n に内分する</strong>とき、</p>
+        <div class="math-block">$$\vec{p} = \frac{n\,\vec{a} + m\,\vec{b}}{m+n}$$</div>
+        <p class="note">※「m に近い方（B側）が m 倍」と覚えると混乱しない</p>
+      </div>
+
+      <div class="key-box" style="margin-top:0.8rem; border-color:var(--green);">
+        <div class="label" style="background:var(--green);">特別な場合：中点</div>
+        <p>線分 AB の <strong>中点 M</strong>（1:1 内分）：</p>
+        <div class="math-block">$$\vec{m} = \frac{\vec{a}+\vec{b}}{2}$$</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-divpt" width="560" height="200"></canvas>
+        <div class="canvas-controls" style="flex-wrap:wrap; gap:0.8rem;">
+          <label>m：</label>
+          <input type="range" id="div-m" min="1" max="4" step="1" value="1" oninput="updateDivision()">
+          <span id="div-m-disp" style="min-width:18px; font-weight:700; color:var(--blue);">1</span>
+          <label>：n＝</label>
+          <input type="range" id="div-n" min="1" max="4" step="1" value="1" oninput="updateDivision()">
+          <span id="div-n-disp" style="min-width:18px; font-weight:700; color:#9b59b6;">1</span>
+          <span id="div-formula" style="font-weight:600; color:var(--green); font-size:0.85rem;"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>外分点の位置ベクトル</h2>
+      <div class="key-box">
+        <div class="label">外分点の公式</div>
+        <p>点 Q が線分 AB を <strong>m : n に外分する</strong>とき（$m \neq n$）、</p>
+        <div class="math-block">$$\vec{q} = \frac{-n\,\vec{a} + m\,\vec{b}}{m-n}$$</div>
+        <p class="note">※ 内分の公式で $n$ を $-n$ に置き換えた形。分母が $m-n$ に変わることに注意。</p>
+      </div>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題</div>
+        <p>AB を 2:1 に外分する点 Q の位置ベクトルは？</p>
+        <p style="margin-top:0.4rem;"><strong>解：</strong>$m=2, n=1$ を代入すると</p>
+        <div class="math-block" style="margin:0.3rem 0;">$$\vec{q} = \frac{-1\cdot\vec{a}+2\cdot\vec{b}}{2-1} = 2\vec{b}-\vec{a}$$</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>三角形の重心</h2>
+      <div class="key-box">
+        <div class="label">重心の公式</div>
+        <p>△ABC の頂点の位置ベクトルを $\vec{a}, \vec{b}, \vec{c}$ とすると、<strong>重心 G</strong> の位置ベクトルは、</p>
+        <div class="math-block">$$\vec{g} = \frac{\vec{a}+\vec{b}+\vec{c}}{3}$$</div>
+        <p class="note">重心 = 3頂点の位置ベクトルの平均</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-gravity" width="560" height="240"></canvas>
+        <div class="canvas-controls">
+          △ABCの重心G（各中線の交点）の位置ベクトルは $\dfrac{\vec{a}+\vec{b}+\vec{c}}{3}$
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:1rem;">
+        <div class="accent-box">
+          <div class="label">内分点による導出</div>
+          <p>辺BCの中点Mの位置ベクトル：$\vec{m}=\dfrac{\vec{b}+\vec{c}}{2}$</p>
+          <p style="margin-top:0.4rem;">GはAMを2:1に内分するから：</p>
+          <div class="math-block" style="font-size:0.9rem;">$$\vec{g}=\frac{1\cdot\vec{a}+2\cdot\frac{\vec{b}+\vec{c}}{2}}{3}=\frac{\vec{a}+\vec{b}+\vec{c}}{3}$$</div>
+        </div>
+        <div class="key-box">
+          <div class="label">△OABの重心（特別な場合）</div>
+          <p>Oが原点（$\vec{o}=\vec{0}$）のとき：</p>
+          <div class="math-block" style="font-size:0.9rem;">$$\vec{g}=\frac{\vec{0}+\vec{a}+\vec{b}}{3}=\frac{\vec{a}+\vec{b}}{3}$$</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no2a')">← No.2① に戻る</button>
+      <button class="btn btn-accent" onclick="showSection('quiz')">練習問題に挑戦！ →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ QUIZ ══════════════ -->
+  <div id="sec-quiz" class="section">
+    <div class="page-title">
+      <div class="tag">練習問題</div>
+      <h1>確認テスト</h1>
+      <p>単元を選んで練習しよう</p>
+    </div>
+
+    <!-- 単元選択メニュー -->
+    <div id="quiz-menu">
+      <div class="card">
+        <h2><span class="icon">📚</span>単元を選択してください</h2>
+        <div class="quiz-unit-grid">
+          <button class="quiz-unit-btn u-no0" onclick="startQuiz('no0')">
+            <span class="u-num">0</span>
+            <span class="u-title">No.0<br>ベクトルとは</span>
+            <span class="u-count">9問</span>
+          </button>
+          <button class="quiz-unit-btn u-no1a" onclick="startQuiz('no1a')">
+            <span class="u-num">1①</span>
+            <span class="u-title">No.1①<br>加法・減法</span>
+            <span class="u-count">3問</span>
+          </button>
+          <button class="quiz-unit-btn u-no1b" onclick="startQuiz('no1b')">
+            <span class="u-num">1②</span>
+            <span class="u-title">No.1②<br>線形結合</span>
+            <span class="u-count">4問</span>
+          </button>
+          <button class="quiz-unit-btn u-no2a" onclick="startQuiz('no2a')">
+            <span class="u-num">2①</span>
+            <span class="u-title">No.2①<br>位置ベクトル</span>
+            <span class="u-count">5問</span>
+          </button>
+          <button class="quiz-unit-btn u-no2b" onclick="startQuiz('no2b')">
+            <span class="u-num">2②</span>
+            <span class="u-title">No.2②<br>分点・重心</span>
+            <span class="u-count">12問</span>
+          </button>
+          <button class="quiz-unit-btn u-all" onclick="startQuiz('all')">
+            <span class="u-num">全</span>
+            <span class="u-title">全範囲<br>まとめ</span>
+            <span class="u-count">33問</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- クイズパネル（単元選択後に表示） -->
+    <div id="quiz-panel" style="display:none;">
+      <div class="card">
+        <div class="progress-header">
+          <span id="quiz-progress-label">問題 1 / 9</span>
+          <span id="quiz-score-label">正解数：0</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="quiz-progress-fill" style="width:0%;"></div>
+        </div>
+
+        <div id="quiz-content">
+          <div class="quiz-question" id="quiz-q"></div>
+          <div id="quiz-fig-wrap" class="canvas-wrap" style="display:none; max-width:420px; margin:0 auto 0.8rem;">
+            <canvas id="quiz-fig"></canvas>
+          </div>
+          <div class="quiz-options" id="quiz-opts"></div>
+          <div class="quiz-feedback" id="quiz-fb"></div>
+          <div class="quiz-nav">
+            <button class="btn" id="quiz-next" onclick="nextQuestion()" style="display:none;">次の問題 →</button>
+          </div>
+        </div>
+
+        <div id="quiz-result" style="display:none; text-align:center; padding:2rem 0;">
+          <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
+          <h2 style="font-size:1.4rem; color:var(--navy); margin-bottom:0.5rem;">テスト完了！</h2>
+          <p id="result-score" style="font-size:1.1rem; margin-bottom:1.2rem;"></p>
+          <p id="result-msg" style="color:var(--text-muted); margin-bottom:1.4rem;"></p>
+          <div style="display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="showQuizMenu()">← 単元を選び直す</button>
+            <button class="btn btn-accent" onclick="retryQuiz()">もう一度挑戦</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════
+//  Navigation
+// ═══════════════════════════════════════
+const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','quiz'];
+
+function showSection(id) {
+  sectionIds.forEach(s => document.getElementById('sec-'+s).classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+
+  document.querySelectorAll('header nav button').forEach((b, i) => {
+    b.classList.toggle('active', sectionIds[i] === id);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (id === 'no0' && !no0Init) initNo0();
+  if (id === 'no1a' && !no1aInit) initNo1a();
+  if (id === 'no1b' && !no1bInit) initNo1b();
+  if (id === 'no2a' && !no2aInit) initNo2a();
+  if (id === 'no2b' && !no2bInit) initNo2b();
+  if (id === 'quiz') showQuizMenu();
+}
+
+// ═══════════════════════════════════════
+//  Canvas Helpers
+// ═══════════════════════════════════════
+
+function getCtx(id) {
+  const canvas = document.getElementById(id);
+  const ratio = window.devicePixelRatio || 1;
+  // Design dimensions from HTML attributes
+  const designW = parseInt(canvas.getAttribute('width')) || 560;
+  const designH = parseInt(canvas.getAttribute('height')) || 200;
+  // Actual CSS width — may be smaller on narrow screens
+  const cssW = canvas.clientWidth || designW;
+  // Shrink to fit, never enlarge beyond design size
+  const scale = Math.min(1, cssW / designW);
+  const cssH = Math.round(designH * scale);
+  canvas.style.height = cssH + 'px';
+  canvas.width = cssW * ratio;
+  canvas.height = cssH * ratio;
+  const ctx = canvas.getContext('2d');
+  // HiDPI correction × responsive scale — drawing code uses design coords unchanged
+  ctx.setTransform(ratio * scale, 0, 0, ratio * scale, 0, 0);
+  return { ctx, w: designW, h: designH };
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color='#3b6bcc', width=2.5) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  if (len < 2) return;
+  const ux = dx/len, uy = dy/len;
+  const hl = 13, hw = 8;
+
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = 'round';
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2 - ux*hl*0.55, y2 - uy*hl*0.55);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - ux*hl - uy*hw/2, y2 - uy*hl + ux*hw/2);
+  ctx.lineTo(x2 - ux*hl + uy*hw/2, y2 - uy*hl - ux*hw/2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawDot(ctx, x, y, color='#1a2744', r=4) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawLabel(ctx, x, y, text, color='#1a2744', size=13) {
+  ctx.save();
+  ctx.font = `bold ${size}px serif`;
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function drawVecLabel(ctx, x, y, vecText, color='#1a2744', size=13, prefix='') {
+  ctx.save();
+  ctx.font = `bold ${size}px serif`;
+  ctx.fillStyle = color;
+  let xc = x;
+  if (prefix) { ctx.fillText(prefix, xc, y); xc += ctx.measureText(prefix).width; }
+  const tw = ctx.measureText(vecText).width;
+  ctx.fillText(vecText, xc, y);
+  const ay = y - size * 0.88;
+  const hl = Math.max(4, size * 0.32), hw = Math.max(1.5, size * 0.18);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = Math.max(0.7, size * 0.07);
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(xc, ay); ctx.lineTo(xc + tw, ay); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(xc + tw, ay);
+  ctx.lineTo(xc + tw - hl, ay - hw);
+  ctx.lineTo(xc + tw - hl, ay + hw);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function drawGrid(ctx, w, h) {
+  ctx.save();
+  ctx.strokeStyle = '#e8eef8';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= w; x += 30) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y <= h; y += 30) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════
+//  No.0 Canvases
+// ═══════════════════════════════════════
+let no0Init = false;
+
+function initNo0() {
+  no0Init = true;
+  drawEqualVectors();
+  drawNotation();
+  drawInverse();
+  drawScalar();
+}
+
+function drawEqualVectors() {
+  const { ctx, w, h } = getCtx('canvas-equal');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const vecs = [[60,130,140,80],[230,145,310,95],[400,120,480,70]];
+  vecs.forEach(([x1,y1,x2,y2]) => {
+    drawArrow(ctx, x1, y1, x2, y2, '#3b6bcc', 2.5);
+    drawDot(ctx, x1, y1, '#3b6bcc', 3);
+    drawDot(ctx, x2, y2, '#3b6bcc', 3);
+    const mx = (x1+x2)/2 - 4, my = (y1+y2)/2 - 8;
+    drawVecLabel(ctx, mx, my, 'a', '#3b6bcc', 12);
+  });
+  drawLabel(ctx, 14, h-8, '位置が違っても、大きさと向きが等しければ同じベクトル', '#9b7a99', 10);
+}
+
+function drawNotation() {
+  const { ctx, w, h } = getCtx('canvas-notation');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const x1=90, y1=130, x2=420, y2=75;
+  drawArrow(ctx, x1, y1, x2, y2, '#3b6bcc', 3);
+  drawDot(ctx, x1, y1, '#1a2744', 5);
+  drawDot(ctx, x2, y2, '#1a2744', 5);
+  drawLabel(ctx, x1-12, y1+20, 'A（始点）', '#1a2744', 12);
+  drawLabel(ctx, x2+6, y2-8, 'B（終点）', '#1a2744', 12);
+  drawVecLabel(ctx, (x1+x2)/2-16, (y1+y2)/2-10, 'AB', '#3b6bcc', 14);
+
+  // magnitude indicator
+  ctx.save();
+  ctx.strokeStyle = '#f5a623'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(x1, y1+40); ctx.lineTo(x2, y1+40); ctx.stroke();
+  ctx.setLineDash([]);
+  [[x1,y1+34,x1,y1+46],[x2,y1+34,x2,y1+46]].forEach(([a,b,c,d]) => {
+    ctx.beginPath(); ctx.moveTo(a,b); ctx.lineTo(c,d); ctx.stroke();
+  });
+  ctx.restore();
+  drawLabel(ctx, (x1+x2)/2-28, y1+58, '|AB| = 大きさ', '#d4870a', 12);
+}
+
+function drawInverse() {
+  const { ctx, w, h } = getCtx('canvas-inverse');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // AB
+  const ax=90, ay=100, bx=360, by=75;
+  drawArrow(ctx, ax, ay, bx, by, '#3b6bcc', 3);
+  drawDot(ctx, ax, ay, '#1a2744', 5); drawLabel(ctx, ax-16, ay+18, 'A', '#1a2744');
+  drawDot(ctx, bx, by, '#1a2744', 5); drawLabel(ctx, bx+6, by-8, 'B', '#1a2744');
+  drawVecLabel(ctx, (ax+bx)/2-16, (ay+by)/2-10, 'AB', '#3b6bcc', 13);
+
+  // BA (inverse) - at lower position
+  const ax2=360, ay2=160, bx2=90, by2=155;
+  drawArrow(ctx, ax2, ay2, bx2, by2, '#e74c3c', 3);
+  drawDot(ctx, ax2, ay2, '#1a2744', 5); drawLabel(ctx, ax2+6, ay2+18, 'B\'', '#1a2744');
+  drawDot(ctx, bx2, by2, '#1a2744', 5); drawLabel(ctx, bx2-22, by2+18, 'A\'', '#1a2744');
+  { const lx=(ax2+bx2)/2-22, ly=(ay2+by2)/2+14;
+    ctx.save(); ctx.font='bold 13px serif'; ctx.fillStyle='#e74c3c';
+    const mW=ctx.measureText('−').width, abW=ctx.measureText('AB').width, eqW=ctx.measureText(' = ').width;
+    ctx.fillText('−', lx, ly);
+    drawVecLabel(ctx, lx+mW, ly, 'AB', '#e74c3c', 13);
+    ctx.save(); ctx.font='bold 13px serif'; ctx.fillStyle='#e74c3c'; ctx.fillText(' = ', lx+mW+abW, ly); ctx.restore();
+    drawVecLabel(ctx, lx+mW+abW+eqW, ly, 'BA', '#e74c3c', 13);
+    ctx.restore(); }
+}
+
+function drawScalar() {
+  const k = parseFloat(document.getElementById('scalar-k').value);
+  document.getElementById('scalar-val').textContent = `k = ${k}`;
+
+  const { ctx, w, h } = getCtx('canvas-scalar');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const ox = 60, oy = h/2;
+  const bx=80, by=-40;
+
+  // base vector a
+  drawArrow(ctx, ox, oy, ox+bx, oy+by, '#888', 2);
+  drawVecLabel(ctx, ox+bx/2-4, oy+by/2+20, 'a', '#888', 13);
+  drawLabel(ctx, ox-4, oy+16, 'O', '#888', 11);
+
+  // scaled vector
+  const sx = 220;
+  const kbx = bx*k, kby = by*k;
+  const color = k > 0 ? '#3b6bcc' : k < 0 ? '#e74c3c' : '#27ae60';
+
+  if (Math.abs(k) < 0.01) {
+    drawDot(ctx, sx, oy, '#27ae60', 6);
+    drawLabel(ctx, sx-30, oy-16, '零ベクトル (k=0)', '#27ae60', 12);
+  } else {
+    drawArrow(ctx, sx, oy, sx+kbx, oy+kby, color, 3);
+    const kStr = k%1===0 ? k.toString() : k.toFixed(1);
+    drawVecLabel(ctx, sx+kbx/2+6, oy+kby/2-6, 'a', color, 13, kStr);
+    const note = k > 0 ? '同じ向き' : '逆向き';
+    drawLabel(ctx, sx-10, oy+28, `k=${kStr}：${note}、大きさ${Math.abs(k)}倍`, color, 11);
+  }
+}
+
+// ═══════════════════════════════════════
+//  No.1① Canvases
+// ═══════════════════════════════════════
+let no1aInit = false;
+let addProgress = 0, addTimer = null;
+let subProgress = 0, subTimer = null;
+let currentStep = 0;
+
+function initNo1a() {
+  no1aInit = true;
+  drawAdd(0);
+  drawSub(0);
+  setStep(0);
+}
+
+function drawAdd(p) {
+  const { ctx, w, h } = getCtx('canvas-add');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O=[70,210], a=[150,-90], b=[120,30];
+  const A=[O[0]+a[0], O[1]+a[1]];
+  const B=[A[0]+b[0], A[1]+b[1]];
+
+  drawDot(ctx, O[0], O[1], '#1a2744', 5); drawLabel(ctx, O[0]-20, O[1]+5, 'O', '#1a2744', 14);
+
+  const p1 = Math.min(1, p);
+  if (p1 > 0) {
+    const ex=O[0]+a[0]*p1, ey=O[1]+a[1]*p1;
+    drawArrow(ctx, O[0], O[1], ex, ey, '#3b6bcc', 3);
+    drawVecLabel(ctx, (O[0]+ex)/2-30, (O[1]+ey)/2+4, 'a', '#3b6bcc', 14);
+    if (p1 >= 1) { drawDot(ctx, A[0], A[1], '#1a2744', 5); drawLabel(ctx, A[0]+6, A[1]-8, 'A', '#1a2744', 14); }
+  }
+
+  if (p > 1) {
+    const p2 = Math.min(1, p-1);
+    const ex=A[0]+b[0]*p2, ey=A[1]+b[1]*p2;
+    drawArrow(ctx, A[0], A[1], ex, ey, '#9b59b6', 3);
+    drawVecLabel(ctx, (A[0]+ex)/2+8, (A[1]+ey)/2+16, 'b', '#9b59b6', 14);
+    if (p2 >= 1) { drawDot(ctx, B[0], B[1], '#1a2744', 5); drawLabel(ctx, B[0]+6, B[1]+6, 'B', '#1a2744', 14); }
+  }
+
+  if (p >= 2) {
+    drawArrow(ctx, O[0], O[1], B[0], B[1], '#27ae60', 3.5);
+    drawVecLabel(ctx, (O[0]+B[0])/2+8, (O[1]+B[1])/2+22, 'a+b', '#27ae60', 14);
+    document.getElementById('add-info').innerHTML = '$\\overrightarrow{OA} + \\overrightarrow{AB} = \\overrightarrow{OB}$　← 三角形の法則！';
+    if (window.MathJax) MathJax.typesetPromise([document.getElementById('add-info')]);
+  }
+}
+
+function animateAdd() {
+  if (addTimer) clearInterval(addTimer);
+  addProgress = 0;
+  addTimer = setInterval(() => {
+    addProgress += 0.05;
+    drawAdd(addProgress);
+    if (addProgress >= 2.3) clearInterval(addTimer);
+  }, 30);
+}
+
+function resetAdd() {
+  if (addTimer) clearInterval(addTimer);
+  addProgress = 0;
+  drawAdd(0);
+  document.getElementById('add-info').textContent = '';
+}
+
+function drawSub(p) {
+  const { ctx, w, h } = getCtx('canvas-sub');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O=[70,200], a=[200,-90], b=[110,-110];
+  const A=[O[0]+a[0], O[1]+a[1]];
+  const B=[O[0]+b[0], O[1]+b[1]];
+
+  drawDot(ctx, O[0], O[1], '#1a2744', 5); drawLabel(ctx, O[0]-20, O[1]+5, 'O', '#1a2744', 14);
+  drawArrow(ctx, O[0], O[1], A[0], A[1], '#3b6bcc', 2.5);
+  drawDot(ctx, A[0], A[1], '#1a2744', 5); drawLabel(ctx, A[0]+6, A[1]-8, 'A', '#1a2744', 14);
+  drawVecLabel(ctx, (O[0]+A[0])/2-4, (O[1]+A[1])/2+20, 'OA', '#3b6bcc', 13);
+
+  drawArrow(ctx, O[0], O[1], B[0], B[1], '#9b59b6', 2.5);
+  drawDot(ctx, B[0], B[1], '#1a2744', 5); drawLabel(ctx, B[0]-24, B[1]-8, 'B', '#1a2744', 14);
+  drawVecLabel(ctx, (O[0]+B[0])/2+8, (O[1]+B[1])/2-6, 'OB', '#9b59b6', 13);
+
+  if (p >= 1) {
+    const p2 = Math.min(1, p-1);
+    ctx.save();
+    ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(A[0], A[1]);
+    ctx.lineTo(A[0]+(O[0]-A[0])*p2, A[1]+(O[1]-A[1])*p2);
+    ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+    drawVecLabel(ctx, A[0]+10, A[1]+28, 'OA', '#e74c3c', 12, '−');
+
+    if (p2 >= 1) {
+      drawArrow(ctx, A[0], A[1], B[0], B[1], '#27ae60', 3.5);
+      drawVecLabel(ctx, (A[0]+B[0])/2+8, (A[1]+B[1])/2, 'AB', '#27ae60', 14);
+    }
+  }
+}
+
+function animateSub() {
+  if (subTimer) clearInterval(subTimer);
+  subProgress = 0;
+  subTimer = setInterval(() => {
+    subProgress += 0.04;
+    drawSub(subProgress);
+    if (subProgress >= 2.2) clearInterval(subTimer);
+  }, 30);
+}
+
+function resetSub() {
+  if (subTimer) clearInterval(subTimer);
+  subProgress = 0;
+  drawSub(0);
+}
+
+function setStep(n) {
+  currentStep = n;
+  [0,1,2].forEach(i => document.getElementById('step'+i).classList.toggle('active', i===n));
+
+  const { ctx, w, h } = getCtx('canvas-step');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O=[70,185], A=[270,100], B=[430,155];
+
+  drawDot(ctx, O[0], O[1], '#1a2744', 5); drawLabel(ctx, O[0]-20, O[1]+5, 'O', '#1a2744', 14);
+  drawDot(ctx, A[0], A[1], '#1a2744', 5); drawLabel(ctx, A[0]+6, A[1]-10, 'A', '#1a2744', 14);
+  drawDot(ctx, B[0], B[1], '#1a2744', 5); drawLabel(ctx, B[0]+6, B[1]+6, 'B', '#1a2744', 14);
+
+  const desc = document.getElementById('step-desc');
+
+  // Step 0: OA and OB
+  drawArrow(ctx, O[0], O[1], A[0], A[1], '#3b6bcc', 3);
+  drawArrow(ctx, O[0], O[1], B[0], B[1], '#9b59b6', 3);
+  drawVecLabel(ctx, (O[0]+A[0])/2-28, (O[1]+A[1])/2+18, 'OA', '#3b6bcc', 12);
+  drawVecLabel(ctx, (O[0]+B[0])/2+8, (O[1]+B[1])/2+5, 'OB', '#9b59b6', 12);
+  if (n === 0) desc.innerHTML = '① $\\overrightarrow{OA}$（青）と $\\overrightarrow{OB}$（紫）を確認する。';
+
+  if (n >= 1) {
+    ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2.5; ctx.setLineDash([7,5]);
+    ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(O[0]+12,O[1]-5); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
+    drawArrow(ctx, A[0]-8, A[1]+4, O[0]+12, O[1]-5, '#e74c3c', 2.5);
+    drawVecLabel(ctx, (A[0]+O[0])/2-12, (A[1]+O[1])/2+30, 'OA', '#e74c3c', 12, '−');
+    if (n === 1) desc.innerHTML = '② $\\overrightarrow{OA}$ の逆ベクトル $-\\overrightarrow{OA}$（赤・破線）を A から描く。';
+  }
+
+  if (n >= 2) {
+    drawArrow(ctx, A[0], A[1], B[0], B[1], '#27ae60', 3.5);
+    drawVecLabel(ctx, (A[0]+B[0])/2+6, (A[1]+B[1])/2-10, 'AB', '#27ae60', 14);
+    desc.innerHTML = '③ <strong>$\\overrightarrow{AB} = \\overrightarrow{OB} - \\overrightarrow{OA}$</strong>（緑）が求まった！';
+  }
+  setTimeout(() => { if (window.MathJax) MathJax.typesetPromise([desc]); }, 30);
+}
+
+// ═══════════════════════════════════════
+//  No.1② Canvases
+// ═══════════════════════════════════════
+let no1bInit = false;
+
+function initNo1b() {
+  no1bInit = true;
+  updateLinear();
+  drawHex(0);
+  setTimeout(() => {
+    if (window.MathJax) MathJax.typesetPromise([document.getElementById('sec-no1b')]);
+  }, 100);
+}
+
+function updateLinear() {
+  const s = parseFloat(document.getElementById('s-val').value);
+  const t = parseFloat(document.getElementById('t-val').value);
+  document.getElementById('s-disp').textContent = s;
+  document.getElementById('t-disp').textContent = t;
+
+  const sStr = s%1===0 ? s : s.toFixed(2);
+  const tStr = t%1===0 ? t : t.toFixed(2);
+  const formulaEl = document.getElementById('linear-formula');
+  formulaEl.innerHTML = `$\\vec{p} = ${sStr}\\vec{a} + ${tStr}\\vec{b}$`;
+  if (window.MathJax) MathJax.typesetPromise([formulaEl]);
+
+  drawLinear(s, t);
+}
+
+function drawLinear(s, t) {
+  const { ctx, w, h } = getCtx('canvas-linear');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const ox = w/2 - 30, oy = h/2 + 50;
+  const ax=100, ay=-55, bx=55, by=-95;
+
+  // Base vectors
+  drawArrow(ctx, ox, oy, ox+ax, oy+ay, '#3b6bcc', 3);
+  drawVecLabel(ctx, ox+ax+6, oy+ay-4, 'a', '#3b6bcc', 14);
+  drawArrow(ctx, ox, oy, ox+bx, oy+by, '#9b59b6', 3);
+  drawVecLabel(ctx, ox+bx+6, oy+by-4, 'b', '#9b59b6', 14);
+
+  const sax=ax*s, say=ay*s, tbx=bx*t, tby=by*t;
+
+  // s*a dashed
+  if (Math.abs(s) > 0.01) {
+    ctx.save(); ctx.setLineDash([5,4]);
+    drawArrow(ctx, ox, oy, ox+sax, oy+say, '#3b6bcc', 2);
+    ctx.restore();
+  }
+
+  // t*b from tip of s*a
+  if (Math.abs(t) > 0.01) {
+    ctx.save(); ctx.setLineDash([5,4]);
+    drawArrow(ctx, ox+sax, oy+say, ox+sax+tbx, oy+say+tby, '#9b59b6', 2);
+    ctx.restore();
+  }
+
+  // result p
+  const px=sax+tbx, py=say+tby;
+  if (Math.abs(px) > 1 || Math.abs(py) > 1) {
+    drawArrow(ctx, ox, oy, ox+px, oy+py, '#27ae60', 3.5);
+    drawVecLabel(ctx, ox+px+6, oy+py, 'p', '#27ae60', 14);
+  }
+
+  drawDot(ctx, ox, oy, '#1a2744', 5);
+  drawLabel(ctx, ox-18, oy+5, 'O', '#1a2744', 13);
+}
+
+// Hexagon
+const hexData = {
+  1: { vec: '$\\overrightarrow{CD} = -\\vec{a}$', hint: 'CD は AB の逆向き・同じ長さ', from: 2, to: 3 },
+  2: { vec: '$\\overrightarrow{DE} = -\\vec{b}$', hint: 'DE は AF の逆向き・同じ長さ（EF=AB、DE=FA の関係）', from: 3, to: 4 },
+  3: { vec: '$\\overrightarrow{CF} = -2\\vec{a} + \\vec{b}$', hint: 'CF = CB + BF  →  CB=−a、BF=AF−AB=(b−a)  →  CF=−a+(b−a)=−2a+b', from: 2, to: 5 },
+  4: { vec: '$\\overrightarrow{AD} = 2(\\vec{a}+\\vec{b})$', hint: '①経路分解：AF→FO→OE→ED = b+a+b+a = 2a+2b　②中心O を使うと AO = a+b なので AD = 2AO = 2(a+b)', from: 0, to: 3 },
+  5: { vec: '$\\overrightarrow{AC} = 2\\vec{a}+\\vec{b}$', hint: 'AF→FO→OC と分解：b + a + a = 2a + b', from: 0, to: 2 },
+};
+
+function hexShow(n) {
+  const d = hexData[n];
+  document.getElementById('hex-answer').style.display = 'block';
+  document.getElementById('hex-answer-text').innerHTML =
+    `<p style="font-weight:700; margin-bottom:0.3rem;">${d.vec}</p><p class="note">${d.hint}</p>`;
+  document.getElementById('hex-label').innerHTML = d.vec;
+  drawHex(n);
+  setTimeout(() => {
+    if (window.MathJax) MathJax.typesetPromise([document.getElementById('hex-answer'), document.getElementById('hex-label')]);
+  }, 30);
+}
+
+function drawHex(highlight) {
+  const { ctx, w, h } = getCtx('canvas-hex');
+  ctx.clearRect(0, 0, w, h);
+
+  const cx=w/2, cy=h/2+8, R=Math.min(w,h)*0.34;
+  const labels=['A','B','C','D','E','F'];
+  const pts = labels.map((_, i) => [
+    cx + R * Math.cos(-Math.PI/2 + i*Math.PI/3),
+    cy + R * Math.sin(-Math.PI/2 + i*Math.PI/3)
+  ]);
+
+  // Hexagon outline
+  ctx.save();
+  ctx.strokeStyle = '#dde3f0'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  pts.forEach((p, i) => i===0 ? ctx.moveTo(p[0],p[1]) : ctx.lineTo(p[0],p[1]));
+  ctx.closePath(); ctx.stroke(); ctx.restore();
+
+  // 対角線 AD, BE, CF（破線）
+  ctx.save();
+  ctx.strokeStyle = '#c8cfe8'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  [[0,3],[1,4],[2,5]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(pts[a][0], pts[a][1]); ctx.lineTo(pts[b][0], pts[b][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]); ctx.restore();
+
+  // 中心 O
+  drawDot(ctx, cx, cy, '#e74c3c', 4);
+  drawLabel(ctx, cx + 6, cy - 5, 'O', '#e74c3c', 12);
+
+  // Highlighted vector
+  if (highlight > 0) {
+    const d = hexData[highlight];
+    drawArrow(ctx, pts[d.from][0], pts[d.from][1], pts[d.to][0], pts[d.to][1], '#27ae60', 3.5);
+  }
+
+  // a (AB) and b (AF)
+  drawArrow(ctx, pts[0][0], pts[0][1], pts[1][0], pts[1][1], '#3b6bcc', 2.5);
+  drawArrow(ctx, pts[0][0], pts[0][1], pts[5][0], pts[5][1], '#9b59b6', 2.5);
+  drawVecLabel(ctx, (pts[0][0]+pts[1][0])/2+4, (pts[0][1]+pts[1][1])/2+14, 'a', '#3b6bcc', 13);
+  drawVecLabel(ctx, (pts[0][0]+pts[5][0])/2-22, (pts[0][1]+pts[5][1])/2+14, 'b', '#9b59b6', 13);
+
+  // Vertex labels & dots
+  pts.forEach((p, i) => {
+    drawDot(ctx, p[0], p[1], '#1a2744', 4);
+    const angle = -Math.PI/2 + i*Math.PI/3;
+    const ox = Math.cos(angle)*17, oy = Math.sin(angle)*17;
+    drawLabel(ctx, p[0]+ox-6, p[1]+oy+5, labels[i], '#1a2744', 13);
+  });
+}
+
+// ═══════════════════════════════════════
+//  Quiz
+// ═══════════════════════════════════════
+const questions = [
+  {
+    q: 'ベクトルが持つ2つの情報は何か？',
+    opts: ['大きさと向き', '長さと色', '速さと時間', '位置と形'],
+    ans: 0,
+    exp: 'ベクトルは「①大きさ（長さ）」と「②向き（方向）」の2つの情報を持つ。',
+  },
+  {
+    q: '位置が異なっていても「同じベクトル」とみなせる条件は？',
+    opts: ['始点が同じ', '大きさと向きが等しい', '向きだけ等しい', '大きさだけ等しい'],
+    ans: 1,
+    exp: 'ベクトルは位置に依存しない。大きさと向きが等しければ同じベクトルとみなす。',
+  },
+  {
+    q: '$\\overrightarrow{AB}$ の大きさ（絶対値）を表す記号はどれか？',
+    opts: ['$|\\overrightarrow{AB}|$', '$\\overrightarrow{|AB|}$', '$AB$', '$\\vec{AB}$'],
+    ans: 0,
+    exp: 'ベクトルの大きさは絶対値記号 $|\\overrightarrow{AB}|$ で表す。',
+  },
+  {
+    q: '$\\overrightarrow{AB}$ の逆ベクトルはどれか？',
+    opts: ['$\\overrightarrow{BA}$', '$\\overrightarrow{AB}$', '$-\\overrightarrow{BA}$', '$2\\overrightarrow{AB}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AB}$ の逆ベクトルは $\\overrightarrow{BA}$。始点と終点が入れ替わり、向きが逆になる。',
+  },
+  {
+    q: '零ベクトルの説明として正しいものはどれか？',
+    opts: ['大きさが1のベクトル', '始点と終点が一致するベクトル', '向きが0のベクトル', '正の向きのベクトル'],
+    ans: 1,
+    exp: '零ベクトル $\\vec{0}$ は始点と終点が一致する（大きさが0の）ベクトル。向きは定めない。',
+  },
+  {
+    q: '$k < 0$ のとき、$k\\vec{a}$ の向きは？',
+    opts: ['$\\vec{a}$ と同じ向き', '$\\vec{a}$ と逆向き', '向きなし（零ベクトル）', '$\\vec{a}$ に垂直'],
+    ans: 1,
+    exp: '$k < 0$ のとき $k\\vec{a}$ は $\\vec{a}$ と逆向き。大きさは $|k||\\vec{a}|$。',
+  },
+  {
+    q: '三角形の法則：$\\overrightarrow{OA} + \\overrightarrow{AB}$ はどれか？',
+    opts: ['$\\overrightarrow{OB}$', '$\\overrightarrow{AB}$', '$\\overrightarrow{AO}$', '$\\overrightarrow{BO}$'],
+    ans: 0,
+    exp: '三角形の法則：$\\overrightarrow{OA} + \\overrightarrow{AB} = \\overrightarrow{OB}$（終点と始点を合わせてつなぐ）。',
+  },
+  {
+    q: '位置ベクトルを使った表現：$\\overrightarrow{AB} = ?$',
+    opts: ['$\\overrightarrow{OB} - \\overrightarrow{OA}$', '$\\overrightarrow{OA} - \\overrightarrow{OB}$', '$\\overrightarrow{OA} + \\overrightarrow{OB}$', '$\\overrightarrow{OB} + \\overrightarrow{OA}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AB} = \\overrightarrow{OB} - \\overrightarrow{OA}$（終点 − 始点）。重要な公式！',
+  },
+  {
+    q: '平行でない2つのベクトル $\\vec{a}$, $\\vec{b}$ について正しいのはどれか？',
+    opts: [
+      '平面上のどんなベクトルも $s\\vec{a}+t\\vec{b}$ で表せる',
+      '表せるベクトルは限られている',
+      '$\\vec{a}$ の方向のみ表せる',
+      '$s, t$ は無数に定まる',
+    ],
+    ans: 0,
+    exp: '平行でない2つのベクトルがあれば、平面上のどんなベクトルも $s\\vec{a}+t\\vec{b}$ で一意に表せる（線形結合）。',
+  },
+  {
+    q: '正六角形ABCDEFで $\\overrightarrow{AB}=\\vec{a}$, $\\overrightarrow{AF}=\\vec{b}$、中心をOとするとき、$\\overrightarrow{AC}$ は？',
+    opts: ['$2\\vec{a}+\\vec{b}$', '$2\\vec{a}$', '$\\vec{a}+\\vec{b}$', '$\\vec{a}+2\\vec{b}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AF}+\\overrightarrow{FO}+\\overrightarrow{OC}$ と分解すると $\\vec{b}+\\vec{a}+\\vec{a}=2\\vec{a}+\\vec{b}$。',
+  },
+  {
+    q: '$|k\\vec{a}|$ を $|\\vec{a}|$ と $k$ で表すと？',
+    opts: ['$|k||\\vec{a}|$', '$k|\\vec{a}|$', '$|k|+|\\vec{a}|$', '$k^2|\\vec{a}|$'],
+    ans: 0,
+    exp: 'スカラー倍の大きさは $|k\\vec{a}| = |k||\\vec{a}|$。$k<0$ でも大きさは非負なので絶対値 $|k|$ が必要。',
+  },
+  {
+    q: '$\\vec{a} + (-\\vec{a})$ はどうなるか？',
+    opts: ['$\\vec{0}$（零ベクトル）', '$2\\vec{a}$', '$\\vec{a}$', '定まらない'],
+    ans: 0,
+    exp: 'ベクトルとその逆ベクトルを足すと始点と終点が一致し、零ベクトル $\\vec{0}$ になる。',
+  },
+  {
+    q: '三角形OABで $\\overrightarrow{OA}+\\overrightarrow{AB}+\\overrightarrow{BO}$ は？',
+    opts: ['$\\vec{0}$', '$\\overrightarrow{OA}$', '$\\overrightarrow{OB}$', '$2\\overrightarrow{OA}$'],
+    ans: 0,
+    exp: '三角形の法則を2回使うと $\\overrightarrow{OA}+\\overrightarrow{AB}=\\overrightarrow{OB}$、$\\overrightarrow{OB}+\\overrightarrow{BO}=\\vec{0}$。',
+  },
+  {
+    q: '位置ベクトルで $\\overrightarrow{BA}$ を表すと？（Oは原点）',
+    opts: ['$\\overrightarrow{OA}-\\overrightarrow{OB}$', '$\\overrightarrow{OB}-\\overrightarrow{OA}$', '$\\overrightarrow{OA}+\\overrightarrow{OB}$', '$-\\overrightarrow{OA}-\\overrightarrow{OB}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{BA} = \\overrightarrow{OA} - \\overrightarrow{OB}$（終点A − 始点B）。$\\overrightarrow{AB}$ と逆符号になる。',
+  },
+  {
+    q: '$\\overrightarrow{AB}$ の逆ベクトルの大きさは？',
+    opts: ['$|\\overrightarrow{AB}|$ と等しい', '$-|\\overrightarrow{AB}|$', '$0$', '$2|\\overrightarrow{AB}|$'],
+    ans: 0,
+    exp: '逆ベクトルは向きが逆になるだけで大きさは変わらない。$|-\\overrightarrow{AB}| = |\\overrightarrow{AB}|$。',
+  },
+  {
+    q: '正六角形ABCDEFで $\\overrightarrow{AB}=\\vec{a}$, $\\overrightarrow{AF}=\\vec{b}$、中心をOとするとき、$\\overrightarrow{AD}$ は？',
+    opts: ['$2\\vec{a}+2\\vec{b}$', '$\\vec{a}+\\vec{b}$', '$2\\vec{a}$', '$2\\vec{b}$'],
+    ans: 0,
+    exp: '【経路分解】$\\overrightarrow{AF}+\\overrightarrow{FO}+\\overrightarrow{OE}+\\overrightarrow{ED}=\\vec{b}+\\vec{a}+\\vec{b}+\\vec{a}=2\\vec{a}+2\\vec{b}$　【中心対称】$\\overrightarrow{AO}=\\vec{a}+\\vec{b}$ なので $\\overrightarrow{AD}=2\\overrightarrow{AO}=2(\\vec{a}+\\vec{b})$',
+  },
+  {
+    q: '平行でない $\\vec{a},\\vec{b}$ に対して $s\\vec{a}+t\\vec{b}=\\vec{0}$ ならば？',
+    opts: ['$s=0$ かつ $t=0$', '$s=t$', '$s+t=0$', '$s=1, t=-1$'],
+    ans: 0,
+    exp: '平行でない2ベクトルは線形独立。$s\\vec{a}+t\\vec{b}=\\vec{0}$ ならば必ず $s=0$ かつ $t=0$（一意性の条件）。',
+  },
+  {
+    q: '$\\vec{a}=3\\vec{b}$ が成り立つとき、$\\vec{a}$ と $\\vec{b}$ の関係は？',
+    opts: ['平行（同じ向きまたは逆向き）', '垂直', '等しい', '大きさが等しい'],
+    ans: 0,
+    exp: '$\\vec{a}=3\\vec{b}$ はスカラー倍の関係。2つのベクトルは平行（同じ向き）で、大きさは3倍。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$, $\\overrightarrow{OB}=\\vec{b}$ のとき、線分ABの中点Mの位置ベクトルは？',
+    opts: ['$\\dfrac{\\vec{a}+\\vec{b}}{2}$', '$\\vec{a}+\\vec{b}$', '$\\dfrac{\\vec{b}-\\vec{a}}{2}$', '$\\dfrac{\\vec{a}-\\vec{b}}{2}$'],
+    ans: 0,
+    exp: '中点Mの位置ベクトルは $\\overrightarrow{OM}=\\dfrac{\\overrightarrow{OA}+\\overrightarrow{OB}}{2}=\\dfrac{\\vec{a}+\\vec{b}}{2}$。',
+  },
+  // ── No.2 問題 ──
+  {
+    q: '位置ベクトルの定義として正しいのはどれか？',
+    opts: [
+      '基準点Oから各点への有向線分で表したベクトル',
+      '各点間を結ぶベクトル',
+      '大きさが1の単位ベクトル',
+      'ベクトルの絶対値',
+    ],
+    ans: 0,
+    exp: '位置ベクトルとは、固定した原点Oから各点への有向線分で表したベクトル。点Pの位置ベクトルは $\\overrightarrow{OP}=\\vec{p}$。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、$\\overrightarrow{AB}$ を求めよ。',
+    opts: ['$\\vec{b}-\\vec{a}$', '$\\vec{a}-\\vec{b}$', '$\\vec{a}+\\vec{b}$', '$-(\\vec{a}+\\vec{b})$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AB}=\\overrightarrow{AO}+\\overrightarrow{OB}=-\\vec{a}+\\vec{b}=\\vec{b}-\\vec{a}$。「終点の位置ベクトル−始点の位置ベクトル」が基本。',
+  },
+  {
+    q: '線分ABを $m:n$ に内分する点Pの位置ベクトルは？',
+    opts: [
+      '$\\dfrac{n\\vec{a}+m\\vec{b}}{m+n}$',
+      '$\\dfrac{m\\vec{a}+n\\vec{b}}{m+n}$',
+      '$\\dfrac{n\\vec{a}+m\\vec{b}}{m-n}$',
+      '$\\dfrac{m\\vec{a}-n\\vec{b}}{m+n}$',
+    ],
+    ans: 0,
+    exp: '内分点の公式：$\\vec{p}=\\dfrac{n\\vec{a}+m\\vec{b}}{m+n}$。「m に近い終点 B 側が m 倍」と覚える。分母は $m+n$。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、ABを $1:2$ に内分する点Pの位置ベクトルは？',
+    opts: [
+      '$\\dfrac{2\\vec{a}+\\vec{b}}{3}$',
+      '$\\dfrac{\\vec{a}+2\\vec{b}}{3}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{3}$',
+      '$\\dfrac{2\\vec{a}+2\\vec{b}}{3}$',
+    ],
+    ans: 0,
+    exp: '$m=1, n=2$ を内分公式に代入：$\\vec{p}=\\dfrac{2\\vec{a}+1\\cdot\\vec{b}}{1+2}=\\dfrac{2\\vec{a}+\\vec{b}}{3}$。',
+  },
+  {
+    q: '線分ABを $m:n$ に外分する点Qの位置ベクトルは？',
+    opts: [
+      '$\\dfrac{-n\\vec{a}+m\\vec{b}}{m-n}$',
+      '$\\dfrac{n\\vec{a}+m\\vec{b}}{m+n}$',
+      '$\\dfrac{m\\vec{a}-n\\vec{b}}{m-n}$',
+      '$\\dfrac{m\\vec{a}+n\\vec{b}}{m-n}$',
+    ],
+    ans: 0,
+    exp: '外分点の公式：$\\vec{q}=\\dfrac{-n\\vec{a}+m\\vec{b}}{m-n}$。内分の公式の $n$ を $-n$ に置き換えた形。分母が $m-n$ に変わる点に注意。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、ABを $2:1$ に内分する点Pは？',
+    opts: [
+      '$\\dfrac{\\vec{a}+2\\vec{b}}{3}$',
+      '$\\dfrac{2\\vec{a}+\\vec{b}}{3}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{2}$',
+      '$\\dfrac{2(\\vec{a}+\\vec{b})}{3}$',
+    ],
+    ans: 0,
+    exp: '$m=2, n=1$：$\\vec{p}=\\dfrac{1\\cdot\\vec{a}+2\\vec{b}}{2+1}=\\dfrac{\\vec{a}+2\\vec{b}}{3}$。m と n を間違えないよう注意！',
+  },
+  {
+    q: '△ABCの重心Gの位置ベクトルは？（$\\overrightarrow{OA}=\\vec{a},\\overrightarrow{OB}=\\vec{b},\\overrightarrow{OC}=\\vec{c}$）',
+    opts: [
+      '$\\dfrac{\\vec{a}+\\vec{b}+\\vec{c}}{3}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}+\\vec{c}}{2}$',
+      '$\\vec{a}+\\vec{b}+\\vec{c}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{2}$',
+    ],
+    ans: 0,
+    exp: '重心の公式：$\\vec{g}=\\dfrac{\\vec{a}+\\vec{b}+\\vec{c}}{3}$。3頂点の位置ベクトルの平均。辺BCの中点MをAから2:1に内分する点として導出できる。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、ABを $2:1$ に外分する点Qは？',
+    opts: [
+      '$2\\vec{b}-\\vec{a}$',
+      '$2\\vec{a}-\\vec{b}$',
+      '$\\dfrac{\\vec{a}+2\\vec{b}}{3}$',
+      '$\\dfrac{2\\vec{a}+\\vec{b}}{3}$',
+    ],
+    ans: 0,
+    exp: '$m=2,n=1$ を外分公式に代入：$\\vec{q}=\\dfrac{-1\\cdot\\vec{a}+2\\vec{b}}{2-1}=2\\vec{b}-\\vec{a}$。',
+  },
+  {
+    q: '△OABの重心G（Oは原点、$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$）の位置ベクトルは？',
+    opts: [
+      '$\\dfrac{\\vec{a}+\\vec{b}}{3}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{2}$',
+      '$\\dfrac{2(\\vec{a}+\\vec{b})}{3}$',
+      '$\\vec{a}+\\vec{b}$',
+    ],
+    ans: 0,
+    exp: 'Oの位置ベクトルは $\\vec{0}$ なので：$\\vec{g}=\\dfrac{\\vec{0}+\\vec{a}+\\vec{b}}{3}=\\dfrac{\\vec{a}+\\vec{b}}{3}$。',
+  },
+  {
+    q: '△ABCにおいて辺BCの中点Mの位置ベクトルは？',
+    opts: [
+      '$\\dfrac{\\vec{b}+\\vec{c}}{2}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{2}$',
+      '$\\dfrac{\\vec{a}+\\vec{c}}{2}$',
+      '$\\dfrac{\\vec{b}-\\vec{c}}{2}$',
+    ],
+    ans: 0,
+    exp: '中点Mは B と C の 1:1 内分点：$\\vec{m}=\\dfrac{\\vec{b}+\\vec{c}}{2}$。辺BCの端点B, Cの位置ベクトルの平均。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、ABを $3:1$ に内分する点Pは？',
+    opts: [
+      '$\\dfrac{\\vec{a}+3\\vec{b}}{4}$',
+      '$\\dfrac{3\\vec{a}+\\vec{b}}{4}$',
+      '$\\dfrac{\\vec{a}+\\vec{b}}{4}$',
+      '$\\dfrac{3\\vec{a}+3\\vec{b}}{4}$',
+    ],
+    ans: 0,
+    exp: '$m=3,n=1$：$\\vec{p}=\\dfrac{1\\cdot\\vec{a}+3\\vec{b}}{3+1}=\\dfrac{\\vec{a}+3\\vec{b}}{4}$。Bに近いので $\\vec{b}$ の係数が大きい（$3$）。',
+  },
+  {
+    q: '3点A, B, Cが一直線上にある（共線）ための条件は？',
+    opts: [
+      '$\\overrightarrow{AC}=k\\,\\overrightarrow{AB}$ を満たす実数 $k$ が存在する',
+      '$|\\overrightarrow{AB}|=|\\overrightarrow{AC}|$',
+      '$\\vec{a}+\\vec{b}+\\vec{c}=\\vec{0}$',
+      '$\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=0$',
+    ],
+    ans: 0,
+    exp: '3点が一直線上にある $\\Leftrightarrow$ $\\overrightarrow{AC}=k\\,\\overrightarrow{AB}$（平行）を満たす実数 $k$ が存在する。これを共線条件という。',
+  },
+  {
+    q: '△ABCで辺BCを $2:1$ に内分する点Dの位置ベクトルは？',
+    opts: [
+      '$\\dfrac{\\vec{b}+2\\vec{c}}{3}$',
+      '$\\dfrac{2\\vec{b}+\\vec{c}}{3}$',
+      '$\\dfrac{\\vec{b}+\\vec{c}}{2}$',
+      '$\\dfrac{\\vec{b}+\\vec{c}}{3}$',
+    ],
+    ans: 0,
+    exp: 'BCを $m:n=2:1$ に内分する点D：$\\vec{d}=\\dfrac{1\\cdot\\vec{b}+2\\vec{c}}{2+1}=\\dfrac{\\vec{b}+2\\vec{c}}{3}$。始点B側の係数が $n=1$、終点C側が $m=2$。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$、$\\overrightarrow{OB}=\\vec{b}$ のとき、ABを $1:3$ に外分する点Qは？',
+    opts: [
+      '$\\dfrac{3\\vec{a}-\\vec{b}}{2}$',
+      '$\\dfrac{-3\\vec{a}+\\vec{b}}{2}$',
+      '$\\dfrac{\\vec{a}-3\\vec{b}}{2}$',
+      '$\\dfrac{3\\vec{a}+\\vec{b}}{4}$',
+    ],
+    ans: 0,
+    exp: '$m=1,n=3$：$\\vec{q}=\\dfrac{-3\\vec{a}+1\\cdot\\vec{b}}{1-3}=\\dfrac{-3\\vec{a}+\\vec{b}}{-2}=\\dfrac{3\\vec{a}-\\vec{b}}{2}$。分母が負になる場合は符号を逆転。',
+  },
+];
+
+// ═══════════════════════════════════════
+//  Quiz Figures
+// ═══════════════════════════════════════
+function qfigCtx(canvas, drawH) {
+  const ratio = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 360;
+  const h = drawH || 150;
+  canvas.width = w * ratio;
+  canvas.height = h * ratio;
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+  return { ctx, w, h };
+}
+
+function qfig_equal(c) {
+  const {ctx, w, h} = qfigCtx(c, 130);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  [[0.12, 0.74], [0.43, 0.47], [0.73, 0.64]].forEach(([fx, fy]) => {
+    const x1=w*fx, y1=h*fy, x2=x1+w*0.20, y2=y1-h*0.30;
+    drawArrow(ctx, x1, y1, x2, y2, '#3b6bcc', 2.5);
+    drawDot(ctx, x1, y1, '#3b6bcc', 3);
+    drawDot(ctx, x2, y2, '#3b6bcc', 3);
+    drawVecLabel(ctx, (x1+x2)/2-8, (y1+y2)/2+14, 'a', '#3b6bcc', 12);
+  });
+  drawLabel(ctx, 8, h-5, '位置が違っても大きさ・向きが同じ → 同じベクトル', '#888', 9);
+}
+
+function qfig_inverse_q(c) {
+  const {ctx, w, h} = qfigCtx(c, 110);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ax=w*0.13, ay=h*0.55, bx=w*0.82, by=h*0.38;
+  drawArrow(ctx, ax, ay, bx, by, '#3b6bcc', 2.5);
+  drawDot(ctx, ax, ay, '#1a2744', 4); drawLabel(ctx, ax-16, ay+16, 'A', '#1a2744', 12);
+  drawDot(ctx, bx, by, '#1a2744', 4); drawLabel(ctx, bx+5, by-8, 'B', '#1a2744', 12);
+  drawVecLabel(ctx, (ax+bx)/2-12, (ay+by)/2-10, 'AB', '#3b6bcc', 13);
+}
+
+function qfig_tri_law(c) {
+  const {ctx, w, h} = qfigCtx(c, 155);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const O=[w*0.12,h*0.85], A=[w*0.52,h*0.24], B=[w*0.88,h*0.74];
+  drawDot(ctx, O[0],O[1],'#1a2744',4); drawLabel(ctx, O[0]-20,O[1]+5,'O','#1a2744',13);
+  drawDot(ctx, A[0],A[1],'#1a2744',4); drawLabel(ctx, A[0]-4,A[1]-12,'A','#1a2744',13);
+  drawDot(ctx, B[0],B[1],'#1a2744',4); drawLabel(ctx, B[0]+5,B[1]+5,'B','#1a2744',13);
+  drawArrow(ctx, O[0],O[1],A[0],A[1],'#3b6bcc',2.5);
+  drawVecLabel(ctx, (O[0]+A[0])/2-26,(O[1]+A[1])/2+14,'OA','#3b6bcc',12);
+  drawArrow(ctx, A[0],A[1],B[0],B[1],'#9b59b6',2.5);
+  drawVecLabel(ctx, (A[0]+B[0])/2+4,(A[1]+B[1])/2-8,'AB','#9b59b6',12);
+  drawArrow(ctx, O[0],O[1],B[0],B[1],'#27ae60',3);
+  drawVecLabel(ctx, (O[0]+B[0])/2-4,(O[1]+B[1])/2+16,'OB','#27ae60',12);
+}
+
+function qfig_pos_vec(c) {
+  const {ctx, w, h} = qfigCtx(c, 155);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const O=[w*0.12,h*0.85], A=[w*0.52,h*0.24], B=[w*0.88,h*0.69];
+  drawDot(ctx, O[0],O[1],'#1a2744',5); drawLabel(ctx, O[0]-20,O[1]+5,'O','#1a2744',13);
+  drawDot(ctx, A[0],A[1],'#1a2744',5); drawLabel(ctx, A[0]-4,A[1]-12,'A','#1a2744',13);
+  drawDot(ctx, B[0],B[1],'#1a2744',5); drawLabel(ctx, B[0]+5,B[1]+5,'B','#1a2744',13);
+  drawArrow(ctx, O[0],O[1],A[0],A[1],'#3b6bcc',2.5);
+  drawVecLabel(ctx, (O[0]+A[0])/2-22,(O[1]+A[1])/2+15,'OA','#3b6bcc',12);
+  drawArrow(ctx, O[0],O[1],B[0],B[1],'#9b59b6',2.5);
+  drawVecLabel(ctx, (O[0]+B[0])/2+5,(O[1]+B[1])/2+13,'OB','#9b59b6',12);
+  drawArrow(ctx, A[0],A[1],B[0],B[1],'#27ae60',2.5);
+  drawVecLabel(ctx, (A[0]+B[0])/2+4,(A[1]+B[1])/2-10,'AB','#27ae60',12);
+}
+
+function qfig_hexagon(c, highlightVec) {
+  const {ctx, w, h} = qfigCtx(c, 195);
+  ctx.clearRect(0, 0, w, h);
+  const cx=w/2, cy=h/2+6, R=Math.min(w,h)*0.36;
+  const labels=['A','B','C','D','E','F'];
+  const pts = labels.map((_,i) => [
+    cx + R*Math.cos(-Math.PI/2 + i*Math.PI/3),
+    cy + R*Math.sin(-Math.PI/2 + i*Math.PI/3)
+  ]);
+  ctx.save(); ctx.strokeStyle='#dde3f0'; ctx.lineWidth=1.5;
+  ctx.beginPath(); pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));
+  ctx.closePath(); ctx.stroke(); ctx.restore();
+  drawArrow(ctx, pts[0][0],pts[0][1],pts[1][0],pts[1][1],'#3b6bcc',2);
+  drawArrow(ctx, pts[0][0],pts[0][1],pts[5][0],pts[5][1],'#9b59b6',2);
+  drawVecLabel(ctx,(pts[0][0]+pts[1][0])/2+3,(pts[0][1]+pts[1][1])/2+13,'a','#3b6bcc',11);
+  drawVecLabel(ctx,(pts[0][0]+pts[5][0])/2-20,(pts[0][1]+pts[5][1])/2+13,'b','#9b59b6',11);
+  if (highlightVec && highlightVec.length===2) {
+    const fi=labels.indexOf(highlightVec[0]), ti=labels.indexOf(highlightVec[1]);
+    if (fi>=0 && ti>=0) {
+      drawArrow(ctx, pts[fi][0],pts[fi][1],pts[ti][0],pts[ti][1],'#27ae60',3);
+      const mx=(pts[fi][0]+pts[ti][0])/2, my=(pts[fi][1]+pts[ti][1])/2;
+      const dx=mx-cx, dy=my-cy, len=Math.sqrt(dx*dx+dy*dy)||1;
+      drawVecLabel(ctx, mx+dx/len*18, my+dy/len*18, highlightVec, '#27ae60', 12);
+    }
+  }
+  pts.forEach((p,i) => {
+    drawDot(ctx, p[0],p[1],'#1a2744',3.5);
+    const angle=-Math.PI/2+i*Math.PI/3;
+    drawLabel(ctx, p[0]+Math.cos(angle)*17-5, p[1]+Math.sin(angle)*17+5, labels[i],'#1a2744',12);
+  });
+}
+
+function qfig_tri_circuit(c) {
+  const {ctx, w, h} = qfigCtx(c, 155);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const O=[w*0.12,h*0.84], A=[w*0.52,h*0.22], B=[w*0.88,h*0.77];
+  drawDot(ctx, O[0],O[1],'#1a2744',4); drawLabel(ctx, O[0]-20,O[1]+5,'O','#1a2744',13);
+  drawDot(ctx, A[0],A[1],'#1a2744',4); drawLabel(ctx, A[0]-4,A[1]-12,'A','#1a2744',13);
+  drawDot(ctx, B[0],B[1],'#1a2744',4); drawLabel(ctx, B[0]+5,B[1]+5,'B','#1a2744',13);
+  drawArrow(ctx, O[0],O[1],A[0],A[1],'#3b6bcc',2.5);
+  drawVecLabel(ctx, (O[0]+A[0])/2-26,(O[1]+A[1])/2+14,'OA','#3b6bcc',12);
+  drawArrow(ctx, A[0],A[1],B[0],B[1],'#9b59b6',2.5);
+  drawVecLabel(ctx, (A[0]+B[0])/2+4,(A[1]+B[1])/2-8,'AB','#9b59b6',12);
+  drawArrow(ctx, B[0],B[1],O[0],O[1],'#e74c3c',2.5);
+  drawVecLabel(ctx, (B[0]+O[0])/2+5,(B[1]+O[1])/2+14,'BO','#e74c3c',12);
+}
+
+function qfig_midpoint_q(c) {
+  const {ctx, w, h} = qfigCtx(c, 160);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const O=[w*0.10,h*0.85], A=[w*0.43,h*0.22], B=[w*0.88,h*0.67];
+  const M=[(A[0]+B[0])/2,(A[1]+B[1])/2];
+  drawDot(ctx, O[0],O[1],'#1a2744',5); drawLabel(ctx, O[0]-20,O[1]+5,'O','#1a2744',13);
+  drawDot(ctx, A[0],A[1],'#1a2744',5); drawLabel(ctx, A[0]-4,A[1]-12,'A','#1a2744',13);
+  drawDot(ctx, B[0],B[1],'#1a2744',5); drawLabel(ctx, B[0]+5,B[1]+5,'B','#1a2744',13);
+  drawDot(ctx, M[0],M[1],'#e74c3c',5); drawLabel(ctx, M[0]+5,M[1]-10,'M','#e74c3c',13);
+  drawArrow(ctx, O[0],O[1],A[0],A[1],'#3b6bcc',2);
+  drawVecLabel(ctx, (O[0]+A[0])/2-22,(O[1]+A[1])/2+14,'OA','#3b6bcc',11);
+  drawArrow(ctx, O[0],O[1],B[0],B[1],'#9b59b6',2);
+  drawVecLabel(ctx, (O[0]+B[0])/2+4,(O[1]+B[1])/2+13,'OB','#9b59b6',11);
+  drawArrow(ctx, O[0],O[1],M[0],M[1],'#27ae60',2.5);
+  drawVecLabel(ctx, (O[0]+M[0])/2+4,(O[1]+M[1])/2-4,'OM','#27ae60',11);
+  ctx.save(); ctx.setLineDash([4,3]); ctx.strokeStyle='#ccc'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
+  ctx.restore();
+}
+
+// No.2 図: 内分点
+function qfig_division_pt(c, m, n) {
+  const {ctx, w, h} = qfigCtx(c, 140);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  m = m||1; n = n||2;
+  const O=[w*0.08,h*0.82];
+  const A=[w*0.18,h*0.38], B=[w*0.88,h*0.38];
+  const t = m/(m+n);
+  const P=[A[0]+t*(B[0]-A[0]), A[1]];
+  ctx.save(); ctx.strokeStyle='#ddd'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(A[0]-8,A[1]); ctx.lineTo(B[0]+8,B[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=3; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(P[0],P[1]); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle='#9b59b6'; ctx.lineWidth=3; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(P[0],P[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
+  ctx.restore();
+  drawArrow(ctx, O[0],O[1],A[0],A[1],'#3b6bcc',1.8);
+  drawArrow(ctx, O[0],O[1],B[0],B[1],'#9b59b6',1.8);
+  drawArrow(ctx, O[0],O[1],P[0],P[1],'#27ae60',2.2);
+  drawDot(ctx,O[0],O[1],'#1a2744',4); drawLabel(ctx,O[0]-12,O[1]+13,'O','#1a2744',11);
+  drawDot(ctx,A[0],A[1],'#3b6bcc',4); drawLabel(ctx,A[0]-14,A[1]+14,'A','#3b6bcc',11);
+  drawDot(ctx,B[0],B[1],'#9b59b6',4); drawLabel(ctx,B[0]+4,B[1]+14,'B','#9b59b6',11);
+  drawDot(ctx,P[0],P[1],'#27ae60',5); drawLabel(ctx,P[0]-4,P[1]+14,'P','#27ae60',11);
+  drawLabel(ctx,(A[0]+P[0])/2-4,A[1]-10,m,'#e74c3c',11);
+  drawLabel(ctx,(P[0]+B[0])/2-4,A[1]-10,n,'#9b59b6',11);
+}
+
+// No.2 図: 重心
+function qfig_centroid(c) {
+  const {ctx, w, h} = qfigCtx(c, 155);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const A=[w*0.28,h*0.10], B=[w*0.08,h*0.90], C=[w*0.88,h*0.85];
+  const G=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3];
+  const MA=[(B[0]+C[0])/2,(B[1]+C[1])/2];
+  const O=[w*0.06,h*0.52];
+  ctx.save(); ctx.strokeStyle='#aab'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.lineTo(C[0],C[1]); ctx.closePath(); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle='#c8a'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(MA[0],MA[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  drawArrow(ctx,O[0],O[1],A[0],A[1],'#3b6bcc',1.5);
+  drawArrow(ctx,O[0],O[1],B[0],B[1],'#9b59b6',1.5);
+  drawArrow(ctx,O[0],O[1],C[0],C[1],'#e67e22',1.5);
+  drawArrow(ctx,O[0],O[1],G[0],G[1],'#27ae60',2.2);
+  drawDot(ctx,O[0],O[1],'#1a2744',4); drawLabel(ctx,O[0]-14,O[1]+5,'O','#1a2744',11);
+  drawDot(ctx,A[0],A[1],'#3b6bcc',4); drawLabel(ctx,A[0]-4,A[1]-10,'A','#3b6bcc',12);
+  drawDot(ctx,B[0],B[1],'#9b59b6',4); drawLabel(ctx,B[0]-14,B[1]+5,'B','#9b59b6',12);
+  drawDot(ctx,C[0],C[1],'#e67e22',4); drawLabel(ctx,C[0]+4,C[1]+5,'C','#e67e22',12);
+  drawDot(ctx,G[0],G[1],'#27ae60',5); drawLabel(ctx,G[0]+5,G[1]-4,'G','#27ae60',12);
+  drawDot(ctx,MA[0],MA[1],'#888',3); drawLabel(ctx,MA[0]+4,MA[1]+5,'M','#888',10);
+}
+
+// No.2 図: 三角形の分点
+function qfig_tri_div(c, m, n) {
+  const {ctx, w, h} = qfigCtx(c, 155);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  m=m||2; n=n||1;
+  const A=[w*0.28,h*0.10], B=[w*0.08,h*0.90], C=[w*0.88,h*0.85];
+  const D=[B[0]+m/(m+n)*(C[0]-B[0]), B[1]+m/(m+n)*(C[1]-B[1])];
+  ctx.save(); ctx.strokeStyle='#aab'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.lineTo(C[0],C[1]); ctx.closePath(); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(B[0],B[1]); ctx.lineTo(D[0],D[1]); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle='#9b59b6'; ctx.lineWidth=2.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(D[0],D[1]); ctx.lineTo(C[0],C[1]); ctx.stroke();
+  ctx.restore();
+  drawDot(ctx,A[0],A[1],'#3b6bcc',4); drawLabel(ctx,A[0]-4,A[1]-10,'A','#3b6bcc',12);
+  drawDot(ctx,B[0],B[1],'#1a2744',4); drawLabel(ctx,B[0]-16,B[1]+5,'B','#1a2744',12);
+  drawDot(ctx,C[0],C[1],'#1a2744',4); drawLabel(ctx,C[0]+4,C[1]+5,'C','#1a2744',12);
+  drawDot(ctx,D[0],D[1],'#27ae60',5); drawLabel(ctx,D[0]-4,D[1]+14,'D','#27ae60',12);
+  const bcm=(B[0]+D[0])/2, bcn=(B[1]+D[1])/2;
+  const dcm=(D[0]+C[0])/2, dcn=(D[1]+C[1])/2;
+  drawLabel(ctx,bcm-4,bcn-10,m,'#e74c3c',11);
+  drawLabel(ctx,dcm-4,dcn-10,n,'#9b59b6',11);
+}
+
+function qfig_hexagon_center(c, highlightVec) {
+  const {ctx, w, h} = qfigCtx(c, 205);
+  ctx.clearRect(0, 0, w, h);
+  const cx=w/2, cy=h/2+6, R=Math.min(w,h)*0.36;
+  const labels=['A','B','C','D','E','F'];
+  const pts = labels.map((_,i) => [
+    cx + R*Math.cos(-Math.PI/2 + i*Math.PI/3),
+    cy + R*Math.sin(-Math.PI/2 + i*Math.PI/3)
+  ]);
+  // 六角形の辺
+  ctx.save(); ctx.strokeStyle='#dde3f0'; ctx.lineWidth=1.5;
+  ctx.beginPath(); pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));
+  ctx.closePath(); ctx.stroke(); ctx.restore();
+  // 全対角線（破線）
+  ctx.save(); ctx.strokeStyle='#c8d4f0'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  [[0,3],[1,4],[2,5]].forEach(([i,j]) => {
+    ctx.beginPath(); ctx.moveTo(pts[i][0],pts[i][1]); ctx.lineTo(pts[j][0],pts[j][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]); ctx.restore();
+  // 中心O
+  drawDot(ctx, cx, cy, '#888', 4);
+  drawLabel(ctx, cx+6, cy+14, 'O', '#888', 11);
+  // 基底ベクトル a=AB, b=AF
+  drawArrow(ctx, pts[0][0],pts[0][1],pts[1][0],pts[1][1],'#3b6bcc',2);
+  drawArrow(ctx, pts[0][0],pts[0][1],pts[5][0],pts[5][1],'#9b59b6',2);
+  drawVecLabel(ctx,(pts[0][0]+pts[1][0])/2+3,(pts[0][1]+pts[1][1])/2+13,'a','#3b6bcc',11);
+  drawVecLabel(ctx,(pts[0][0]+pts[5][0])/2-20,(pts[0][1]+pts[5][1])/2+13,'b','#9b59b6',11);
+  // ハイライトベクトル
+  if (highlightVec && highlightVec.length===2) {
+    const fi=labels.indexOf(highlightVec[0]), ti=labels.indexOf(highlightVec[1]);
+    if (fi>=0 && ti>=0) {
+      drawArrow(ctx, pts[fi][0],pts[fi][1],pts[ti][0],pts[ti][1],'#27ae60',3);
+      const mx=(pts[fi][0]+pts[ti][0])/2, my=(pts[fi][1]+pts[ti][1])/2;
+      const dx=mx-cx, dy=my-cy, len=Math.sqrt(dx*dx+dy*dy)||1;
+      drawVecLabel(ctx, mx+dx/len*20, my+dy/len*20, highlightVec, '#27ae60', 12);
+    }
+  }
+  // 頂点ラベルと点
+  pts.forEach((p,i) => {
+    drawDot(ctx, p[0],p[1],'#1a2744',3.5);
+    const angle=-Math.PI/2+i*Math.PI/3;
+    drawLabel(ctx, p[0]+Math.cos(angle)*17-5, p[1]+Math.sin(angle)*17+5, labels[i],'#1a2744',12);
+  });
+}
+
+const qFigs = {
+  1:  c => qfig_equal(c),
+  3:  c => qfig_inverse_q(c),
+  6:  c => qfig_tri_law(c),
+  7:  c => qfig_pos_vec(c),
+  9:  c => qfig_hexagon_center(c, 'AC'),
+  12: c => qfig_tri_circuit(c),
+  13: c => qfig_pos_vec(c),
+  15: c => qfig_hexagon_center(c, 'AD'),
+  18: c => qfig_midpoint_q(c),
+  // No.2
+  20: c => qfig_pos_vec(c),
+  22: c => qfig_division_pt(c, 1, 2),
+  24: c => qfig_division_pt(c, 2, 1),
+  25: c => qfig_centroid(c),
+  28: c => qfig_centroid(c),
+  31: c => qfig_tri_div(c, 2, 1),
+};
+
+// ── 単元ごとの問題インデックス割り当て ──
+const unitMap = {
+  no0:  [0,1,2,3,4,5,10,14,17],
+  no1a: [6,11,12],
+  no1b: [8,9,15,16],
+  no2a: [7,13,18,19,20],
+  no2b: [21,22,23,24,25,26,27,28,29,30,31,32],
+};
+Object.entries(unitMap).forEach(([unit, idxs]) => {
+  idxs.forEach(i => { if (questions[i]) questions[i].unit = unit; });
+});
+
+let qIdx = 0, score = 0, answered = false;
+let filteredQ = [], filteredFigs = {}, currentUnit = null;
+let currentShuffledAns = 0; // シャッフル後の正解インデックス
+
+const unitLabel = {
+  no0: 'No.0 ベクトルとは',
+  no1a: 'No.1① 加法・減法',
+  no1b: 'No.1② 線形結合',
+  no2a: 'No.2① 位置ベクトル',
+  no2b: 'No.2② 分点・重心',
+  all:  '全範囲まとめ',
+};
+
+function showQuizMenu() {
+  document.getElementById('quiz-menu').style.display = 'block';
+  document.getElementById('quiz-panel').style.display = 'none';
+}
+
+function startQuiz(unit) {
+  currentUnit = unit;
+  filteredQ = (unit === 'all') ? [...questions] : questions.filter(q => q.unit === unit);
+  // 元のグローバルインデックス → フィルタ後インデックスで図をマッピング
+  filteredFigs = {};
+  filteredQ.forEach((q, ni) => {
+    const oi = questions.indexOf(q);
+    if (qFigs[oi]) filteredFigs[ni] = qFigs[oi];
+  });
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quiz-menu').style.display = 'none';
+  document.getElementById('quiz-panel').style.display = 'block';
+  document.getElementById('quiz-content').style.display = 'block';
+  document.getElementById('quiz-result').style.display = 'none';
+  renderQuestion();
+}
+
+function retryQuiz() { startQuiz(currentUnit); }
+
+function renderQuestion() {
+  answered = false;
+  const q = filteredQ[qIdx];
+  document.getElementById('quiz-q').innerHTML = `Q${qIdx+1}. ${q.q}`;
+
+  // 選択肢をシャッフル（正解位置をランダム化）
+  const correctText = q.opts[q.ans];
+  const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+  currentShuffledAns = shuffled.indexOf(correctText);
+
+  const optsEl = document.getElementById('quiz-opts');
+  optsEl.innerHTML = '';
+  shuffled.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.innerHTML = opt;
+    btn.onclick = () => answerQ(i);
+    optsEl.appendChild(btn);
+  });
+
+  const figWrap = document.getElementById('quiz-fig-wrap');
+  if (filteredFigs[qIdx]) {
+    figWrap.style.display = 'block';
+    requestAnimationFrame(() => filteredFigs[qIdx](document.getElementById('quiz-fig')));
+  } else {
+    figWrap.style.display = 'none';
+  }
+
+  const fb = document.getElementById('quiz-fb');
+  fb.style.display = 'none';
+  fb.className = 'quiz-feedback';
+  document.getElementById('quiz-next').style.display = 'none';
+
+  document.getElementById('quiz-progress-label').textContent = `問題 ${qIdx+1} / ${filteredQ.length}`;
+  document.getElementById('quiz-score-label').textContent = `正解数：${score}`;
+  document.getElementById('quiz-progress-fill').style.width = `${(qIdx/filteredQ.length)*100}%`;
+
+  setTimeout(() => {
+    if (window.MathJax) MathJax.typesetPromise([document.getElementById('quiz-q'), optsEl]);
+  }, 60);
+}
+
+function answerQ(i) {
+  if (answered) return;
+  answered = true;
+  const q = filteredQ[qIdx];
+  document.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
+
+  const correct = (i === currentShuffledAns);
+  document.querySelectorAll('.quiz-option')[currentShuffledAns].classList.add('correct');
+  if (!correct) document.querySelectorAll('.quiz-option')[i].classList.add('wrong');
+
+  if (correct) score++;
+  document.getElementById('quiz-score-label').textContent = `正解数：${score}`;
+
+  const fb = document.getElementById('quiz-fb');
+  fb.style.display = 'block';
+  fb.className = `quiz-feedback ${correct ? 'correct' : 'wrong'}`;
+  fb.innerHTML = (correct ? '✓ 正解！　' : '✗ 不正解。') + q.exp;
+  document.getElementById('quiz-next').style.display = 'inline-block';
+
+  setTimeout(() => {
+    if (window.MathJax) MathJax.typesetPromise([fb]);
+  }, 60);
+}
+
+function nextQuestion() {
+  qIdx++;
+  if (qIdx >= filteredQ.length) {
+    document.getElementById('quiz-content').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'block';
+    document.getElementById('quiz-progress-fill').style.width = '100%';
+
+    const pct = Math.round(score / filteredQ.length * 100);
+    const label = unitLabel[currentUnit] || '';
+    document.getElementById('result-score').textContent =
+      `【${label}】${score} / ${filteredQ.length} 問正解（${pct}%）`;
+    const msgs = [
+      '基礎からもう一度確認しよう！解説を読み直してみよう。',
+      'もう少し！苦手な問題を復習して再挑戦しよう。',
+      'よくできました！少し弱い部分を復習しよう。',
+      '素晴らしい！完璧に理解できている！',
+    ];
+    document.getElementById('result-msg').textContent = msgs[pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0];
+  } else {
+    renderQuestion();
+  }
+}
+
+// ═══════════════════════════════════════
+//  Init
+// ═══════════════════════════════════════
+// MathJax が初期ページの数式を自動処理するため追加呼び出し不要
+
+// ═══════════════════════════════════════
+//  No.2 Canvases
+// ═══════════════════════════════════════
+let no2aInit = false, no2bInit = false;
+
+function initNo2a() {
+  no2aInit = true;
+  requestAnimationFrame(drawPosVec);
+}
+
+function initNo2b() {
+  no2bInit = true;
+  requestAnimationFrame(() => {
+    updateDivision();
+    drawGravity();
+  });
+}
+
+// 位置ベクトル図
+function drawPosVec() {
+  const { ctx, w, h } = getCtx('canvas-pos');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [80, h - 50];
+  const A = [210, 80];
+  const B = [460, 150];
+
+  // OA (blue = a)
+  drawArrow(ctx, O[0], O[1], A[0], A[1], '#3b6bcc', 2.5);
+  drawVecLabel(ctx, (O[0]+A[0])/2 - 38, (O[1]+A[1])/2 + 6, 'a', '#3b6bcc', 13);
+
+  // OB (purple = b)
+  drawArrow(ctx, O[0], O[1], B[0], B[1], '#9b59b6', 2.5);
+  drawVecLabel(ctx, (O[0]+B[0])/2 - 4, (O[1]+B[1])/2 + 16, 'b', '#9b59b6', 13);
+
+  // AB dashed then arrow (green = b - a)
+  ctx.save();
+  ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  drawArrow(ctx, A[0], A[1], B[0], B[1], '#27ae60', 2.5);
+
+  // Label AB as "b - a"
+  const mx = (A[0]+B[0])/2 - 20, my = (A[1]+B[1])/2 - 18;
+  ctx.save();
+  ctx.font = 'bold 12px serif';
+  ctx.fillStyle = '#27ae60';
+  ctx.fillText('b', mx, my);
+  ctx.font = 'bold 12px sans-serif';
+  ctx.fillText(' − ', mx + 10, my);
+  ctx.restore();
+  drawVecLabel(ctx, mx + 30, my, 'a', '#27ae60', 12);
+
+  // Arrow overlay (hide dashed line tip)
+  const abAngle = Math.atan2(B[1]-A[1], B[0]-A[0]);
+  const dx = Math.cos(abAngle), dy = Math.sin(abAngle);
+  ctx.save(); ctx.fillStyle = '#27ae60';
+  ctx.beginPath();
+  ctx.moveTo(B[0], B[1]);
+  ctx.lineTo(B[0] - dx*13 - dy*8, B[1] - dy*13 + dx*8);
+  ctx.lineTo(B[0] - dx*13 + dy*8, B[1] - dy*13 - dx*8);
+  ctx.closePath(); ctx.fill(); ctx.restore();
+
+  // Points & labels
+  drawDot(ctx, O[0], O[1], '#1a2744', 5);
+  drawDot(ctx, A[0], A[1], '#3b6bcc', 5);
+  drawDot(ctx, B[0], B[1], '#9b59b6', 5);
+  drawLabel(ctx, O[0] - 10, O[1] + 16, 'O（原点）', '#1a2744', 11);
+  drawLabel(ctx, A[0] - 14, A[1] - 9, 'A', '#3b6bcc', 13);
+  drawLabel(ctx, B[0] + 6, B[1] - 6, 'B', '#9b59b6', 13);
+
+  // 凡例
+  ctx.save(); ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#3b6bcc'; ctx.fillText('OA = a（位置ベクトル）', 14, h - 30);
+  ctx.fillStyle = '#9b59b6'; ctx.fillText('OB = b', 14, h - 16);
+  ctx.fillStyle = '#27ae60'; ctx.fillText('AB = b − a', 170, h - 30);
+  ctx.restore();
+}
+
+// 内分点インタラクティブ図
+function drawDivision(m, n) {
+  const { ctx, w, h } = getCtx('canvas-divpt');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [55, h - 40];
+  const A = [120, h/2 - 10];
+  const B = [460, h/2 - 10];
+  const t = m / (m + n);
+  const P = [A[0] + t * (B[0] - A[0]), A[1] + t * (B[1] - A[1])];
+
+  // Dashed line through AB
+  ctx.save();
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(A[0]-10, A[1]); ctx.lineTo(B[0]+10, B[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  // AP segment (red/orange, m parts)
+  ctx.save(); ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(P[0], P[1]); ctx.stroke();
+  ctx.restore();
+  drawLabel(ctx, (A[0]+P[0])/2 - 4, A[1] - 12, 'm', '#e74c3c', 12);
+
+  // PB segment (blue, n parts)
+  ctx.save(); ctx.strokeStyle = '#9b59b6'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(P[0], P[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  ctx.restore();
+  drawLabel(ctx, (P[0]+B[0])/2 - 4, A[1] - 12, 'n', '#9b59b6', 12);
+
+  // OA, OB, OP arrows from origin
+  drawArrow(ctx, O[0], O[1], A[0], A[1], '#3b6bcc', 2);
+  drawArrow(ctx, O[0], O[1], B[0], B[1], '#9b59b6', 2);
+  drawArrow(ctx, O[0], O[1], P[0], P[1], '#27ae60', 2.5);
+
+  // Labels
+  drawVecLabel(ctx, (O[0]+A[0])/2 - 22, (O[1]+A[1])/2 + 8, 'a', '#3b6bcc', 12);
+  drawVecLabel(ctx, (O[0]+B[0])/2 + 2, (O[1]+B[1])/2 + 14, 'b', '#9b59b6', 12);
+  drawVecLabel(ctx, (O[0]+P[0])/2 - 20, (O[1]+P[1])/2 - 4, 'p', '#27ae60', 12);
+
+  drawDot(ctx, O[0], O[1], '#1a2744', 5);
+  drawDot(ctx, A[0], A[1], '#3b6bcc', 5);
+  drawDot(ctx, B[0], B[1], '#9b59b6', 5);
+  drawDot(ctx, P[0], P[1], '#27ae60', 5);
+
+  drawLabel(ctx, O[0]-10, O[1]+14, 'O', '#1a2744', 12);
+  drawLabel(ctx, A[0]-18, A[1]+14, 'A', '#3b6bcc', 12);
+  drawLabel(ctx, B[0]+5, B[1]+14, 'B', '#9b59b6', 12);
+  drawLabel(ctx, P[0]-5, P[1]+14, 'P', '#27ae60', 12);
+}
+
+function updateDivision() {
+  const m = parseInt(document.getElementById('div-m').value);
+  const n = parseInt(document.getElementById('div-n').value);
+  document.getElementById('div-m-disp').textContent = m;
+  document.getElementById('div-n-disp').textContent = n;
+
+  const fEl = document.getElementById('div-formula');
+  fEl.innerHTML = `$\\vec{p}=\\dfrac{${n}\\vec{a}+${m}\\vec{b}}{${m}+${n}}=\\dfrac{${n}\\vec{a}+${m}\\vec{b}}{${m+n}}$`;
+  if (window.MathJax) MathJax.typesetPromise([fEl]);
+
+  drawDivision(m, n);
+}
+
+// 重心図
+function drawGravity() {
+  const { ctx, w, h } = getCtx('canvas-gravity');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [55, h - 35];
+  const A = [160, 55];
+  const B = [120, h - 50];
+  const C = [450, h - 60];
+  const G = [(A[0]+B[0]+C[0])/3, (A[1]+B[1]+C[1])/3];
+  const MA = [(B[0]+C[0])/2, (B[1]+C[1])/2]; // midpoint of BC (opposite A)
+  const MB = [(A[0]+C[0])/2, (A[1]+C[1])/2]; // midpoint of AC
+  const MC = [(A[0]+B[0])/2, (A[1]+B[1])/2]; // midpoint of AB
+
+  // Triangle sides
+  ctx.save(); ctx.strokeStyle = '#aab'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]);
+  ctx.lineTo(C[0],C[1]); ctx.closePath(); ctx.stroke(); ctx.restore();
+
+  // Medians (dashed)
+  ctx.save(); ctx.strokeStyle = '#c8a'; ctx.lineWidth = 1.2; ctx.setLineDash([5,4]);
+  [[A, MA],[B, MB],[C, MC]].forEach(([from, to]) => {
+    ctx.beginPath(); ctx.moveTo(from[0],from[1]); ctx.lineTo(to[0],to[1]); ctx.stroke();
+  });
+  ctx.setLineDash([]); ctx.restore();
+
+  // Position vectors from O
+  [[A,'#3b6bcc','a'],[B,'#9b59b6','b'],[C,'#e67e22','c']].forEach(([pt, col, lbl]) => {
+    drawArrow(ctx, O[0], O[1], pt[0], pt[1], col, 1.8);
+    drawVecLabel(ctx, (O[0]+pt[0])/2+4, (O[1]+pt[1])/2+10, lbl, col, 11);
+  });
+  drawArrow(ctx, O[0], O[1], G[0], G[1], '#27ae60', 2.5);
+
+  // Vertex dots & labels
+  drawDot(ctx, O[0], O[1], '#1a2744', 4);
+  drawDot(ctx, A[0], A[1], '#3b6bcc', 5);
+  drawDot(ctx, B[0], B[1], '#9b59b6', 5);
+  drawDot(ctx, C[0], C[1], '#e67e22', 5);
+  drawDot(ctx, G[0], G[1], '#27ae60', 6);
+  drawDot(ctx, MA[0], MA[1], '#888', 4);
+  drawDot(ctx, MB[0], MB[1], '#888', 4);
+  drawDot(ctx, MC[0], MC[1], '#888', 4);
+
+  drawLabel(ctx, O[0]-14, O[1]+12, 'O', '#1a2744', 11);
+  drawLabel(ctx, A[0]-16, A[1]-8, 'A', '#3b6bcc', 13);
+  drawLabel(ctx, B[0]-18, B[1]+6, 'B', '#9b59b6', 13);
+  drawLabel(ctx, C[0]+6, C[1]+6, 'C', '#e67e22', 13);
+  drawLabel(ctx, G[0]+6, G[1]-4, 'G（重心）', '#27ae60', 11);
+
+  ctx.save(); ctx.font = '11px sans-serif'; ctx.fillStyle = '#27ae60';
+  ctx.fillText('OG = (a+b+c)/3', 14, h - 12); ctx.restore();
+}
+
+// 画面回転・リサイズ時にCanvasを再描画
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (no0Init) { drawEqualVectors(); drawNotation(); drawInverse(); drawScalar(); }
+    if (no1aInit) { drawAdd(addProgress); drawSub(subProgress); setStep(currentStep); }
+    if (no1bInit) { updateLinear(); drawHex(0); }
+    if (no2aInit) drawPosVec();
+    if (no2bInit) { updateDivision(); drawGravity(); }
+  }, 150);
+});
+</script>
+</body>
+</html>
