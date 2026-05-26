@@ -453,6 +453,8 @@
     .u-no1b .u-num { color: #d4870a; }
     .u-no2a .u-num { color: var(--green); }
     .u-no2b .u-num { color: #1a9060; }
+    .u-no3a .u-num { color: #e74c3c; }
+    .u-no3b .u-num { color: #c0392b; }
     .u-all  .u-num { color: var(--navy); }
     .u-all  { border-style: dashed; }
 
@@ -519,6 +521,7 @@
     .hero-card.no0::before { background: var(--blue); }
     .hero-card.no1::before { background: var(--accent); }
     .hero-card.no2::before { background: var(--green); }
+    .hero-card.no3::before { background: var(--red); }
 
     .hero-card:hover {
       transform: translateY(-2px);
@@ -588,6 +591,8 @@
     <button onclick="showSection('no1b')">No.1② 線形結合</button>
     <button onclick="showSection('no2a')">No.2① 位置ベクトル</button>
     <button onclick="showSection('no2b')">No.2② 分点・重心</button>
+    <button onclick="showSection('no3a')">No.3① 分解・点の位置</button>
+    <button onclick="showSection('no3b')">No.3② 係数比較・平行</button>
     <button onclick="showSection('quiz')">練習問題</button>
   </nav>
 </header>
@@ -599,7 +604,7 @@
     <div class="page-title">
       <div class="tag">数学C</div>
       <h1>ベクトル学習アプリ</h1>
-      <p>No.0 〜 No.2 の内容をインタラクティブに学ぼう</p>
+      <p>No.0 〜 No.3 の内容をインタラクティブに学ぼう</p>
     </div>
 
     <div class="hero">
@@ -635,6 +640,17 @@
           <li>$\overrightarrow{AB}=\vec{b}-\vec{a}$</li>
           <li>内分点・外分点の公式</li>
           <li>三角形の重心</li>
+        </ul>
+      </div>
+      <div class="hero-card no3" onclick="showSection('no3a')">
+        <span class="num">3</span>
+        <h3>No.3 分解・係数比較・平行</h3>
+        <p>ベクトルによる点の位置決定と線形代数的条件</p>
+        <ul class="topic-list">
+          <li>$\overrightarrow{BC}=\vec{c}-\vec{b}$ による分解</li>
+          <li>$m\overrightarrow{AP}+n\overrightarrow{BP}=\vec{0}$ で点Pを決定</li>
+          <li>係数比較（一次独立の利用）</li>
+          <li>平行条件 $\vec{p}\parallel\vec{q}$</li>
         </ul>
       </div>
     </div>
@@ -1056,6 +1072,146 @@
 
     <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
       <button class="btn btn-outline" onclick="showSection('no2a')">← No.2① に戻る</button>
+      <button class="btn" onclick="showSection('no3a')">次へ：No.3① 分解・点の位置 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.3① ══════════════ -->
+  <div id="sec-no3a" class="section">
+    <div class="page-title">
+      <div class="tag">No.3①</div>
+      <h1>位置ベクトルによる分解と点の位置</h1>
+      <p>$\overrightarrow{AP}=\vec{p}-\vec{a}$ を使いこなそう</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>ベクトルの分解（基点を変える）</h2>
+      <div class="key-box">
+        <div class="label">基本変換</div>
+        <p>点 A を基点にとって位置ベクトル $\vec{b}=\overrightarrow{AB}$, $\vec{c}=\overrightarrow{AC}$ とおくと、</p>
+        <div class="math-block">$$\overrightarrow{BC} = \overrightarrow{AC} - \overrightarrow{AB} = \vec{c} - \vec{b}$$</div>
+        <p class="note">「終点の位置ベクトル − 始点の位置ベクトル」の原則と同じ。</p>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">一般形（原点Oを基準にするとき）</div>
+        <p>$\overrightarrow{OA}=\vec{a}$, $\overrightarrow{OP}=\vec{p}$ とすると、</p>
+        <div class="math-block">$$\overrightarrow{AP} = \vec{p} - \vec{a} \quad \text{（終点 − 始点）}$$</div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-decomp" width="560" height="210"></canvas>
+        <div class="canvas-controls">
+          A を基点とすると $\overrightarrow{BC}=\vec{c}-\vec{b}$（原点Oから見たベクトルの差）
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>点の位置の決定</h2>
+      <p>$m\overrightarrow{AP}+n\overrightarrow{BP}=\vec{0}$ のような式から点 P の位置ベクトルを求める。</p>
+      <div class="key-box">
+        <div class="label">手順</div>
+        <ol style="margin-left:1.2rem; line-height:2.1;">
+          <li>$\overrightarrow{AP}=\vec{p}-\vec{a}$, $\overrightarrow{BP}=\vec{p}-\vec{b}$ のように「終点 − 始点」に直す</li>
+          <li>$\vec{p}$ についての方程式を解く</li>
+          <li>求めた $\vec{p}$ が内分点・重心などと一致するか確認する</li>
+        </ol>
+      </div>
+
+      <div class="two-col" style="margin-top:1rem;">
+        <div class="accent-box">
+          <div class="label">例題② $3\overrightarrow{AP}+\overrightarrow{BP}=\vec{0}$</div>
+          <p>$3(\vec{p}-\vec{a})+(\vec{p}-\vec{b})=\vec{0}$</p>
+          <p>$4\vec{p}=3\vec{a}+\vec{b}$</p>
+          <div class="math-block" style="font-size:0.9rem;">$$\vec{p}=\frac{3\vec{a}+\vec{b}}{4}$$</div>
+          <p class="note">→ P は AB を <strong>1:3 に内分</strong>する点（$n=3, m=1$）</p>
+        </div>
+        <div class="accent-box">
+          <div class="label">例題③ $\overrightarrow{AP}+2\overrightarrow{BP}+3\overrightarrow{CP}=\overrightarrow{CA}$</div>
+          <p>$(\vec{p}-\vec{a})+2(\vec{p}-\vec{b})+3(\vec{p}-\vec{c})=\vec{a}-\vec{c}$</p>
+          <p>$6\vec{p}=2\vec{a}+2\vec{b}+2\vec{c}$</p>
+          <div class="math-block" style="font-size:0.9rem;">$$\vec{p}=\frac{\vec{a}+\vec{b}+\vec{c}}{3}$$</div>
+          <p class="note">→ P は △ABC の <strong>重心</strong></p>
+        </div>
+      </div>
+
+      <div class="key-box" style="margin-top:0.8rem; border-color:var(--green);">
+        <div class="label" style="background:var(--green);">重要パターン：$\overrightarrow{PA}+\overrightarrow{PB}+\overrightarrow{PC}=\vec{0}$</div>
+        <p>$(\vec{a}-\vec{p})+(\vec{b}-\vec{p})+(\vec{c}-\vec{p})=\vec{0}$ より $3\vec{p}=\vec{a}+\vec{b}+\vec{c}$</p>
+        <div class="math-block">$$\vec{p}=\frac{\vec{a}+\vec{b}+\vec{c}}{3} \quad \Rightarrow \text{P は△ABCの重心}$$</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no2b')">← No.2② に戻る</button>
+      <button class="btn" onclick="showSection('no3b')">次へ：No.3② 係数比較・平行条件 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.3② ══════════════ -->
+  <div id="sec-no3b" class="section">
+    <div class="page-title">
+      <div class="tag">No.3②</div>
+      <h1>係数比較・平行条件</h1>
+      <p>一次独立を使った方程式の解法と平行の判定</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>一次独立と係数比較</h2>
+      <div class="key-box">
+        <div class="label">一次独立（係数比較の定理）</div>
+        <p>$\vec{a}\neq\vec{0}$, $\vec{b}\neq\vec{0}$ で $\vec{a}$ と $\vec{b}$ が <strong>平行でない</strong>（一次独立）とき、</p>
+        <div class="math-block">$$m\vec{a}+n\vec{b}=m'\vec{a}+n'\vec{b} \iff m=m',\; n=n'$$</div>
+        <p>特に $m\vec{a}+n\vec{b}=\vec{0} \iff m=0$ かつ $n=0$</p>
+      </div>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題⑤ 係数比較で $x$, $y$ を求める</div>
+        <div class="two-col" style="margin-top:0.5rem;">
+          <div>
+            <p><strong>⑴</strong> $3\vec{a}+x\vec{b}=y\vec{a}-4\vec{b}$</p>
+            <p style="margin-top:0.3rem; margin-left:0.5rem;">$\vec{a}$ の係数：$3=y$ → $y=3$</p>
+            <p style="margin-left:0.5rem;">$\vec{b}$ の係数：$x=-4$</p>
+          </div>
+          <div>
+            <p><strong>⑵</strong> $(2x-5)\vec{a}+(4-3y)\vec{b}=\vec{a}-2\vec{b}$</p>
+            <p style="margin-top:0.3rem; margin-left:0.5rem;">$2x-5=1$ → $x=3$</p>
+            <p style="margin-left:0.5rem;">$4-3y=-2$ → $y=2$</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>ベクトルの平行条件</h2>
+      <div class="key-box">
+        <div class="label">平行条件</div>
+        <p>$\vec{p}\neq\vec{0}$, $\vec{q}\neq\vec{0}$ のとき、</p>
+        <div class="math-block">$$\vec{p}\parallel\vec{q} \iff \vec{q}=k\vec{p} \text{ となる実数 } k \text{ が存在する}$$</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-parallel2" width="560" height="180"></canvas>
+        <div class="canvas-controls">
+          $\vec{q}=k\vec{p}$ のとき $\vec{p}\parallel\vec{q}$（$k>0$ なら同じ向き、$k&lt;0$ なら逆向き）
+        </div>
+      </div>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題⑥ $\vec{p}=2\vec{a}-3\vec{b}$, $\vec{q}=-6\vec{a}+x\vec{b}$ が平行になる $x$ は？</div>
+        <p>$\vec{q}=k\vec{p}$ とおくと $-6\vec{a}+x\vec{b}=k(2\vec{a}-3\vec{b})=2k\vec{a}-3k\vec{b}$</p>
+        <p style="margin-top:0.4rem;">係数比較：$2k=-6 \Rightarrow k=-3$　また $x=-3k=9$</p>
+        <div class="math-block" style="margin:0.3rem 0;">$$\boxed{x=9}$$</div>
+      </div>
+
+      <div class="key-box" style="margin-top:0.8rem;">
+        <div class="label">注意</div>
+        <p>$\vec{a}$, $\vec{b}$ が一次独立のとき $\vec{p}=s\vec{a}+t\vec{b}$, $\vec{q}=s'\vec{a}+t'\vec{b}$ であれば、</p>
+        <p>$\vec{p}\parallel\vec{q}$ $\iff$ $st'=s't$（係数の比が等しい）</p>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no3a')">← No.3① に戻る</button>
       <button class="btn btn-accent" onclick="showSection('quiz')">練習問題に挑戦！ →</button>
     </div>
   </div>
@@ -1098,10 +1254,20 @@
             <span class="u-title">No.2②<br>分点・重心</span>
             <span class="u-count">12問</span>
           </button>
+          <button class="quiz-unit-btn u-no3a" onclick="startQuiz('no3a')">
+            <span class="u-num">3①</span>
+            <span class="u-title">No.3①<br>分解・点の位置</span>
+            <span class="u-count">5問</span>
+          </button>
+          <button class="quiz-unit-btn u-no3b" onclick="startQuiz('no3b')">
+            <span class="u-num">3②</span>
+            <span class="u-title">No.3②<br>係数比較・平行</span>
+            <span class="u-count">5問</span>
+          </button>
           <button class="quiz-unit-btn u-all" onclick="startQuiz('all')">
             <span class="u-num">全</span>
             <span class="u-title">全範囲<br>まとめ</span>
-            <span class="u-count">33問</span>
+            <span class="u-count">43問</span>
           </button>
         </div>
       </div>
@@ -1150,7 +1316,7 @@
 // ═══════════════════════════════════════
 //  Navigation
 // ═══════════════════════════════════════
-const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','quiz'];
+const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','quiz'];
 
 function showSection(id) {
   sectionIds.forEach(s => document.getElementById('sec-'+s).classList.remove('active'));
@@ -1167,6 +1333,8 @@ function showSection(id) {
   if (id === 'no1b' && !no1bInit) initNo1b();
   if (id === 'no2a' && !no2aInit) initNo2a();
   if (id === 'no2b' && !no2bInit) initNo2b();
+  if (id === 'no3a' && !no3aInit) initNo3a();
+  if (id === 'no3b' && !no3bInit) initNo3b();
   if (id === 'quiz') showQuizMenu();
 }
 
@@ -1955,6 +2123,78 @@ const questions = [
     ans: 0,
     exp: '$m=1,n=3$：$\\vec{q}=\\dfrac{-3\\vec{a}+1\\cdot\\vec{b}}{1-3}=\\dfrac{-3\\vec{a}+\\vec{b}}{-2}=\\dfrac{3\\vec{a}-\\vec{b}}{2}$。分母が負になる場合は符号を逆転。',
   },
+  // ── No.3① 問題（idx 33〜37） ──
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$, $\\overrightarrow{OB}=\\vec{b}$, $\\overrightarrow{OC}=\\vec{c}$ のとき、$\\overrightarrow{BC}$ を $\\vec{b}$, $\\vec{c}$ で表すと？',
+    opts: ['$\\vec{c}-\\vec{b}$', '$\\vec{b}-\\vec{c}$', '$\\vec{b}+\\vec{c}$', '$\\vec{c}+\\vec{b}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{BC}=\\overrightarrow{OC}-\\overrightarrow{OB}=\\vec{c}-\\vec{b}$。「終点の位置ベクトル − 始点の位置ベクトル」の原則。',
+  },
+  {
+    q: '$\\overrightarrow{OA}=\\vec{a}$, $\\overrightarrow{OP}=\\vec{p}$ のとき、$\\overrightarrow{AP}$ を表すと？',
+    opts: ['$\\vec{p}-\\vec{a}$', '$\\vec{a}-\\vec{p}$', '$\\vec{p}+\\vec{a}$', '$\\vec{a}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AP}=\\overrightarrow{OP}-\\overrightarrow{OA}=\\vec{p}-\\vec{a}$。終点 P の位置ベクトル − 始点 A の位置ベクトル。',
+  },
+  {
+    q: '$\\overrightarrow{PA}+\\overrightarrow{PB}+\\overrightarrow{PC}=\\vec{0}$ のとき、点 P はどの点か？',
+    opts: ['△ABCの重心', 'ABの中点', 'BCの中点', 'Aと一致する点'],
+    ans: 0,
+    exp: '$(\\vec{a}-\\vec{p})+(\\vec{b}-\\vec{p})+(\\vec{c}-\\vec{p})=\\vec{0}$ より $3\\vec{p}=\\vec{a}+\\vec{b}+\\vec{c}$，すなわち $\\vec{p}=\\dfrac{\\vec{a}+\\vec{b}+\\vec{c}}{3}$。これは △ABC の重心。',
+  },
+  {
+    q: '$3\\overrightarrow{AP}+\\overrightarrow{BP}=\\vec{0}$ のとき、P は AB をどのように分ける点か？',
+    opts: ['ABを1:3に内分', 'ABを3:1に内分', 'ABの中点', 'ABを1:3に外分'],
+    ans: 0,
+    exp: '$3(\\vec{p}-\\vec{a})+(\\vec{p}-\\vec{b})=\\vec{0}$ より $4\\vec{p}=3\\vec{a}+\\vec{b}$，$\\vec{p}=\\dfrac{3\\vec{a}+\\vec{b}}{4}$。内分公式 $\\dfrac{n\\vec{a}+m\\vec{b}}{m+n}$ と比較すると $m=1,n=3$。P は AB を 1:3 に内分。',
+  },
+  {
+    q: '$\\overrightarrow{AP}+2\\overrightarrow{BP}+3\\overrightarrow{CP}=\\overrightarrow{CA}$ のとき、点 P はどの点か？',
+    opts: ['△ABCの重心', 'ABの中点', 'BCを1:2に内分', '△ABCの外心'],
+    ans: 0,
+    exp: '$(\\vec{p}-\\vec{a})+2(\\vec{p}-\\vec{b})+3(\\vec{p}-\\vec{c})=(\\vec{a}-\\vec{c})$ を整理すると $6\\vec{p}=2\\vec{a}+2\\vec{b}+2\\vec{c}$，$\\vec{p}=\\dfrac{\\vec{a}+\\vec{b}+\\vec{c}}{3}$。△ABC の重心。',
+  },
+  // ── No.3② 問題（idx 38〜42） ──
+  {
+    q: '$\\vec{a}$, $\\vec{b}$ が一次独立のとき、$x\\vec{a}+y\\vec{b}=\\vec{0}$ ならば？',
+    opts: ['$x=0$ かつ $y=0$', '$x=y$', '$x+y=0$', '$x=-y$'],
+    ans: 0,
+    exp: '一次独立な2ベクトルの線形結合が $\\vec{0}$ になるのは，両方の係数がともに0のときに限る。$x=0$ かつ $y=0$。',
+  },
+  {
+    q: '$\\vec{a}$, $\\vec{b}$ が一次独立のとき、$3\\vec{a}+x\\vec{b}=y\\vec{a}-4\\vec{b}$ の $x$, $y$ の値は？',
+    opts: ['$x=-4,\\; y=3$', '$x=4,\\; y=3$', '$x=-4,\\; y=-3$', '$x=3,\\; y=4$'],
+    ans: 0,
+    exp: '$\\vec{a}$ の係数比較：$3=y$ → $y=3$。$\\vec{b}$ の係数比較：$x=-4$。',
+  },
+  {
+    q: '$\\vec{a}\\neq\\vec{0}$, $\\vec{b}\\neq\\vec{0}$ のとき、$\\vec{a}\\parallel\\vec{b}$ の条件は？',
+    opts: [
+      '$\\vec{b}=k\\vec{a}$ となる実数 $k$ が存在する',
+      '$\\vec{a}+\\vec{b}=\\vec{0}$',
+      '$|\\vec{a}|=|\\vec{b}|$',
+      '$\\vec{a}\\cdot\\vec{b}=0$',
+    ],
+    ans: 0,
+    exp: '平行条件：$\\vec{a}\\parallel\\vec{b}$ $\\iff$ $\\vec{b}=k\\vec{a}$ を満たす実数 $k$ が存在する。$k>0$ で同向き，$k<0$ で逆向き。',
+  },
+  {
+    q: '$\\vec{p}=2\\vec{a}-3\\vec{b}$, $\\vec{q}=-6\\vec{a}+x\\vec{b}$ が平行となる $x$ の値は？',
+    opts: ['$9$', '$-9$', '$6$', '$-6$'],
+    ans: 0,
+    exp: '$\\vec{q}=k\\vec{p}$ とおくと $-6\\vec{a}+x\\vec{b}=2k\\vec{a}-3k\\vec{b}$。$\\vec{a}$ の係数：$2k=-6$ → $k=-3$。$\\vec{b}$ の係数：$x=-3k=9$。',
+  },
+  {
+    q: '$\\vec{p}=-3\\vec{a}+4\\vec{b}$, $\\vec{q}=x\\vec{a}+2\\vec{b}$ が平行となる $x$ の値は？',
+    opts: [
+      '$-\\dfrac{3}{2}$',
+      '$\\dfrac{3}{2}$',
+      '$-6$',
+      '$6$',
+    ],
+    ans: 0,
+    exp: '$\\vec{q}=k\\vec{p}$ とおくと $x\\vec{a}+2\\vec{b}=-3k\\vec{a}+4k\\vec{b}$。$\\vec{b}$ の係数：$4k=2$ → $k=\\dfrac{1}{2}$。$\\vec{a}$ の係数：$x=-3k=-\\dfrac{3}{2}$。',
+  },
 ];
 
 // ═══════════════════════════════════════
@@ -2096,6 +2336,29 @@ function qfig_midpoint_q(c) {
   ctx.save(); ctx.setLineDash([4,3]); ctx.strokeStyle='#ccc'; ctx.lineWidth=1.2;
   ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
   ctx.restore();
+}
+
+// No.3 図: ベクトルの分解
+function qfig_decomp_q(c) {
+  const {ctx, w, h} = qfigCtx(c, 145);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const O=[w*0.08,h*0.88], A=[w*0.38,h*0.80], B=[w*0.30,h*0.18], C=[w*0.90,h*0.40];
+  ctx.save(); ctx.strokeStyle='#dde3f0'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(C[0],C[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  drawArrow(ctx,O[0],O[1],B[0],B[1],'#3b6bcc',1.8);
+  drawArrow(ctx,O[0],O[1],C[0],C[1],'#9b59b6',1.8);
+  drawArrow(ctx,B[0],B[1],C[0],C[1],'#27ae60',2.5);
+  drawVecLabel(ctx,(O[0]+B[0])/2-22,(O[1]+B[1])/2+8,'b','#3b6bcc',11);
+  drawVecLabel(ctx,(O[0]+C[0])/2+2,(O[1]+C[1])/2+12,'c','#9b59b6',11);
+  const mx=(B[0]+C[0])/2, my=(B[1]+C[1])/2;
+  ctx.save(); ctx.font='bold 11px serif'; ctx.fillStyle='#27ae60';
+  ctx.fillText('c−b', mx+4, my-8); ctx.restore();
+  drawDot(ctx,O[0],O[1],'#1a2744',4); drawLabel(ctx,O[0]-14,O[1]+5,'O','#1a2744',11);
+  drawDot(ctx,B[0],B[1],'#3b6bcc',4); drawLabel(ctx,B[0]-14,B[1]-4,'B','#3b6bcc',11);
+  drawDot(ctx,C[0],C[1],'#9b59b6',4); drawLabel(ctx,C[0]+4,C[1]-4,'C','#9b59b6',11);
 }
 
 // No.2 図: 内分点
@@ -2244,6 +2507,12 @@ const qFigs = {
   25: c => qfig_centroid(c),
   28: c => qfig_centroid(c),
   31: c => qfig_tri_div(c, 2, 1),
+  // No.3
+  33: c => qfig_decomp_q(c),
+  34: c => qfig_pos_vec(c),
+  35: c => qfig_centroid(c),
+  36: c => qfig_division_pt(c, 1, 3),
+  37: c => qfig_centroid(c),
 };
 
 // ── 単元ごとの問題インデックス割り当て ──
@@ -2253,6 +2522,8 @@ const unitMap = {
   no1b: [8,9,15,16],
   no2a: [7,13,18,19,20],
   no2b: [21,22,23,24,25,26,27,28,29,30,31,32],
+  no3a: [33,34,35,36,37],
+  no3b: [38,39,40,41,42],
 };
 Object.entries(unitMap).forEach(([unit, idxs]) => {
   idxs.forEach(i => { if (questions[i]) questions[i].unit = unit; });
@@ -2268,6 +2539,8 @@ const unitLabel = {
   no1b: 'No.1② 線形結合',
   no2a: 'No.2① 位置ベクトル',
   no2b: 'No.2② 分点・重心',
+  no3a: 'No.3① 分解・点の位置',
+  no3b: 'No.3② 係数比較・平行',
   all:  '全範囲まとめ',
 };
 
@@ -2587,6 +2860,96 @@ function drawGravity() {
   ctx.fillText('OG = (a+b+c)/3', 14, h - 12); ctx.restore();
 }
 
+// ═══════════════════════════════════════
+//  No.3 Canvases
+// ═══════════════════════════════════════
+let no3aInit = false, no3bInit = false;
+
+function initNo3a() {
+  no3aInit = true;
+  requestAnimationFrame(drawDecomp);
+}
+function initNo3b() {
+  no3bInit = true;
+  requestAnimationFrame(drawParallel2);
+}
+
+// 位置ベクトルによる分解図
+function drawDecomp() {
+  const { ctx, w, h } = getCtx('canvas-decomp');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O=[65, h-38], A=[200, h-60], B=[155, 80], C=[450, 115];
+
+  // 破線: A-B, A-C の辺
+  ctx.save(); ctx.strokeStyle='#dde3f0'; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(C[0],C[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  // OA=a（灰青）, OB=b（青）, OC=c（紫）
+  drawArrow(ctx, O[0],O[1], A[0],A[1], '#8baad4', 2);
+  drawVecLabel(ctx, (O[0]+A[0])/2-6,(O[1]+A[1])/2+14, 'a', '#8baad4', 12);
+  drawArrow(ctx, O[0],O[1], B[0],B[1], '#3b6bcc', 2);
+  drawVecLabel(ctx, (O[0]+B[0])/2-26,(O[1]+B[1])/2+8, 'b', '#3b6bcc', 12);
+  drawArrow(ctx, O[0],O[1], C[0],C[1], '#9b59b6', 2);
+  drawVecLabel(ctx, (O[0]+C[0])/2+2,(O[1]+C[1])/2+14, 'c', '#9b59b6', 12);
+
+  // BC = c - b（緑・太）
+  drawArrow(ctx, B[0],B[1], C[0],C[1], '#27ae60', 3);
+  const mx=(B[0]+C[0])/2-12, my=(B[1]+C[1])/2-18;
+  ctx.save(); ctx.font='bold 13px serif'; ctx.fillStyle='#27ae60';
+  ctx.fillText('c', mx, my);
+  ctx.font='bold 13px sans-serif'; ctx.fillText(' − ', mx+11, my);
+  ctx.restore();
+  drawVecLabel(ctx, mx+32, my, 'b', '#27ae60', 13);
+
+  // 点・ラベル
+  [[O,'O','#1a2744',-14,14],[A,'A','#8baad4',6,14],[B,'B','#3b6bcc',-16,-6],[C,'C','#9b59b6',6,-6]]
+    .forEach(([p,lbl,col,dx,dy]) => {
+      drawDot(ctx, p[0],p[1], col, 5);
+      drawLabel(ctx, p[0]+dx, p[1]+dy, lbl, col, 13);
+    });
+
+  ctx.save(); ctx.font='12px sans-serif'; ctx.fillStyle='#27ae60';
+  ctx.fillText('BC = c − b　（A を基点とした位置ベクトルで分解）', 14, h-10);
+  ctx.restore();
+}
+
+// 平行条件図
+function drawParallel2() {
+  const { ctx, w, h } = getCtx('canvas-parallel2');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // p と q = -2p を図示（逆向き平行の例）
+  const p1=[80, h*0.38], p2=[280, h*0.58];
+  // q = 1.5p（同じ向きで1.5倍）
+  const q1=[260, h*0.30], q2=[260+(280-80)*1.5, h*0.30+(h*0.58-h*0.38)*1.5];
+  // q2がはみ出す場合は縮小: q=-2p（逆向き）
+  const q1b=[370, h*0.78], q2b=[370-(280-80)*2, h*0.78-(h*0.58-h*0.38)*2];
+
+  // p
+  drawArrow(ctx, p1[0],p1[1], p2[0],p2[1], '#3b6bcc', 3);
+  drawVecLabel(ctx, (p1[0]+p2[0])/2-4, (p1[1]+p2[1])/2-16, 'p', '#3b6bcc', 14);
+
+  // q = 1.5p（同向き）
+  const qs=[200, h*0.65], qe=[200+(p2[0]-p1[0])*1.5, h*0.65+(p2[1]-p1[1])*1.5];
+  drawArrow(ctx, qs[0],qs[1], qe[0],qe[1], '#27ae60', 3);
+  drawVecLabel(ctx, (qs[0]+qe[0])/2+4,(qs[1]+qe[1])/2+14, 'q', '#27ae60', 14);
+
+  // k label
+  ctx.save(); ctx.font='12px sans-serif'; ctx.fillStyle='#1a2744';
+  ctx.fillText('q = 1.5p  (k = 1.5)', qs[0]+4, qs[1]-8);
+  ctx.restore();
+
+  // 注釈
+  ctx.save(); ctx.font='12px sans-serif'; ctx.fillStyle='#888';
+  ctx.fillText('q = k p  （k≠0 の実数が存在する ⟺ p ∥ q）', 14, h-10);
+  ctx.restore();
+}
+
 // 画面回転・リサイズ時にCanvasを再描画
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -2597,6 +2960,8 @@ window.addEventListener('resize', () => {
     if (no1bInit) { updateLinear(); drawHex(0); }
     if (no2aInit) drawPosVec();
     if (no2bInit) { updateDivision(); drawGravity(); }
+    if (no3aInit) drawDecomp();
+    if (no3bInit) drawParallel2();
   }, 150);
 });
 </script>
