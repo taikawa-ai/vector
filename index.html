@@ -455,6 +455,8 @@
     .u-no2b .u-num { color: #1a9060; }
     .u-no3a .u-num { color: #e74c3c; }
     .u-no3b .u-num { color: #c0392b; }
+    .u-no4a .u-num { color: #8e44ad; }
+    .u-no4b .u-num { color: #6c3483; }
     .u-all  .u-num { color: var(--navy); }
     .u-all  { border-style: dashed; }
 
@@ -522,6 +524,7 @@
     .hero-card.no1::before { background: var(--accent); }
     .hero-card.no2::before { background: var(--green); }
     .hero-card.no3::before { background: var(--red); }
+    .hero-card.no4::before { background: #8e44ad; }
 
     .hero-card:hover {
       transform: translateY(-2px);
@@ -593,6 +596,8 @@
     <button onclick="showSection('no2b')">No.2② 分点・重心</button>
     <button onclick="showSection('no3a')">No.3① 分解・点の位置</button>
     <button onclick="showSection('no3b')">No.3② 係数比較・平行</button>
+    <button onclick="showSection('no4a')">No.4① 内積の定義</button>
+    <button onclick="showSection('no4b')">No.4② 角度・面積</button>
     <button onclick="showSection('quiz')">練習問題</button>
   </nav>
 </header>
@@ -604,7 +609,7 @@
     <div class="page-title">
       <div class="tag">数学C</div>
       <h1>ベクトル学習アプリ</h1>
-      <p>No.0 〜 No.3 の内容をインタラクティブに学ぼう</p>
+      <p>No.0 〜 No.4 の内容をインタラクティブに学ぼう</p>
     </div>
 
     <div class="hero">
@@ -651,6 +656,17 @@
           <li>$m\overrightarrow{AP}+n\overrightarrow{BP}=\vec{0}$ で点Pを決定</li>
           <li>係数比較（一次独立の利用）</li>
           <li>平行条件 $\vec{p}\parallel\vec{q}$</li>
+        </ul>
+      </div>
+      <div class="hero-card no4" onclick="showSection('no4a')">
+        <span class="num">4</span>
+        <h3>No.4 ベクトルの内積</h3>
+        <p>なす角・長さ・面積をベクトルで計算しよう</p>
+        <ul class="topic-list">
+          <li>内積の定義 $\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\theta$</li>
+          <li>内積の性質（交換・分配・$\vec{a}\cdot\vec{a}=|\vec{a}|^2$）</li>
+          <li>垂直条件 $\vec{a}\perp\vec{b}\iff\vec{a}\cdot\vec{b}=0$</li>
+          <li>余弦定理・角度・面積への応用</li>
         </ul>
       </div>
     </div>
@@ -1212,6 +1228,198 @@
 
     <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
       <button class="btn btn-outline" onclick="showSection('no3a')">← No.3① に戻る</button>
+      <button class="btn" onclick="showSection('no4a')">次へ：No.4① 内積の定義 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.4① ══════════════ -->
+  <div id="sec-no4a" class="section">
+    <div class="page-title">
+      <div class="tag">No.4①</div>
+      <h1>内積の定義と性質</h1>
+      <p>ベクトルのかけ算「内積」— 結果はスカラー（数値）</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>内積とは何か</h2>
+      <p>ベクトルは「大きさ×向き」の量。2つのベクトルをかけ算すると<strong>スカラー（実数）</strong>が得られる。これを <strong>内積</strong> という。</p>
+      <p>（外積もあるが大学で学ぶ。高校では内積のみ。）</p>
+
+      <div class="key-box">
+        <div class="label">内積の定義</div>
+        <p>$\vec{a}$ と $\vec{b}$ のなす角を $\theta$（$0\le\theta\le\pi$）とするとき、</p>
+        <div class="math-block">$$\vec{a}\cdot\vec{b} = |\vec{a}||\vec{b}|\cos\theta$$</div>
+        <p>この計算結果は <strong>実数（スカラー）</strong> になる。</p>
+      </div>
+
+      <div class="accent-box">
+        <div class="label">「なす角」の測り方</div>
+        <p><strong>始点をそろえて</strong> 2つのベクトルをかいたとき、2つの方向がつくる角 $\theta$（$0\le\theta\le\pi$）が「なす角」。</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-innerprod" width="560" height="220"></canvas>
+        <div class="canvas-controls">
+          2つのベクトルの始点をそろえて「なす角 $\theta$」を読み取る
+        </div>
+      </div>
+
+      <h3>計算例</h3>
+      <div class="two-col">
+        <div class="accent-box">
+          <div class="label">例①　$|\vec{a}|=3,\ |\vec{b}|=2,\ \theta=\dfrac{\pi}{6}$</div>
+          <div class="math-block">$$\vec{a}\cdot\vec{b}=3\cdot2\cdot\cos\frac{\pi}{6}=6\cdot\frac{\sqrt{3}}{2}=3\sqrt{3}$$</div>
+        </div>
+        <div class="accent-box">
+          <div class="label">例②　$|\vec{a}|=4,\ |\vec{b}|=3,\ \theta=\dfrac{2\pi}{3}$</div>
+          <div class="math-block">$$\vec{a}\cdot\vec{b}=4\cdot3\cdot\cos\frac{2\pi}{3}=12\cdot\left(-\frac{1}{2}\right)=-6$$</div>
+        </div>
+      </div>
+      <div class="accent-box" style="margin-top:0.5rem;">
+        <div class="label">例③　$|\vec{a}|=5,\ |\vec{b}|=2,\ \theta=\dfrac{\pi}{2}$（垂直）</div>
+        <div class="math-block">$$\vec{a}\cdot\vec{b}=5\cdot2\cdot\cos\frac{\pi}{2}=10\cdot0=0$$</div>
+        <p>→ 垂直なら内積は <strong>必ず 0</strong>！</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>内積の性質</h2>
+      <div class="key-box">
+        <div class="label">内積の3つの性質</div>
+        <p>① <strong>交換法則</strong>：$\vec{a}\cdot\vec{b}=\vec{b}\cdot\vec{a}$</p>
+        <p>② <strong>分配法則</strong>：$\vec{a}\cdot(\vec{b}+\vec{c})=\vec{a}\cdot\vec{b}+\vec{a}\cdot\vec{c}$</p>
+        <p>③ <strong>自己内積</strong>：$\vec{a}\cdot\vec{a}=|\vec{a}|^2$</p>
+      </div>
+      <p class="note">③の証明：同じベクトルのなす角は $\theta=0$ なので、$\vec{a}\cdot\vec{a}=|\vec{a}||\vec{a}|\cos0=|\vec{a}|^2$。</p>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題：$|\vec{a}|=5,\ |\vec{b}|=2,\ \vec{a}\perp\vec{b}$ のとき各内積を求めよ</div>
+        <div class="two-col" style="margin-top:0.5rem;">
+          <div>
+            <p><strong>$\vec{a}\cdot\vec{a}$</strong> $=|\vec{a}|^2=25$</p>
+            <p style="margin-top:0.4rem;"><strong>$\vec{b}\cdot\vec{b}$</strong> $=|\vec{b}|^2=4$</p>
+            <p style="margin-top:0.4rem;"><strong>$\vec{a}\cdot\vec{b}$</strong> $=0$（垂直）</p>
+          </div>
+          <div>
+            <p><strong>$(2\vec{a}+\vec{b})\cdot\vec{b}$</strong></p>
+            <p>$=2\vec{a}\cdot\vec{b}+\vec{b}\cdot\vec{b}$</p>
+            <p>$=2\cdot0+4=\mathbf{4}$</p>
+          </div>
+        </div>
+        <p style="margin-top:0.5rem;"><strong>$(\vec{a}+\vec{b})\cdot(\vec{a}+\vec{b})$</strong> $=|\vec{a}|^2+2\vec{a}\cdot\vec{b}+|\vec{b}|^2=25+0+4=\mathbf{29}$</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>垂直条件</h2>
+      <div class="key-box">
+        <div class="label">垂直条件（重要！）</div>
+        <p>$\vec{a}\neq\vec{0}$, $\vec{b}\neq\vec{0}$ のとき、</p>
+        <div class="math-block">$$\vec{a}\perp\vec{b} \iff \vec{a}\cdot\vec{b}=0$$</div>
+      </div>
+      <p class="note">なす角 $\theta=\dfrac{\pi}{2}$ のとき $\cos\frac{\pi}{2}=0$ となるため。</p>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題：$\vec{a}=\overrightarrow{OA}$, $\vec{b}=\overrightarrow{OB}$ として、$\overrightarrow{OA}\perp\overrightarrow{OB}$ を確認する</div>
+        <p>OA=3, OB=4, ∠AOB=90° のとき</p>
+        <div class="math-block">$$\vec{a}\cdot\vec{b}=3\cdot4\cdot\cos\frac{\pi}{2}=0 \quad \checkmark$$</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no3b')">← No.3② に戻る</button>
+      <button class="btn" onclick="showSection('no4b')">次へ：No.4② 角度・面積への応用 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.4② ══════════════ -->
+  <div id="sec-no4b" class="section">
+    <div class="page-title">
+      <div class="tag">No.4②</div>
+      <h1>内積の応用 — 角度・長さ・面積</h1>
+      <p>内積を使って図形の計量問題を解く</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>展開公式と余弦定理</h2>
+      <p>内積は普通のかけ算と同じように展開できる：</p>
+      <div class="key-box">
+        <div class="label">展開公式（内積版）</div>
+        <div class="math-block">$$|\vec{a}-\vec{b}|^2=|\vec{a}|^2-2\vec{a}\cdot\vec{b}+|\vec{b}|^2$$</div>
+        <p>証明：$(\vec{a}-\vec{b})\cdot(\vec{a}-\vec{b})=\vec{a}\cdot\vec{a}-2\vec{a}\cdot\vec{b}+\vec{b}\cdot\vec{b}$</p>
+      </div>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">余弦定理とのつながり</div>
+        <p>三角形OABで $\vec{a}=\overrightarrow{OA}$, $\vec{b}=\overrightarrow{OB}$, $\angle AOB=\theta$ とすると $|\vec{a}-\vec{b}|=AB$ なので、</p>
+        <div class="math-block">$$AB^2=OA^2-2\vec{a}\cdot\vec{b}+OB^2=OA^2-2\cdot OA\cdot OB\cos\theta+OB^2$$</div>
+        <p>これはまさに <strong>余弦定理</strong>！</p>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-coslaw" width="560" height="240"></canvas>
+        <div class="canvas-controls">
+          $|\vec{b}-\vec{a}|^2$ の展開が余弦定理と一致する
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>角度と面積の求め方</h2>
+      <div class="key-box">
+        <div class="label">基本の3値を先にそろえる</div>
+        <p>2つの基準ベクトル $\vec{a}$, $\vec{b}$ をとったとき、まず</p>
+        <div class="math-block">$$|\vec{a}|,\quad |\vec{b}|,\quad \vec{a}\cdot\vec{b}$$</div>
+        <p>の3値を求めれば、「長さ」「角度」「面積」はすべて計算できる。</p>
+      </div>
+
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="key-box">
+          <div class="label">なす角 $\theta$ を求める公式</div>
+          <div class="math-block">$$\cos\theta=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}$$</div>
+        </div>
+        <div class="key-box">
+          <div class="label">面積を求める公式</div>
+          <div class="math-block">$$S=\frac{1}{2}|\vec{a}||\vec{b}|\sin\theta=\frac{1}{2}\sqrt{|\vec{a}|^2|\vec{b}|^2-(\vec{a}\cdot\vec{b})^2}$$</div>
+        </div>
+      </div>
+
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例題① 辺の長さから内積・角度・面積を求める</div>
+        <p>三角形ABCで AB=4, BC=7, CA=5 とする。$\vec{a}=\overrightarrow{BA}$, $\vec{b}=\overrightarrow{BC}$ とおく。</p>
+        <p style="margin-top:0.3rem;"><strong>（1）$\vec{a}\cdot\vec{b}$ を求める：</strong></p>
+        <p style="margin-left:0.8rem;">$|CA|=|\vec{b}-\vec{a}|=5$ より $|\vec{b}-\vec{a}|^2=25$</p>
+        <p style="margin-left:0.8rem;">$|\vec{a}|^2-2\vec{a}\cdot\vec{b}+|\vec{b}|^2=25$　→　$16-2\vec{a}\cdot\vec{b}+49=25$</p>
+        <div class="math-block">$$\vec{a}\cdot\vec{b}=20$$</div>
+        <p style="margin-top:0.3rem;"><strong>（2）$\cos\angle ABC$ を求める：</strong></p>
+        <div class="math-block">$$\cos\angle ABC=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}=\frac{20}{4\times7}=\frac{5}{7}$$</div>
+        <p style="margin-top:0.3rem;"><strong>（3）面積を求める：</strong></p>
+        <p style="margin-left:0.8rem;">$\sin^2\angle ABC=1-\dfrac{25}{49}=\dfrac{24}{49}$ → $\sin\angle ABC=\dfrac{2\sqrt{6}}{7}$</p>
+        <div class="math-block">$$S=\frac{1}{2}\times4\times7\times\frac{2\sqrt{6}}{7}=4\sqrt{6}$$</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>垂直条件の応用</h2>
+      <div class="accent-box">
+        <div class="label">例題② 直交する点の位置を求める</div>
+        <p>OA=4, OB=5, AB=6 の三角形OABで、辺AB上に点Pを $\overrightarrow{AC}\perp\overrightarrow{OP}$ となるようにとる。AP:PBを求めよ。</p>
+        <p style="margin-top:0.4rem;">まず $|\vec{a}|=4$, $|\vec{b}|=5$ として $\vec{a}\cdot\vec{b}$ を求める。</p>
+        <p style="margin-left:0.8rem;">$|{\vec{b}-\vec{a}}|^2=36$ より $16-2\vec{a}\cdot\vec{b}+25=36$ → $\vec{a}\cdot\vec{b}=\dfrac{5}{2}$</p>
+        <p style="margin-top:0.3rem;">$\overrightarrow{OP}=(1-t)\vec{a}+t\vec{b}$ とおき、$\overrightarrow{AC}\perp\overrightarrow{OP}$ の条件 $\overrightarrow{AC}\cdot\overrightarrow{OP}=0$ を解くと</p>
+        <div class="math-block">$$t=\frac{2}{5} \quad \Rightarrow \quad AP:PB=2:3$$</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas-perppt" width="560" height="230"></canvas>
+        <div class="canvas-controls">
+          内積を使って「垂直になる点P」の位置を決定する
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no4a')">← No.4① に戻る</button>
       <button class="btn btn-accent" onclick="showSection('quiz')">練習問題に挑戦！ →</button>
     </div>
   </div>
@@ -1264,10 +1472,20 @@
             <span class="u-title">No.3②<br>係数比較・平行</span>
             <span class="u-count">5問</span>
           </button>
+          <button class="quiz-unit-btn u-no4a" onclick="startQuiz('no4a')">
+            <span class="u-num">4①</span>
+            <span class="u-title">No.4①<br>内積の定義</span>
+            <span class="u-count">6問</span>
+          </button>
+          <button class="quiz-unit-btn u-no4b" onclick="startQuiz('no4b')">
+            <span class="u-num">4②</span>
+            <span class="u-title">No.4②<br>角度・面積</span>
+            <span class="u-count">6問</span>
+          </button>
           <button class="quiz-unit-btn u-all" onclick="startQuiz('all')">
             <span class="u-num">全</span>
             <span class="u-title">全範囲<br>まとめ</span>
-            <span class="u-count">43問</span>
+            <span class="u-count">55問</span>
           </button>
         </div>
       </div>
@@ -1316,7 +1534,7 @@
 // ═══════════════════════════════════════
 //  Navigation
 // ═══════════════════════════════════════
-const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','quiz'];
+const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','no4a','no4b','quiz'];
 
 function showSection(id) {
   sectionIds.forEach(s => document.getElementById('sec-'+s).classList.remove('active'));
@@ -1335,6 +1553,8 @@ function showSection(id) {
   if (id === 'no2b' && !no2bInit) initNo2b();
   if (id === 'no3a' && !no3aInit) initNo3a();
   if (id === 'no3b' && !no3bInit) initNo3b();
+  if (id === 'no4a' && !no4aInit) initNo4a();
+  if (id === 'no4b' && !no4bInit) initNo4b();
   if (id === 'quiz') showQuizMenu();
 }
 
@@ -2195,6 +2415,82 @@ const questions = [
     ans: 0,
     exp: '$\\vec{q}=k\\vec{p}$ とおくと $x\\vec{a}+2\\vec{b}=-3k\\vec{a}+4k\\vec{b}$。$\\vec{b}$ の係数：$4k=2$ → $k=\\dfrac{1}{2}$。$\\vec{a}$ の係数：$x=-3k=-\\dfrac{3}{2}$。',
   },
+
+  // ── No.4① 内積の定義（index 43〜48） ──
+  {
+    q: '$|\\vec{a}|=3$, $|\\vec{b}|=4$, なす角 $\\theta=60°$ のとき、$\\vec{a}\\cdot\\vec{b}$ の値は？',
+    opts: ['$6$', '$12$', '$6\\sqrt{3}$', '$0$'],
+    ans: 0,
+    exp: '$\\vec{a}\\cdot\\vec{b}=|\\vec{a}||\\vec{b}|\\cos60°=3\\times4\\times\\dfrac{1}{2}=6$',
+  },
+  {
+    q: '$\\vec{a}\\perp\\vec{b}$ のとき $\\vec{a}\\cdot\\vec{b}$ の値は？',
+    opts: ['$0$', '$|\\vec{a}||\\vec{b}|$', '$1$', '$-1$'],
+    ans: 0,
+    exp: 'なす角 $\\theta=\\dfrac{\\pi}{2}$ のとき $\\cos\\dfrac{\\pi}{2}=0$ なので、$\\vec{a}\\cdot\\vec{b}=|\\vec{a}||\\vec{b}|\\cdot0=0$。',
+  },
+  {
+    q: '$\\vec{a}\\cdot\\vec{a}$ を $|\\vec{a}|$ を用いて表すと？',
+    opts: ['$|\\vec{a}|^2$', '$|\\vec{a}|$', '$2|\\vec{a}|$', '$0$'],
+    ans: 0,
+    exp: '同じベクトルのなす角は $\\theta=0$。$\\vec{a}\\cdot\\vec{a}=|\\vec{a}||\\vec{a}|\\cos0=|\\vec{a}|^2$。',
+  },
+  {
+    q: '$|\\vec{a}|=2$, $|\\vec{b}|=3$, なす角 $\\theta=120°$ のとき、$\\vec{a}\\cdot\\vec{b}$ の値は？',
+    opts: ['$-3$', '$3$', '$-6$', '$3\\sqrt{3}$'],
+    ans: 0,
+    exp: '$\\vec{a}\\cdot\\vec{b}=2\\times3\\times\\cos120°=6\\times\\left(-\\dfrac{1}{2}\\right)=-3$',
+  },
+  {
+    q: '$|\\vec{a}|=5$, $|\\vec{b}|=2$, $\\vec{a}\\perp\\vec{b}$ のとき $(2\\vec{a}+\\vec{b})\\cdot\\vec{b}$ の値は？',
+    opts: ['$4$', '$20$', '$0$', '$24$'],
+    ans: 0,
+    exp: '分配法則より $(2\\vec{a}+\\vec{b})\\cdot\\vec{b}=2\\vec{a}\\cdot\\vec{b}+\\vec{b}\\cdot\\vec{b}=2\\cdot0+|\\vec{b}|^2=4$。',
+  },
+  {
+    q: '$|\\vec{a}|=3$, $|\\vec{b}|=4$, $\\vec{a}\\cdot\\vec{b}=6$ のとき $|\\vec{a}+\\vec{b}|^2$ の値は？',
+    opts: ['$37$', '$25$', '$49$', '$12$'],
+    ans: 0,
+    exp: '$|\\vec{a}+\\vec{b}|^2=|\\vec{a}|^2+2\\vec{a}\\cdot\\vec{b}+|\\vec{b}|^2=9+12+16=37$。',
+  },
+
+  // ── No.4② 内積の応用（index 49〜54） ──
+  {
+    q: '$|\\vec{a}|=4$, $|\\vec{b}|=3$, $\\vec{a}\\cdot\\vec{b}=6$ のとき $|\\vec{a}-\\vec{b}|$ の値は？',
+    opts: ['$\\sqrt{13}$', '$\\sqrt{37}$', '$7$', '$1$'],
+    ans: 0,
+    exp: '$|\\vec{a}-\\vec{b}|^2=|\\vec{a}|^2-2\\vec{a}\\cdot\\vec{b}+|\\vec{b}|^2=16-12+9=13$。よって $|\\vec{a}-\\vec{b}|=\\sqrt{13}$。',
+  },
+  {
+    q: '三角形OABで OA=2, OB=3, $\\angle AOB=60°$ のとき $\\overrightarrow{OA}\\cdot\\overrightarrow{OB}$ の値は？',
+    opts: ['$3$', '$6$', '$3\\sqrt{3}$', '$0$'],
+    ans: 0,
+    exp: '$\\overrightarrow{OA}\\cdot\\overrightarrow{OB}=|\\overrightarrow{OA}||\\overrightarrow{OB}|\\cos60°=2\\times3\\times\\dfrac{1}{2}=3$。',
+  },
+  {
+    q: '$\\vec{a}=\\overrightarrow{OA}$, $\\vec{b}=\\overrightarrow{OB}$ として OA=4, OB=5, AB=6 のとき $\\vec{a}\\cdot\\vec{b}$ の値は？',
+    opts: ['$\\dfrac{5}{2}$', '$10$', '$20$', '$\\dfrac{45}{2}$'],
+    ans: 0,
+    exp: '$|\\vec{b}-\\vec{a}|^2=AB^2=36$ より $|\\vec{a}|^2-2\\vec{a}\\cdot\\vec{b}+|\\vec{b}|^2=36$。$16-2\\vec{a}\\cdot\\vec{b}+25=36$ → $\\vec{a}\\cdot\\vec{b}=\\dfrac{5}{2}$。',
+  },
+  {
+    q: '$|\\vec{a}|=3$, $|\\vec{b}|=4$, $\\vec{a}\\cdot\\vec{b}=6$ のとき、$\\vec{a}$ と $\\vec{b}$ のなす角 $\\theta$ の $\\cos\\theta$ は？',
+    opts: ['$\\dfrac{1}{2}$', '$\\dfrac{\\sqrt{3}}{2}$', '$\\dfrac{1}{3}$', '$\\dfrac{1}{4}$'],
+    ans: 0,
+    exp: '$\\cos\\theta=\\dfrac{\\vec{a}\\cdot\\vec{b}}{|\\vec{a}||\\vec{b}|}=\\dfrac{6}{3\\times4}=\\dfrac{1}{2}$。よって $\\theta=60°$。',
+  },
+  {
+    q: 'OA=2, OB=3, $\\angle AOB=\\dfrac{\\pi}{3}$ の三角形OABの面積は？',
+    opts: ['$\\dfrac{3\\sqrt{3}}{2}$', '$3\\sqrt{3}$', '$3$', '$\\dfrac{\\sqrt{3}}{2}$'],
+    ans: 0,
+    exp: '$S=\\dfrac{1}{2}\\times OA\\times OB\\times\\sin\\dfrac{\\pi}{3}=\\dfrac{1}{2}\\times2\\times3\\times\\dfrac{\\sqrt{3}}{2}=\\dfrac{3\\sqrt{3}}{2}$。',
+  },
+  {
+    q: '三角形ABCで AB=4, BC=7, CA=5 のとき、$\\cos\\angle ABC$ の値は？',
+    opts: ['$\\dfrac{5}{7}$', '$\\dfrac{1}{2}$', '$\\dfrac{4}{7}$', '$-\\dfrac{1}{2}$'],
+    ans: 0,
+    exp: '$\\vec{a}=\\overrightarrow{BA}$, $\\vec{b}=\\overrightarrow{BC}$ として $CA=|\\vec{b}-\\vec{a}|=5$ より展開すると $\\vec{a}\\cdot\\vec{b}=20$。$\\cos\\angle ABC=\\dfrac{20}{4\\times7}=\\dfrac{5}{7}$。',
+  },
 ];
 
 // ═══════════════════════════════════════
@@ -2513,6 +2809,11 @@ const qFigs = {
   35: c => qfig_centroid(c),
   36: c => qfig_division_pt(c, 1, 3),
   37: c => qfig_centroid(c),
+  // No.4
+  43: c => qfig_innerprod_angle(c, 60),
+  46: c => qfig_innerprod_angle(c, 120),
+  47: c => qfig_innerprod_angle(c, 90),
+  49: c => qfig_innerprod_angle(c, 60),
 };
 
 // ── 単元ごとの問題インデックス割り当て ──
@@ -2524,6 +2825,8 @@ const unitMap = {
   no2b: [21,22,23,24,25,26,27,28,29,30,31,32],
   no3a: [33,34,35,36,37],
   no3b: [38,39,40,41,42],
+  no4a: [43,44,45,46,47,48],
+  no4b: [49,50,51,52,53,54],
 };
 Object.entries(unitMap).forEach(([unit, idxs]) => {
   idxs.forEach(i => { if (questions[i]) questions[i].unit = unit; });
@@ -2541,6 +2844,8 @@ const unitLabel = {
   no2b: 'No.2② 分点・重心',
   no3a: 'No.3① 分解・点の位置',
   no3b: 'No.3② 係数比較・平行',
+  no4a: 'No.4① 内積の定義',
+  no4b: 'No.4② 角度・面積',
   all:  '全範囲まとめ',
 };
 
@@ -2950,6 +3255,248 @@ function drawParallel2() {
   ctx.restore();
 }
 
+// ─────────── No.4 描画関数 ───────────
+
+// ベクトル記号付きテキストのインライン描画ヘルパー
+// parts: [{t:'テキスト'}, {t:'a', v:true}, ...]
+// v:true のセグメントは drawVecLabel で矢印付き描画
+function drawVecLine(ctx, x, y, parts, color, size) {
+  ctx.save();
+  let cx = x;
+  for (const p of parts) {
+    ctx.font = `${size}px serif`;
+    ctx.fillStyle = color;
+    if (p.v) {
+      drawVecLabel(ctx, cx, y, p.t, color, size);
+      ctx.font = `${size}px serif`;
+      cx += ctx.measureText(p.t).width + 2;
+    } else {
+      ctx.fillText(p.t, cx, y);
+      cx += ctx.measureText(p.t).width;
+    }
+  }
+  ctx.restore();
+  return cx;
+}
+
+// 内積の定義図：2ベクトルとなす角θ
+function drawInnerProd() {
+  const { ctx, w, h } = getCtx('canvas-innerprod');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [w*0.22, h*0.75];
+  const theta1 = -0.2;
+  const theta2 = 0.95;
+  const lenA = 130, lenB = 100;
+
+  const A = [O[0]+lenA*Math.cos(theta1), O[1]+lenA*Math.sin(theta1)];
+  const B = [O[0]+lenB*Math.cos(-theta2), O[1]+lenB*Math.sin(-theta2)];
+
+  // なす角の弧
+  const arcR = 38;
+  ctx.save();
+  ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(O[0], O[1], arcR, -theta2, theta1);
+  ctx.stroke();
+  const tmid = (-theta2 + theta1) / 2;
+  ctx.font = 'italic 14px serif'; ctx.fillStyle = '#e74c3c';
+  ctx.fillText('θ', O[0]+arcR*Math.cos(tmid)-6, O[1]+arcR*Math.sin(tmid)+4);
+  ctx.restore();
+
+  // ベクトル a, b
+  drawArrow(ctx, O[0],O[1], A[0],A[1], '#3b6bcc', 3);
+  drawVecLabel(ctx, (O[0]+A[0])/2-6, (O[1]+A[1])/2+16, 'a', '#3b6bcc', 14);
+  drawArrow(ctx, O[0],O[1], B[0],B[1], '#27ae60', 3);
+  drawVecLabel(ctx, (O[0]+B[0])/2+8, (O[1]+B[1])/2-6, 'b', '#27ae60', 14);
+
+  // O ドット
+  drawDot(ctx, O[0],O[1], '#1a2744', 5);
+  drawLabel(ctx, O[0]-16, O[1]+4, 'O', '#1a2744', 13);
+
+  // 公式ラベル（drawVecLine でベクトル記号を正しく表示）
+  drawVecLine(ctx, w*0.46, h*0.30, [
+    {t:'a', v:true}, {t:' · '}, {t:'b', v:true},
+    {t:'  =  |'}, {t:'a', v:true}, {t:'| · |'}, {t:'b', v:true}, {t:'| cos θ'}
+  ], '#1a2744', 14);
+
+  // 射影の破線
+  const projLen = lenB * Math.cos(theta1 + theta2);
+  const PJ = [O[0]+projLen*Math.cos(theta1), O[1]+projLen*Math.sin(theta1)];
+  ctx.save();
+  ctx.strokeStyle = '#f39c12'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(B[0],B[1]); ctx.lineTo(PJ[0],PJ[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  drawVecLine(ctx, PJ[0]-10, PJ[1]+18, [
+    {t:'b', v:true}, {t:' の '}, {t:'a', v:true}, {t:' への射影'}
+  ], '#f39c12', 11);
+
+  ctx.save(); ctx.font='12px sans-serif'; ctx.fillStyle='#888';
+  ctx.fillText('内積 = (a の長さ) × (b の a 方向成分)', 14, h-10);
+  ctx.restore();
+}
+
+// 余弦定理図：三角形OABと|b-a|=AB
+function drawCosLaw() {
+  const { ctx, w, h } = getCtx('canvas-coslaw');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [w*0.18, h*0.80];
+  const A = [w*0.72, h*0.78];
+  const B = [w*0.38, h*0.20];
+
+  // 三角形の辺
+  ctx.save(); ctx.strokeStyle='#bbb'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(O[0],O[1]); ctx.lineTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.closePath(); ctx.stroke();
+  ctx.restore();
+
+  // OA = a（青）, OB = b（緑）
+  drawArrow(ctx, O[0],O[1], A[0],A[1], '#3b6bcc', 3);
+  drawArrow(ctx, O[0],O[1], B[0],B[1], '#27ae60', 3);
+
+  // b − a = AB（赤）
+  drawArrow(ctx, A[0],A[1], B[0],B[1], '#e74c3c', 2.5);
+
+  // 点ラベル
+  [[O,'O','#1a2744',-16,6],[A,'A','#3b6bcc',8,6],[B,'B','#27ae60',6,-6]]
+    .forEach(([p,lbl,col,dx,dy]) => {
+      drawDot(ctx, p[0],p[1], col, 5);
+      drawLabel(ctx, p[0]+dx, p[1]+dy, lbl, col, 13);
+    });
+
+  // ベクトルラベル（矢印付き）
+  drawVecLabel(ctx, (O[0]+A[0])/2-6, (O[1]+A[1])/2+18, 'a', '#3b6bcc', 13);
+  drawVecLabel(ctx, (O[0]+B[0])/2-20, (O[1]+B[1])/2, 'b', '#27ae60', 13);
+  drawVecLine(ctx, (A[0]+B[0])/2+8, (A[1]+B[1])/2, [
+    {t:'b', v:true}, {t:' − '}, {t:'a', v:true}
+  ], '#e74c3c', 13);
+
+  // 公式テキスト（右側）
+  const fx = w*0.50, s13 = 13;
+  drawVecLine(ctx, fx, h*0.50, [
+    {t:'|'}, {t:'b', v:true}, {t:' − '}, {t:'a', v:true},
+    {t:'|² = |'}, {t:'a', v:true}, {t:'|² − 2'}, {t:'a', v:true},
+    {t:'·'}, {t:'b', v:true}, {t:' + |'}, {t:'b', v:true}, {t:'|²'}
+  ], '#1a2744', s13);
+
+  ctx.save(); ctx.font=`${s13}px sans-serif`; ctx.fillStyle='#1a2744';
+  ctx.fillText('⟺ AB² = OA² − 2·OA·OB·cosθ + OB²', fx, h*0.67);
+  ctx.font=`bold ${s13}px sans-serif`; ctx.fillStyle='#e74c3c';
+  ctx.fillText('（余弦定理！）', fx, h*0.84);
+  ctx.restore();
+}
+
+// 垂直点Pの図
+function drawPerpPt() {
+  const { ctx, w, h } = getCtx('canvas-perppt');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const O = [w*0.15, h*0.80];
+  const A = [w*0.55, h*0.78];
+  const B = [w*0.38, h*0.18];
+  const t = 2/5;
+  const P = [A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t];
+  const C = [O[0]+(B[0]-O[0])/3, O[1]+(B[1]-O[1])/3];
+
+  // 三角形
+  ctx.save(); ctx.strokeStyle='#bbb'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(O[0],O[1]); ctx.lineTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.closePath(); ctx.stroke();
+  ctx.restore();
+
+  drawArrow(ctx, O[0],O[1], A[0],A[1], '#3b6bcc', 2.5);
+  drawArrow(ctx, O[0],O[1], B[0],B[1], '#27ae60', 2.5);
+
+  drawArrow(ctx, O[0],O[1], C[0],C[1], '#9b59b6', 2.5);
+  drawDot(ctx, C[0],C[1], '#9b59b6', 5);
+  drawLabel(ctx, C[0]+8, C[1]-6, 'C', '#9b59b6', 12);
+
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(C[0],C[1]); ctx.stroke();
+  ctx.restore();
+
+  drawArrow(ctx, O[0],O[1], P[0],P[1], '#f39c12', 2.5);
+
+  // 直角マーク
+  const dx1=(C[0]-A[0]), dy1=(C[1]-A[1]), l1=Math.hypot(dx1,dy1);
+  const dx2=(P[0]-O[0]), dy2=(P[1]-O[1]), l2=Math.hypot(dx2,dy2);
+  const ix=P[0]+(dx1/l1+dx2/l2)*10, iy=P[1]+(dy1/l1+dy2/l2)*10;
+  const jx=P[0]+(dx1/l1)*10, jy=P[1]+(dy1/l1)*10;
+  const kx=P[0]+(dx2/l2)*10, ky=P[1]+(dy2/l2)*10;
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(jx,jy); ctx.lineTo(ix,iy); ctx.lineTo(kx,ky); ctx.stroke();
+  ctx.restore();
+
+  [[O,'O','#1a2744',-16,6],[A,'A','#3b6bcc',8,6],[B,'B','#27ae60',6,-8],[P,'P','#f39c12',6,14]]
+    .forEach(([p,lbl,col,dx,dy]) => {
+      drawDot(ctx, p[0],p[1], col, 5);
+      drawLabel(ctx, p[0]+dx, p[1]+dy, lbl, col, 13);
+    });
+
+  // 注釈（drawVecLine でベクトル記号付き）
+  drawVecLine(ctx, 14, h-10, [
+    {t:'AC', v:true}, {t:' ⊥ '}, {t:'OP', v:true},
+    {t:'  →  '}, {t:'AC', v:true}, {t:' · '}, {t:'OP', v:true},
+    {t:' = 0 を解く'}
+  ], '#e74c3c', 12);
+}
+
+let no4aInit = false, no4bInit = false;
+
+function initNo4a() {
+  if (no4aInit) return; no4aInit = true;
+  drawInnerProd();
+  MathJax.typesetPromise([document.getElementById('sec-no4a')]);
+}
+
+function initNo4b() {
+  if (no4bInit) return; no4bInit = true;
+  drawCosLaw();
+  drawPerpPt();
+  MathJax.typesetPromise([document.getElementById('sec-no4b')]);
+}
+
+// No.4 quiz figure: なす角θのある2ベクトル図
+function qfig_innerprod_angle(c, deg) {
+  const { ctx, w, h } = getCtx(c.id || 'quiz-fig');
+  ctx.clearRect(0,0,w,h);
+  drawGrid(ctx,w,h);
+  const O=[w*0.22,h*0.75], theta2=deg*Math.PI/180;
+  const lenA=100, lenB=85;
+  const A=[O[0]+lenA, O[1]];
+  const B=[O[0]+lenB*Math.cos(-theta2), O[1]+lenB*Math.sin(-theta2)];
+
+  if (deg === 90) {
+    // 直角マーク（小さな正方形）
+    const sq = 14;
+    ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(O[0]+sq, O[1]);
+    ctx.lineTo(O[0]+sq, O[1]-sq);
+    ctx.lineTo(O[0],    O[1]-sq);
+    ctx.stroke();
+    ctx.font='13px sans-serif'; ctx.fillStyle='#e74c3c';
+    ctx.fillText('90°', O[0]+sq+6, O[1]-sq+4);
+    ctx.restore();
+  } else {
+    // なす角の弧
+    const ar=32;
+    ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(O[0],O[1],ar,-theta2,0); ctx.stroke();
+    ctx.font='italic 13px serif'; ctx.fillStyle='#e74c3c';
+    ctx.fillText(deg+'°', O[0]+ar+4, O[1]-ar*0.4); ctx.restore();
+  }
+
+  drawArrow(ctx,O[0],O[1],A[0],A[1],'#3b6bcc',3);
+  drawArrow(ctx,O[0],O[1],B[0],B[1],'#27ae60',3);
+  drawVecLabel(ctx, (O[0]+A[0])/2-4, (O[1]+A[1])/2+16, 'a', '#3b6bcc', 13);
+  drawVecLabel(ctx, (O[0]+B[0])/2+8, (O[1]+B[1])/2-6, 'b', '#27ae60', 13);
+  drawDot(ctx,O[0],O[1],'#1a2744',4);
+}
+
 // 画面回転・リサイズ時にCanvasを再描画
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -2962,6 +3509,8 @@ window.addEventListener('resize', () => {
     if (no2bInit) { updateDivision(); drawGravity(); }
     if (no3aInit) drawDecomp();
     if (no3bInit) drawParallel2();
+    if (no4aInit) drawInnerProd();
+    if (no4bInit) { drawCosLaw(); drawPerpPt(); }
   }, 150);
 });
 </script>
