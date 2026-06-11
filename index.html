@@ -1475,9 +1475,13 @@
     <div class="card">
       <h2><span class="icon">②</span>大きさの公式</h2>
       <div class="key-box">
-        <div class="label">三平方の定理から</div>
+        <div class="label">ピタゴラスの定理（三平方の定理）より</div>
+        <p>x 成分 $a_1$・y 成分 $a_2$ を 2 辺とする直角三角形の斜辺が $|\vec{a}|$ なので、</p>
         <div class="math-block">$$|\vec{a}| = \sqrt{a_1^2 + a_2^2}$$</div>
-        <p>例）$\vec{a}=(3,\,4)$ のとき $|\vec{a}|=\sqrt{9+16}=\sqrt{25}=5$</p>
+        <div class="canvas-wrap" style="margin:0.6rem 0;">
+          <canvas id="canvas-pythagoras" width="560" height="200"></canvas>
+        </div>
+        <p>例）$\vec{a}=(3,\,4)$ のとき $|\vec{a}|=\sqrt{3^2+4^2}=\sqrt{25}=5$</p>
       </div>
       <div class="key-box" style="margin-top:0.8rem;">
         <div class="label">2点間の距離</div>
@@ -1513,8 +1517,12 @@
 
       <div class="accent-box" style="margin-top:0.8rem;">
         <div class="label">平行四辺形の条件</div>
-        <p>四角形 ABDC が平行四辺形 $\iff$ $\overrightarrow{AB}=\overrightarrow{CD}$</p>
-        <p class="note">「同じ成分のベクトルが等しい」→ 各成分ごとに方程式を立てて解く</p>
+        <p>四角形 ABCD が平行四辺形 $\iff$ $\overrightarrow{AB}=\overrightarrow{DC}$</p>
+        <p class="note">AB と DC が「向きも長さも等しい」→ 各成分が一致する</p>
+        <div class="canvas-wrap" style="margin-top:0.6rem;">
+          <canvas id="canvas-parallelogram" width="560" height="200"></canvas>
+        </div>
+        <p class="note" style="margin-top:0.4rem;">例）A$(-3,1)$, B$(-1,-2)$, C$(0,2)$ で ABCD が平行四辺形のとき、D を求める：$\overrightarrow{AB}=\overrightarrow{DC}$ より $(2,-3)=(x_D-0,\,y_D-2)$、したがって D$(2,-1)$</p>
       </div>
     </div>
 
@@ -3849,11 +3857,13 @@ function drawCompVec() {
   drawDot(ctx, ox, oy, '#1a2744', 5);
   drawDot(ctx, Ax, Ay, '#3b6bcc', 5);
 
-  // 式
-  ctx.save(); ctx.font = '13px sans-serif'; ctx.fillStyle = '#1a2744';
-  ctx.fillText('a = (3, 2)', w * 0.52, h * 0.22);
-  ctx.fillText('|a| = √(3² + 2²) = √13', w * 0.52, h * 0.38);
-  ctx.restore();
+  // 式（drawVecLine でベクトル矢印付き）
+  drawVecLine(ctx, w * 0.52, h * 0.22, [
+    {t:'a', v:true}, {t:' = (3, 2)'}
+  ], '#1a2744', 13);
+  drawVecLine(ctx, w * 0.52, h * 0.38, [
+    {t:'|'}, {t:'a', v:true}, {t:'| = √(3² + 2²) = √13'}
+  ], '#1a2744', 13);
 }
 
 // 成分による内積の図
@@ -3887,14 +3897,22 @@ function drawInnerProdComp() {
 
   drawDot(ctx, ox, oy, '#1a2744', 4);
 
-  // 計算式
-  ctx.save(); ctx.font = '13px sans-serif'; ctx.fillStyle = '#1a2744';
-  ctx.fillText('a = (1, 2),  b = (3, 1)', w * 0.50, h * 0.20);
-  ctx.fillText('a · b = 1×3 + 2×1 = 5', w * 0.50, h * 0.36);
-  ctx.fillText('|a| = √5,  |b| = √10', w * 0.50, h * 0.52);
-  ctx.fillStyle = '#8e44ad';
-  ctx.fillText('cos θ = 5 / (√5 · √10) = 1/√2', w * 0.50, h * 0.68);
-  ctx.fillText('→ θ = 45°', w * 0.50, h * 0.82);
+  // 計算式（drawVecLine でベクトル矢印付き）
+  const fx = w * 0.50;
+  drawVecLine(ctx, fx, h * 0.20, [
+    {t:'a', v:true}, {t:' = (1, 2),  '}, {t:'b', v:true}, {t:' = (3, 1)'}
+  ], '#1a2744', 13);
+  drawVecLine(ctx, fx, h * 0.36, [
+    {t:'a', v:true}, {t:' · '}, {t:'b', v:true}, {t:' = 1×3 + 2×1 = 5'}
+  ], '#1a2744', 13);
+  drawVecLine(ctx, fx, h * 0.52, [
+    {t:'|'}, {t:'a', v:true}, {t:'| = √5,   |'}, {t:'b', v:true}, {t:'| = √10'}
+  ], '#1a2744', 13);
+  drawVecLine(ctx, fx, h * 0.68, [
+    {t:'cos θ = 5 / (√5 · √10) = 1/√2'}
+  ], '#8e44ad', 13);
+  ctx.save(); ctx.font='13px sans-serif'; ctx.fillStyle='#8e44ad';
+  ctx.fillText('→ θ = 45°', fx, h * 0.82); ctx.restore();
   ctx.restore();
 }
 
@@ -3956,6 +3974,122 @@ function drawPerpLine() {
 }
 
 // No.5 quiz figure: 座標平面の成分ベクトル
+// ピタゴラスの定理図：x成分・y成分・斜辺の関係
+function drawPythagoras() {
+  const { ctx, w, h } = getCtx('canvas-pythagoras');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  const ox = w * 0.18, oy = h * 0.84, scale = Math.min(w * 0.12, h * 0.19);
+  drawAxes(ctx, ox, oy, w, h, scale, 5, 3);
+
+  // a = (3, 2) で図示
+  const a1 = 3, a2 = 2;
+  const Ax = ox + a1 * scale, Ay = oy - a2 * scale;
+
+  // 直角三角形の塗りつぶし（薄い青）
+  ctx.save();
+  ctx.fillStyle = 'rgba(59,107,204,0.08)';
+  ctx.beginPath();
+  ctx.moveTo(ox, oy); ctx.lineTo(Ax, oy); ctx.lineTo(Ax, Ay); ctx.closePath();
+  ctx.fill(); ctx.restore();
+
+  // x 成分（橙・矢印）
+  drawArrow(ctx, ox, oy, Ax, oy, '#e67e22', 2.5);
+  // y 成分（緑・矢印）
+  drawArrow(ctx, Ax, oy, Ax, Ay, '#27ae60', 2.5);
+  // 斜辺 = |a|（青・太矢印）
+  drawArrow(ctx, ox, oy, Ax, Ay, '#3b6bcc', 3);
+
+  // 直角マーク
+  const sq = 9;
+  ctx.save(); ctx.strokeStyle = '#888'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(Ax - sq, oy); ctx.lineTo(Ax - sq, oy - sq); ctx.lineTo(Ax, oy - sq);
+  ctx.stroke(); ctx.restore();
+
+  // 辺ラベル
+  ctx.save(); ctx.font = '13px sans-serif';
+  ctx.fillStyle = '#e67e22';
+  ctx.fillText('a₁', ox + a1 * scale / 2 - 5, oy + 20);
+  ctx.fillStyle = '#27ae60';
+  ctx.fillText('a₂', Ax + 9, oy - a2 * scale / 2 + 4);
+  ctx.restore();
+
+  // 斜辺ラベル（drawVecLine でベクトル矢印付き）
+  drawVecLine(ctx, (ox + Ax) / 2 - 28, (oy + Ay) / 2 - 6, [
+    {t:'|'}, {t:'a', v:true}, {t:'|'}
+  ], '#3b6bcc', 13);
+
+  // O ドット
+  drawDot(ctx, ox, oy, '#1a2744', 5);
+
+  // 公式テキスト（右側）
+  const fx = w * 0.50, s = 13;
+
+  // ピタゴラスの定理: a₁² + a₂² = |a|²
+  drawVecLine(ctx, fx, h * 0.30, [
+    {t:'a₁²  +  a₂²  =  |'}, {t:'a', v:true}, {t:'|²'}
+  ], '#1a2744', s);
+
+  // ∴ |a| = √(a₁² + a₂²)
+  drawVecLine(ctx, fx, h * 0.52, [
+    {t:'∴  |'}, {t:'a', v:true}, {t:'|  =  √( a₁²  +  a₂² )'}
+  ], '#3b6bcc', s + 1);
+
+  // 例
+  ctx.save(); ctx.font = '12px sans-serif'; ctx.fillStyle = '#555';
+  ctx.fillText('例）a = (3, 2)  →  |a| = √(9 + 4) = √13', fx, h * 0.76);
+  ctx.restore();
+}
+
+// 平行四辺形 ABCD の図（AB = DC を示す）
+function drawParallelogram() {
+  const { ctx, w, h } = getCtx('canvas-parallelogram');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // 頂点（見やすい形の平行四辺形）
+  const A = [w*0.14, h*0.78];
+  const B = [w*0.46, h*0.78];
+  const C = [w*0.62, h*0.24];
+  const D = [w*0.30, h*0.24];
+
+  // 平行四辺形の辺（薄いグレー）
+  ctx.save(); ctx.strokeStyle='#ccd'; ctx.lineWidth=1.2;
+  ctx.beginPath();
+  ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]);
+  ctx.lineTo(C[0],C[1]); ctx.lineTo(D[0],D[1]);
+  ctx.closePath(); ctx.stroke(); ctx.restore();
+
+  // AB ベクトル（青・太）
+  drawArrow(ctx, A[0],A[1], B[0],B[1], '#3b6bcc', 3);
+  // DC ベクトル（橙・太、D→C の向き）
+  drawArrow(ctx, D[0],D[1], C[0],C[1], '#e67e22', 3);
+
+  // AB, DC のラベル
+  const abMx=(A[0]+B[0])/2, abMy=(A[1]+B[1])/2;
+  const dcMx=(D[0]+C[0])/2, dcMy=(D[1]+C[1])/2;
+  drawVecLabel(ctx, abMx-8, abMy+18, 'AB', '#3b6bcc', 13);
+  drawVecLabel(ctx, dcMx-8, dcMy-10, 'DC', '#e67e22', 13);
+
+  // 「= 」テキスト
+  ctx.save(); ctx.font='bold 16px sans-serif'; ctx.fillStyle='#1a2744';
+  ctx.fillText('=', w*0.50, h*0.55); ctx.restore();
+
+  // 頂点ラベル
+  const pts = [[A,'A','#1a2744',-18,6],[B,'B','#1a2744',8,6],[C,'C','#1a2744',8,-8],[D,'D','#1a2744',-18,-8]];
+  pts.forEach(([p,lbl,col,dx,dy]) => {
+    drawDot(ctx, p[0],p[1], col, 5);
+    drawLabel(ctx, p[0]+dx, p[1]+dy, lbl, col, 14);
+  });
+
+  // 注釈
+  ctx.save(); ctx.font='12px sans-serif'; ctx.fillStyle='#888';
+  ctx.fillText('AB ∥ DC かつ AB = DC  ⟺  四角形 ABCD は平行四辺形', 14, h-10);
+  ctx.restore();
+}
+
 // ベクトル成分図（自動スケール：はみ出し防止）
 function qfig_compvec(c, a1, a2) {
   const { ctx, w, h } = getCtx(c.id || 'quiz-fig');
@@ -4019,6 +4153,8 @@ let no5aInit = false, no5bInit = false;
 function initNo5a() {
   if (no5aInit) return; no5aInit = true;
   drawCompVec();
+  drawPythagoras();
+  drawParallelogram();
   MathJax.typesetPromise([document.getElementById('sec-no5a')]);
 }
 
@@ -4043,7 +4179,7 @@ window.addEventListener('resize', () => {
     if (no3bInit) drawParallel2();
     if (no4aInit) drawInnerProd();
     if (no4bInit) { drawCosLaw(); drawPerpPt(); }
-    if (no5aInit) drawCompVec();
+    if (no5aInit) { drawCompVec(); drawPythagoras(); drawParallelogram(); }
     if (no5bInit) { drawInnerProdComp(); drawPerpLine(); }
   }, 150);
 });
