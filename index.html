@@ -459,6 +459,8 @@
     .u-no4b .u-num { color: #6c3483; }
     .u-no5a .u-num { color: #16a085; }
     .u-no5b .u-num { color: #0e7a65; }
+    .u-no6a .u-num { color: #1565c0; }
+    .u-no6b .u-num { color: #0d47a1; }
     .u-all  .u-num { color: var(--navy); }
     .u-all  { border-style: dashed; }
 
@@ -528,6 +530,7 @@
     .hero-card.no3::before { background: var(--red); }
     .hero-card.no4::before { background: #8e44ad; }
     .hero-card.no5::before { background: #16a085; }
+    .hero-card.no6::before { background: #1565c0; }
 
     .hero-card:hover {
       transform: translateY(-2px);
@@ -603,6 +606,8 @@
     <button onclick="showSection('no4b')">No.4② 角度・面積</button>
     <button onclick="showSection('no5a')">No.5① 成分表示</button>
     <button onclick="showSection('no5b')">No.5② 成分と内積</button>
+    <button onclick="showSection('no6a')">No.6① 空間ベクトル</button>
+    <button onclick="showSection('no6b')">No.6② 空間と内積</button>
     <button onclick="showSection('quiz')">練習問題</button>
   </nav>
 </header>
@@ -614,7 +619,7 @@
     <div class="page-title">
       <div class="tag">数学C</div>
       <h1>ベクトル学習アプリ</h1>
-      <p>No.0 〜 No.5 の内容をインタラクティブに学ぼう</p>
+      <p>No.0 〜 No.6 の内容をインタラクティブに学ぼう</p>
     </div>
 
     <div class="hero">
@@ -683,6 +688,17 @@
           <li>$\overrightarrow{AB}=$ (終点の座標) $-$ (始点の座標)</li>
           <li>成分による内積 $\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2$</li>
           <li>直線のベクトル方程式・垂線の足</li>
+        </ul>
+      </div>
+      <div class="hero-card no6" onclick="showSection('no6a')">
+        <span class="num">6</span>
+        <h3>No.6 空間ベクトル</h3>
+        <p>2次元から3次元へ — z軸を加えて空間に拡張</p>
+        <ul class="topic-list">
+          <li>空間座標 $(a,b,c)$・直方体と距離</li>
+          <li>3次元の大きさ $|\vec{a}|=\sqrt{x^2+y^2+z^2}$</li>
+          <li>空間の内積 $\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3$</li>
+          <li>空間の直線・垂線の足・xy平面との交点</li>
         </ul>
       </div>
     </div>
@@ -1618,6 +1634,200 @@
 
     <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
       <button class="btn btn-outline" onclick="showSection('no5a')">← No.5① に戻る</button>
+      <button class="btn btn-accent" onclick="showSection('no6a')">次へ：No.6① 空間ベクトル →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.6a ══════════════ -->
+  <div id="sec-no6a" class="section">
+    <div class="page-title">
+      <div class="tag">No.6①</div>
+      <h1>空間ベクトルと成分</h1>
+      <p>z 軸を加えて2次元から3次元へ拡張する</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>空間座標</h2>
+      <p>おなじみの $xy$ 座標平面に「高さ」を表す $z$ 軸を直角に加えると、空間の点を</p>
+      <div class="key-box">
+        <div class="label">空間座標（3次元）</div>
+        <div class="math-block">$$P(a,\ b,\ c)$$</div>
+        <p>x 成分 $a$、y 成分 $b$、z 成分 $c$ の <strong>3つの実数の組</strong> で表す。</p>
+      </div>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="accent-box">
+          <div class="label">座標平面</div>
+          <ul class="topic-list">
+            <li>$xy$ 平面：$z=0$ の平面（地面）</li>
+            <li>$yz$ 平面：$x=0$ の平面</li>
+            <li>$zx$ 平面：$y=0$ の平面</li>
+          </ul>
+        </div>
+        <div class="accent-box">
+          <div class="label">P(2, 5, 4) の直方体</div>
+          <ul class="topic-list">
+            <li>A$(2,0,0)$、B$(0,5,0)$</li>
+            <li>C$(0,0,4)$</li>
+            <li>H$(2,5,0)$（xy 平面への正射影）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-coord3d" width="560" height="240"></canvas>
+        <div class="canvas-controls">P(2, 5, 4) の直方体：各軸への正射影点を確認しよう</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>2点間の距離</h2>
+      <div class="key-box">
+        <div class="label">3次元の2点間の距離</div>
+        <div class="math-block">$$AB = \sqrt{(b_1-a_1)^2+(b_2-a_2)^2+(b_3-a_3)^2}$$</div>
+        <p class="note">ピタゴラスの定理を2回適用：底面の対角線 → 立体の対角線</p>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例：P(2, 5, 4) のとき</div>
+        <p>$OH = \sqrt{2^2+5^2} = \sqrt{29}$（底面 xy 平面の対角線）</p>
+        <p>$OP = \sqrt{(\sqrt{29})^2+4^2} = \sqrt{29+16} = \sqrt{45} = 3\sqrt{5}$</p>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-dist3d" width="560" height="210"></canvas>
+        <div class="canvas-controls">OH（底辺）と HP（高さ）→ OP（斜辺）の直角三角形</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>3次元ベクトルの成分と大きさ</h2>
+      <div class="key-box">
+        <div class="label">成分表示・大きさ（2次元の自然な拡張）</div>
+        <div class="math-block">$$\vec{a}=(x,\ y,\ z),\qquad |\vec{a}|=\sqrt{x^2+y^2+z^2}$$</div>
+        <div class="math-block">$$\overrightarrow{AB} = (\text{B の座標})-(\text{A の座標}) = (b_1-a_1,\;b_2-a_2,\;b_3-a_3)$$</div>
+      </div>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="accent-box">
+          <div class="label">演算（成分ごとに計算）</div>
+          <p>$\vec{a}+\vec{b}=(a_1+b_1,\;a_2+b_2,\;a_3+b_3)$</p>
+          <p>$k\vec{a}=(ka_1,\;ka_2,\;ka_3)$</p>
+        </div>
+        <div class="accent-box">
+          <div class="label">例：A$(1,4,3)$, B$(4,2,6)$</div>
+          <p>$\overrightarrow{AB}=(3,\;-2,\;3)$</p>
+          <p>$|\overrightarrow{AB}|=\sqrt{9+4+9}=\sqrt{22}$</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">④</span>3つのベクトルによる表現</h2>
+      <div class="key-box">
+        <div class="label">空間の1次独立と線形結合</div>
+        <p>「どれも $\vec{0}$ でなく、同一平面上にのらない」3つのベクトル $\vec{a},\vec{b},\vec{c}$ があれば、空間のどんなベクトル $\vec{p}$ も</p>
+        <div class="math-block">$$\vec{p} = s\vec{a}+t\vec{b}+u\vec{c}$$</div>
+        <p>の形でただ1通りに書ける（空間の1次独立）。</p>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例：$\vec{p}=(4,3,4)$、$\vec{a}=(4,1,0)$、$\vec{b}=(2,-3,3)$、$\vec{c}=(0,1,-2)$</div>
+        <p>$s\vec{a}+t\vec{b}+u\vec{c}=(4,3,4)$ を成分ごとに連立：</p>
+        <div class="math-block">$$s=2,\quad t=-2,\quad u=-5 \;\Rightarrow\; \vec{p}=2\vec{a}-2\vec{b}-5\vec{c}$$</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no5b')">← No.5② に戻る</button>
+      <button class="btn btn-accent" onclick="showSection('no6b')">次へ：No.6② 空間と内積 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.6b ══════════════ -->
+  <div id="sec-no6b" class="section">
+    <div class="page-title">
+      <div class="tag">No.6②</div>
+      <h1>空間ベクトルと内積</h1>
+      <p>3次元でも内積で角度・面積・直線を計算できる</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>3次元の内積</h2>
+      <p>内積の定義 $\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\theta$ は空間でも全く同じ。成分公式も同様に拡張できる。</p>
+      <div class="key-box">
+        <div class="label">3次元内積の成分公式</div>
+        <div class="math-block">$$\vec{a}\cdot\vec{b} = a_1b_1+a_2b_2+a_3b_3$$</div>
+        <p>→ x・y・z 各成分どうしをかけて全部足すだけ！</p>
+      </div>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="accent-box">
+          <div class="label">例①（果物の売上）</div>
+          <p>個数 $\vec{q}=(7,8,6)$（りんご・みかん・バナナ）</p>
+          <p>単価 $\vec{c}=(200,50,100)$ 円</p>
+          <p>$\vec{q}\cdot\vec{c}=1400+400+600=2400$ 円</p>
+        </div>
+        <div class="accent-box">
+          <div class="label">例②</div>
+          <p>$\vec{a}=(2,1,3)$, $\vec{b}=(1,-2,2)$</p>
+          <div class="math-block">$$\vec{a}\cdot\vec{b}=2\cdot1+1\cdot(-2)+3\cdot2=6$$</div>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-innerprod3d" width="560" height="210"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>角度・面積の公式（3次元版）</h2>
+      <div class="key-box">
+        <div class="label">なす角・三角形の面積（成分が3つになるだけ）</div>
+        <div class="math-block">$$\cos\theta = \frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}, \qquad S = \frac{1}{2}\sqrt{|\vec{a}|^2|\vec{b}|^2-(\vec{a}\cdot\vec{b})^2}$$</div>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例：P$(1,2,0)$, Q$(3,4,4)$, R$(3,2,2)$</div>
+        <p>$\overrightarrow{PQ}=(2,2,4)$、$\overrightarrow{PR}=(2,0,2)$</p>
+        <p>$\overrightarrow{PQ}\cdot\overrightarrow{PR}=4+0+8=12$、$|\overrightarrow{PQ}|=2\sqrt{6}$、$|\overrightarrow{PR}|=2\sqrt{2}$</p>
+        <div class="math-block">$$\cos\angle QPR=\frac{12}{2\sqrt{6}\cdot2\sqrt{2}}=\frac{12}{4\sqrt{12}}=\frac{\sqrt{3}}{2} \;\Rightarrow\; \angle QPR=30°$$</div>
+        <div class="math-block">$$S=\frac{1}{2}\sqrt{24\times8-144}=\frac{1}{2}\sqrt{48}=2\sqrt{3}$$</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>空間の直線と xy 平面との交点</h2>
+      <div class="key-box">
+        <div class="label">空間の直線のベクトル方程式</div>
+        <p>2点 A, B を通る直線上の点 P は</p>
+        <div class="math-block">$$\overrightarrow{OP} = \overrightarrow{OA}+t\overrightarrow{AB} \quad (t \in \mathbb{R})$$</div>
+        <p>xy 平面との交点：$z$ 成分 $=0$ となる $t$ を求める。</p>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例：A$(4,4,1)$, B$(-4,-8,-3)$ を通る直線と xy 平面の交点</div>
+        <p>$\overrightarrow{AB}=(-8,-12,-4)$</p>
+        <p>$\overrightarrow{OP}=(4-8t,\;4-12t,\;1-4t)$</p>
+        <p>$z=0$：$1-4t=0 \;\Rightarrow\; t=\dfrac{1}{4}$</p>
+        <div class="math-block">$$P(2,\ 1,\ 0)$$</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">④</span>点から直線への垂線の足（空間版）</h2>
+      <div class="key-box">
+        <div class="label">垂線の足（2次元と同じ手順）</div>
+        <p>直線上の点 H を $\overrightarrow{OH}=\overrightarrow{OA}+t\overrightarrow{AB}$ とおき、</p>
+        <div class="math-block">$$\overrightarrow{CH}\perp\overrightarrow{AB} \;\iff\; \overrightarrow{CH}\cdot\overrightarrow{AB}=0$$</div>
+        <p>で $t$ を決定する。</p>
+      </div>
+      <div class="accent-box" style="margin-top:0.8rem;">
+        <div class="label">例：前例の直線 $l$ から C$(6,6,5)$ への垂線の足 H</div>
+        <p>$\overrightarrow{OH}=(4-8t,\;4-12t,\;1-4t)$ とおく。</p>
+        <p>$\overrightarrow{CH}=(-2-8t,\;-2-12t,\;-4-4t)$</p>
+        <p>$\overrightarrow{CH}\cdot\overrightarrow{AB}=(-2-8t)(-8)+(-2-12t)(-12)+(-4-4t)(-4)=0$</p>
+        <p>$224t+56=0 \;\Rightarrow\; t=-\dfrac{1}{4}$</p>
+        <div class="math-block">$$\mathrm{H}(6,\ 7,\ 2)$$</div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-perpline3d" width="560" height="210"></canvas>
+        <div class="canvas-controls">$\overrightarrow{CH}\cdot\overrightarrow{AB}=0$ で足 H の位置を決定（空間版）</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no6a')">← No.6① に戻る</button>
       <button class="btn btn-accent" onclick="showSection('quiz')">練習問題に挑戦！ →</button>
     </div>
   </div>
@@ -1686,14 +1896,24 @@
             <span class="u-count">6問</span>
           </button>
           <button class="quiz-unit-btn u-no5b" onclick="startQuiz('no5b')">
-            <span class="u-num">5②</span>
-            <span class="u-title">No.5②<br>成分と内積</span>
+            <span class="u-num">No.5②</span>
+            <span class="u-title">成分と内積</span>
+            <span class="u-count">6問</span>
+          </button>
+          <button class="quiz-unit-btn u-no6a" onclick="startQuiz('no6a')">
+            <span class="u-num">No.6①</span>
+            <span class="u-title">空間ベクトル</span>
+            <span class="u-count">6問</span>
+          </button>
+          <button class="quiz-unit-btn u-no6b" onclick="startQuiz('no6b')">
+            <span class="u-num">No.6②</span>
+            <span class="u-title">空間と内積</span>
             <span class="u-count">6問</span>
           </button>
           <button class="quiz-unit-btn u-all" onclick="startQuiz('all')">
             <span class="u-num">全</span>
             <span class="u-title">全範囲<br>まとめ</span>
-            <span class="u-count">67問</span>
+            <span class="u-count">79問</span>
           </button>
         </div>
       </div>
@@ -1742,7 +1962,7 @@
 // ═══════════════════════════════════════
 //  Navigation
 // ═══════════════════════════════════════
-const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','no4a','no4b','no5a','no5b','quiz'];
+const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','no4a','no4b','no5a','no5b','no6a','no6b','quiz'];
 
 function showSection(id) {
   sectionIds.forEach(s => document.getElementById('sec-'+s).classList.remove('active'));
@@ -1765,6 +1985,8 @@ function showSection(id) {
   if (id === 'no4b' && !no4bInit) initNo4b();
   if (id === 'no5a' && !no5aInit) initNo5a();
   if (id === 'no5b' && !no5bInit) initNo5b();
+  if (id === 'no6a' && !no6aInit) initNo6a();
+  if (id === 'no6b' && !no6bInit) initNo6b();
   if (id === 'quiz') showQuizMenu();
 }
 
@@ -2778,6 +3000,80 @@ const questions = [
     ans: 0,
     exp: '$\\vec{a}\\cdot\\vec{b}=3\\times4+4\\times3=12+12=24$',
   },
+  // ── No.6① 空間ベクトルと成分 ──
+  {
+    q: '点 P$(3,\\ 4,\\ 5)$ の xy 平面への正射影 H の座標は？',
+    opts: ['$(3,\\ 4,\\ 0)$', '$(3,\\ 0,\\ 5)$', '$(0,\\ 4,\\ 5)$', '$(3,\\ 4,\\ 5)$'],
+    ans: 0,
+    exp: 'xy 平面への正射影は z 成分を 0 にした点。H$(3,4,0)$。',
+  },
+  {
+    q: '原点 O$(0,0,0)$ と P$(1,\\ -2,\\ 2)$ の距離は？',
+    opts: ['$3$', '$\\sqrt{5}$', '$\\sqrt{7}$', '$2\\sqrt{2}$'],
+    ans: 0,
+    exp: '$OP=\\sqrt{1^2+(-2)^2+2^2}=\\sqrt{1+4+4}=\\sqrt{9}=3$',
+  },
+  {
+    q: 'A$(1,\\ 4,\\ 3)$, B$(4,\\ 2,\\ 6)$ のとき $\\overrightarrow{AB}$ を成分で表すと？',
+    opts: ['$(3,\\ -2,\\ 3)$', '$(-3,\\ 2,\\ -3)$', '$(5,\\ 6,\\ 9)$', '$(3,\\ 2,\\ 3)$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AB}=B-A=(4-1,\\;2-4,\\;6-3)=(3,-2,3)$',
+  },
+  {
+    q: 'A$(1,\\ 4,\\ 3)$, B$(4,\\ 2,\\ 6)$ のとき $|\\overrightarrow{AB}|$ は？',
+    opts: ['$\\sqrt{22}$', '$\\sqrt{14}$', '$\\sqrt{18}$', '$\\sqrt{28}$'],
+    ans: 0,
+    exp: '$|\\overrightarrow{AB}|=\\sqrt{3^2+(-2)^2+3^2}=\\sqrt{9+4+9}=\\sqrt{22}$',
+  },
+  {
+    q: '$\\vec{a}=(0,\\ 2,\\ 3)$, $\\vec{b}=(2,\\ -4,\\ 6)$ のとき $\\vec{a}+\\vec{b}$ は？',
+    opts: ['$(2,\\ -2,\\ 9)$', '$(2,\\ 2,\\ 9)$', '$(-2,\\ 6,\\ 3)$', '$(2,\\ -2,\\ 3)$'],
+    ans: 0,
+    exp: '$\\vec{a}+\\vec{b}=(0+2,\\;2+(-4),\\;3+6)=(2,-2,9)$',
+  },
+  {
+    q: '$\\vec{a}=(0,\\ 2,\\ 3)$, $\\vec{b}=(2,\\ -4,\\ 6)$ のとき $2\\vec{a}-\\vec{b}$ は？',
+    opts: ['$(-2,\\ 8,\\ 0)$', '$(2,\\ 8,\\ 0)$', '$(-2,\\ 0,\\ 12)$', '$(2,\\ -4,\\ 0)$'],
+    ans: 0,
+    exp: '$2\\vec{a}=(0,4,6)$、$2\\vec{a}-\\vec{b}=(0-2,\\;4-(-4),\\;6-6)=(-2,8,0)$',
+  },
+  // ── No.6② 空間ベクトルと内積 ──
+  {
+    q: '$\\vec{a}=(2,\\ 1,\\ 3)$, $\\vec{b}=(1,\\ -2,\\ 2)$ のとき $\\vec{a}\\cdot\\vec{b}$ は？',
+    opts: ['$6$', '$4$', '$8$', '$-2$'],
+    ans: 0,
+    exp: '$\\vec{a}\\cdot\\vec{b}=2\\cdot1+1\\cdot(-2)+3\\cdot2=2-2+6=6$',
+  },
+  {
+    q: 'P$(1,2,0)$, Q$(3,4,4)$ のとき $|\\overrightarrow{PQ}|$ は？',
+    opts: ['$2\\sqrt{6}$', '$2\\sqrt{5}$', '$\\sqrt{20}$', '$4\\sqrt{2}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{PQ}=(2,2,4)$、$|\\overrightarrow{PQ}|=\\sqrt{4+4+16}=\\sqrt{24}=2\\sqrt{6}$',
+  },
+  {
+    q: 'P$(1,2,0)$, Q$(3,4,4)$, R$(3,2,2)$ のとき $\\overrightarrow{PQ}\\cdot\\overrightarrow{PR}$ は？',
+    opts: ['$12$', '$8$', '$16$', '$6$'],
+    ans: 0,
+    exp: '$\\overrightarrow{PQ}=(2,2,4)$、$\\overrightarrow{PR}=(2,0,2)$、内積$=4+0+8=12$',
+  },
+  {
+    q: 'P$(1,2,0)$, Q$(3,4,4)$, R$(3,2,2)$ のとき $\\cos\\angle QPR$ は？',
+    opts: ['$\\dfrac{\\sqrt{3}}{2}$', '$\\dfrac{1}{2}$', '$\\dfrac{1}{\\sqrt{2}}$', '$\\dfrac{\\sqrt{3}}{3}$'],
+    ans: 0,
+    exp: '$|\\overrightarrow{PQ}|=2\\sqrt{6}$、$|\\overrightarrow{PR}|=2\\sqrt{2}$、$\\cos\\theta=\\frac{12}{2\\sqrt{6}\\cdot2\\sqrt{2}}=\\frac{12}{4\\sqrt{12}}=\\frac{\\sqrt{3}}{2}$',
+  },
+  {
+    q: '△PQR（P$(1,2,0)$, Q$(3,4,4)$, R$(3,2,2)$）の面積は？',
+    opts: ['$2\\sqrt{3}$', '$\\sqrt{3}$', '$3\\sqrt{2}$', '$\\sqrt{6}$'],
+    ans: 0,
+    exp: '$S=\\frac{1}{2}\\sqrt{|\\overrightarrow{PQ}|^2|\\overrightarrow{PR}|^2-(\\overrightarrow{PQ}\\cdot\\overrightarrow{PR})^2}=\\frac{1}{2}\\sqrt{24\\cdot8-144}=\\frac{1}{2}\\sqrt{48}=2\\sqrt{3}$',
+  },
+  {
+    q: '2点 A$(4,4,1)$, B$(-4,-8,-3)$ を通る直線と xy 平面の交点 P の座標は？',
+    opts: ['$(2,\\ 1,\\ 0)$', '$(1,\\ 2,\\ 0)$', '$(4,\\ 4,\\ 0)$', '$(2,\\ 0,\\ 0)$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AB}=(-8,-12,-4)$、$\\overrightarrow{OP}=(4-8t,4-12t,1-4t)$、$z=0$ より $t=\\frac{1}{4}$、$P(2,1,0)$',
+  },
 ];
 
 // ═══════════════════════════════════════
@@ -3105,6 +3401,9 @@ const qFigs = {
   55: c => qfig_compvec(c, 3, 4),
   56: c => qfig_two_points(c, 2, 1, 5, 3),
   60: c => qfig_compvec(c, 1, 1),
+  // No.6
+  67: c => qfig_box3d(c),
+  75: c => qfig_tri3d(c),
 };
 
 // ── 単元ごとの問題インデックス割り当て ──
@@ -3120,6 +3419,8 @@ const unitMap = {
   no4b: [49,50,51,52,53,54],
   no5a: [55,56,57,58,59,60],
   no5b: [61,62,63,64,65,66],
+  no6a: [67,68,69,70,71,72],
+  no6b: [73,74,75,76,77,78],
 };
 Object.entries(unitMap).forEach(([unit, idxs]) => {
   idxs.forEach(i => { if (questions[i]) questions[i].unit = unit; });
@@ -3141,6 +3442,8 @@ const unitLabel = {
   no4b: 'No.4② 角度・面積',
   no5a: 'No.5① 成分表示',
   no5b: 'No.5② 成分と内積',
+  no6a: 'No.6① 空間ベクトル',
+  no6b: 'No.6② 空間と内積',
   all:  '全範囲まとめ',
 };
 
@@ -4165,6 +4468,288 @@ function initNo5b() {
   MathJax.typesetPromise([document.getElementById('sec-no5b')]);
 }
 
+// ═══════════════════════════════════════
+//  No.6 Canvases
+// ═══════════════════════════════════════
+let no6aInit = false, no6bInit = false;
+
+function initNo6a() {
+  if (no6aInit) return; no6aInit = true;
+  drawCoord3d();
+  drawDist3d();
+  MathJax.typesetPromise([document.getElementById('sec-no6a')]);
+}
+
+function initNo6b() {
+  if (no6bInit) return; no6bInit = true;
+  drawInnerProd3d();
+  drawPerpLine3d();
+  MathJax.typesetPromise([document.getElementById('sec-no6b')]);
+}
+
+// 3D 斜投影（cabinet projection）
+// x→右, y→右斜め下, z→上
+function proj3d(ox, oy, x, y, z, sc) {
+  return [ox + x * sc + y * 0.50 * sc, oy - z * sc + y * 0.35 * sc];
+}
+
+function drawAxes3d(ctx, ox, oy, sc, rx, ry, rz) {
+  ctx.save();
+  ctx.strokeStyle = '#888'; ctx.lineWidth = 1.5;
+  ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = '#555';
+  const xe = proj3d(ox, oy, rx, 0, 0, sc);
+  const ye = proj3d(ox, oy, 0, ry, 0, sc);
+  const ze = proj3d(ox, oy, 0, 0, rz, sc);
+  ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(xe[0], xe[1]); ctx.stroke();
+  ctx.fillText('x', xe[0] + 5, xe[1] + 4);
+  ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ye[0], ye[1]); ctx.stroke();
+  ctx.fillText('y', ye[0] + 4, ye[1] + 10);
+  ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ze[0], ze[1]); ctx.stroke();
+  ctx.fillText('z', ze[0] - 14, ze[1] - 4);
+  ctx.fillText('O', ox - 16, oy + 12);
+  ctx.restore();
+}
+
+function drawCoord3d() {
+  const { ctx, w, h } = getCtx('canvas-coord3d');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.17, oy = h * 0.78, sc = 26;
+  const px = 2, py = 5, pz = 4;
+  drawAxes3d(ctx, ox, oy, sc, 3.8, 7, 5.5);
+  // 直方体の8頂点
+  const C = (x, y, z) => proj3d(ox, oy, x, y, z, sc);
+  const co = [C(0,0,0),C(px,0,0),C(px,py,0),C(0,py,0),
+               C(0,0,pz),C(px,0,pz),C(px,py,pz),C(0,py,pz)];
+  // 底面（破線）
+  ctx.save(); ctx.strokeStyle = '#b0c4de'; ctx.lineWidth = 1.2; ctx.setLineDash([4,3]);
+  [[0,1],[1,2],[2,3],[3,0]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(co[a][0],co[a][1]); ctx.lineTo(co[b][0],co[b][1]); ctx.stroke();
+  });
+  // 原点側縦辺（破線）
+  ctx.beginPath(); ctx.moveTo(co[0][0],co[0][1]); ctx.lineTo(co[4][0],co[4][1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  // 上面・縦辺（実線）
+  ctx.save(); ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.8;
+  [[4,5],[5,6],[6,7],[7,4],[1,5],[2,6],[3,7]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(co[a][0],co[a][1]); ctx.lineTo(co[b][0],co[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+  // OH（床面対角線、赤破線）
+  const Opt = co[0], Hpt = co[2], Ppt = co[6];
+  ctx.save(); ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(Opt[0],Opt[1]); ctx.lineTo(Hpt[0],Hpt[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  // OP（空間対角線、青矢印）
+  drawArrow(ctx, Opt[0],Opt[1], Ppt[0],Ppt[1], '#1a2744', 2.5);
+  // 点とラベル
+  const pts = [
+    [co[1], '#e74c3c', 'A(2,0,0)', 4, 12],
+    [co[3], '#27ae60', 'B(0,5,0)', 4, 10],
+    [co[4], '#8e44ad', 'C(0,0,4)', -60, -4],
+    [Hpt,   '#e74c3c', 'H(2,5,0)', 4, 12],
+    [Ppt,   '#1a2744', 'P(2,5,4)', 5, -6],
+  ];
+  pts.forEach(([pt, col, lbl, dx, dy]) => {
+    drawDot(ctx, pt[0], pt[1], col, 4);
+    ctx.save(); ctx.font = 'bold 11px serif'; ctx.fillStyle = col;
+    ctx.fillText(lbl, pt[0]+dx, pt[1]+dy); ctx.restore();
+  });
+  drawDot(ctx, Opt[0], Opt[1], '#888', 3);
+}
+
+function drawDist3d() {
+  const { ctx, w, h } = getCtx('canvas-dist3d');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.14, oy = h * 0.82, sc = 24;
+  drawAxes3d(ctx, ox, oy, sc, 3.5, 6.5, 5.5);
+  const px = 2, py = 5, pz = 4;
+  const Opt = proj3d(ox,oy,0,0,0,sc);
+  const Hpt = proj3d(ox,oy,px,py,0,sc);
+  const Ppt = proj3d(ox,oy,px,py,pz,sc);
+  // 床の破線ガイド
+  ctx.save(); ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+  [[proj3d(ox,oy,px,0,0,sc), Hpt],[proj3d(ox,oy,0,py,0,sc), Hpt],
+   [Opt, proj3d(ox,oy,px,0,0,sc)],[Opt, proj3d(ox,oy,0,py,0,sc)]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  });
+  ctx.setLineDash([]); ctx.restore();
+  // OH 赤
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(Opt[0],Opt[1]); ctx.lineTo(Hpt[0],Hpt[1]); ctx.stroke();
+  ctx.restore();
+  // HP 緑（垂直）
+  ctx.save(); ctx.strokeStyle='#27ae60'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(Hpt[0],Hpt[1]); ctx.lineTo(Ppt[0],Ppt[1]); ctx.stroke();
+  ctx.restore();
+  // OP 青矢印
+  drawArrow(ctx, Opt[0],Opt[1], Ppt[0],Ppt[1], '#2980b9', 2.5);
+  // 直角マーク
+  ctx.save(); ctx.strokeStyle='#888'; ctx.lineWidth=1.2;
+  const sq=8; ctx.beginPath();
+  ctx.moveTo(Hpt[0],Hpt[1]-sq); ctx.lineTo(Hpt[0]+sq*0.35,Hpt[1]-sq); ctx.lineTo(Hpt[0]+sq*0.35,Hpt[1]);
+  ctx.stroke(); ctx.restore();
+  // ラベル
+  ctx.save(); ctx.font='bold 12px serif';
+  ctx.fillStyle='#e74c3c'; ctx.fillText('OH=√29',(Opt[0]+Hpt[0])/2+2,(Opt[1]+Hpt[1])/2+14);
+  ctx.fillStyle='#27ae60'; ctx.fillText('4', Hpt[0]+6,(Hpt[1]+Ppt[1])/2);
+  ctx.fillStyle='#2980b9'; ctx.fillText('OP=3√5',(Opt[0]+Ppt[0])/2-42,(Opt[1]+Ppt[1])/2-4);
+  ctx.restore();
+  drawDot(ctx,Opt[0],Opt[1],'#888',3);
+  drawDot(ctx,Hpt[0],Hpt[1],'#e74c3c',4);
+  drawDot(ctx,Ppt[0],Ppt[1],'#2980b9',5);
+  ctx.save(); ctx.font='bold 12px serif';
+  ctx.fillStyle='#e74c3c'; ctx.fillText('H',Hpt[0]+4,Hpt[1]+13);
+  ctx.fillStyle='#2980b9'; ctx.fillText('P(2,5,4)',Ppt[0]+5,Ppt[1]-6);
+  ctx.restore();
+}
+
+function drawInnerProd3d() {
+  const { ctx, w, h } = getCtx('canvas-innerprod3d');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.18, oy = h * 0.72, sc = 30;
+  drawAxes3d(ctx, ox, oy, sc, 3.2, 1.5, 3.8);
+  const O = proj3d(ox,oy,0,0,0,sc);
+  const Apt = proj3d(ox,oy,2,1,3,sc);
+  // b=(1,-2,2): y=-2は手前方向になるのでそのまま
+  const Bpt = proj3d(ox,oy,1,-2,2,sc);
+  drawArrow(ctx, O[0],O[1], Apt[0],Apt[1], '#3b6bcc', 2.5);
+  drawArrow(ctx, O[0],O[1], Bpt[0],Bpt[1], '#e74c3c', 2.5);
+  drawDot(ctx, Apt[0],Apt[1],'#3b6bcc',4);
+  drawDot(ctx, Bpt[0],Bpt[1],'#e74c3c',4);
+  drawVecLabel(ctx, Apt[0]+4, Apt[1]-6, 'a', '#3b6bcc', 13);
+  ctx.save(); ctx.font='11px sans-serif'; ctx.fillStyle='#3b6bcc';
+  ctx.fillText('=(2,1,3)', Apt[0]+20, Apt[1]-4); ctx.restore();
+  drawVecLabel(ctx, Bpt[0]-14, Bpt[1]+16, 'b', '#e74c3c', 13);
+  ctx.save(); ctx.font='11px sans-serif'; ctx.fillStyle='#e74c3c';
+  ctx.fillText('=(1,−2,2)', Bpt[0]-10, Bpt[1]+28); ctx.restore();
+  // 計算式
+  ctx.save(); ctx.font='13px sans-serif'; ctx.fillStyle='#1a2744';
+  const rx = w * 0.52, ry = h * 0.20;
+  ctx.fillText('内積の計算', rx, ry);
+  ctx.fillText('= a₁b₁ + a₂b₂ + a₃b₃', rx, ry+20);
+  ctx.fillText('= 2×1 + 1×(−2) + 3×2', rx, ry+40);
+  ctx.fillText('= 2 − 2 + 6 = 6', rx, ry+60);
+  ctx.restore();
+}
+
+function drawPerpLine3d() {
+  const { ctx, w, h } = getCtx('canvas-perpline3d');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w*0.14, oy = h*0.80, sc = 22;
+  drawAxes3d(ctx, ox, oy, sc, 4, 3.5, 5);
+  // A(4,4,1), B(-4,-8,-3) の直線 l（A は正側）
+  // スケールの都合で描画範囲を調整
+  const Apt = proj3d(ox,oy, 4, 4, 1, sc);
+  const Bpt2 = proj3d(ox,oy, 1, 0.5, 0.25, sc); // t=3/4 あたりの中間点
+  const Ppt2 = proj3d(ox,oy, 2, 1, 0, sc); // P(2,1,0) xy平面交点
+  // 直線
+  ctx.save(); ctx.strokeStyle='#2980b9'; ctx.lineWidth=2;
+  const lStart = proj3d(ox,oy, 6, 7, 2, sc);
+  const lEnd   = proj3d(ox,oy,-1,-2,-1, sc);
+  ctx.beginPath(); ctx.moveTo(lStart[0],lStart[1]); ctx.lineTo(lEnd[0],lEnd[1]); ctx.stroke();
+  ctx.restore();
+  // H(6,7,2) 垂線の足
+  const Hpt3 = proj3d(ox,oy, 6, 7, 2, sc);
+  const Cpt  = proj3d(ox,oy, 6, 6, 5, sc);
+  // 垂線
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2;
+  ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(Cpt[0],Cpt[1]); ctx.lineTo(Hpt3[0],Hpt3[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  drawDot(ctx, Apt[0],Apt[1],'#2980b9',4);
+  drawDot(ctx, Hpt3[0],Hpt3[1],'#e74c3c',5);
+  drawDot(ctx, Cpt[0],Cpt[1],'#27ae60',5);
+  ctx.save(); ctx.font='bold 11px serif';
+  ctx.fillStyle='#2980b9'; ctx.fillText('A(4,4,1)', Apt[0]+4, Apt[1]-6);
+  ctx.fillStyle='#e74c3c'; ctx.fillText('H(6,7,2)', Hpt3[0]+4, Hpt3[1]-6);
+  ctx.fillStyle='#27ae60'; ctx.fillText('C(6,6,5)', Cpt[0]+4, Cpt[1]-6);
+  ctx.fillStyle='#2980b9'; ctx.fillText('l', lStart[0]-14, lStart[1]);
+  ctx.restore();
+  // 直角マーク
+  ctx.save(); ctx.strokeStyle='#888'; ctx.lineWidth=1.2;
+  const sq=7;
+  const dx = Cpt[0]-Hpt3[0], dy = Cpt[1]-Hpt3[1];
+  const len = Math.sqrt(dx*dx+dy*dy)||1;
+  const ux=dx/len, uy=dy/len;
+  // 直線方向ベクトル
+  const ldx = lEnd[0]-lStart[0], ldy = lEnd[1]-lStart[1];
+  const llen = Math.sqrt(ldx*ldx+ldy*ldy)||1;
+  const lux=ldx/llen, luy=ldy/llen;
+  ctx.beginPath();
+  ctx.moveTo(Hpt3[0]+ux*sq, Hpt3[1]+uy*sq);
+  ctx.lineTo(Hpt3[0]+ux*sq+lux*sq, Hpt3[1]+uy*sq+luy*sq);
+  ctx.lineTo(Hpt3[0]+lux*sq, Hpt3[1]+luy*sq);
+  ctx.stroke(); ctx.restore();
+}
+
+// ── クイズ用3D図 ──
+function qfig_box3d(c) {
+  const { ctx, w, h } = qfigCtx(c, 230);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  // P(3,4,5): y方向の投影で下に伸びるため原点を高めに設定
+  const ox = w*0.14, oy = h*0.62, sc = Math.min(w*0.087, h*0.11);
+  const px=3, py=4, pz=5;
+  // 軸
+  ctx.save(); ctx.strokeStyle='#888'; ctx.lineWidth=1.3;
+  ctx.font='11px sans-serif'; ctx.fillStyle='#666';
+  [['x',4.5,0,0,4,3],['y',0,4.8,0,4,9],['z',0,0,6.5,-14,-4]].forEach(([l,x,y,z,dx,dy])=>{
+    const pt=proj3d(ox,oy,x,y,z,sc);
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(pt[0],pt[1]); ctx.stroke();
+    ctx.fillText(l,pt[0]+dx,pt[1]+dy);
+  });
+  ctx.fillText('O',ox-13,oy+11); ctx.restore();
+  const C=(x,y,z)=>proj3d(ox,oy,x,y,z,sc);
+  const co=[C(0,0,0),C(px,0,0),C(px,py,0),C(0,py,0),C(0,0,pz),C(px,0,pz),C(px,py,pz),C(0,py,pz)];
+  ctx.save(); ctx.lineWidth=1.2;
+  ctx.strokeStyle='#b0c4de'; ctx.setLineDash([3,2]);
+  [[0,1],[1,2],[2,3],[3,0],[0,4]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(co[a][0],co[a][1]);ctx.lineTo(co[b][0],co[b][1]);ctx.stroke();});
+  ctx.setLineDash([]); ctx.strokeStyle='#2980b9'; ctx.lineWidth=1.6;
+  [[4,5],[5,6],[6,7],[7,4],[1,5],[2,6],[3,7]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(co[a][0],co[a][1]);ctx.lineTo(co[b][0],co[b][1]);ctx.stroke();});
+  ctx.restore();
+  const Ppt=co[6], Hpt=co[2];
+  // OH 赤破線（床面対角線）
+  ctx.save(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=1.8; ctx.setLineDash([4,2]);
+  ctx.beginPath(); ctx.moveTo(co[0][0],co[0][1]); ctx.lineTo(Hpt[0],Hpt[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  drawDot(ctx,Ppt[0],Ppt[1],'#2980b9',5);
+  drawDot(ctx,Hpt[0],Hpt[1],'#e74c3c',5);
+  ctx.save(); ctx.font='bold 10px serif';
+  ctx.fillStyle='#2980b9'; ctx.fillText('P(3,4,5)',Ppt[0]+4,Ppt[1]-6);
+  ctx.fillStyle='#e74c3c'; ctx.fillText('H = ?',Hpt[0]+4,Hpt[1]+13);
+  ctx.restore();
+}
+
+function qfig_tri3d(c) {
+  const { ctx, w, h } = qfigCtx(c, 185);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox=w*0.12, oy=h*0.82, sc=Math.min(w*0.09, h*0.13);
+  ctx.save(); ctx.strokeStyle='#888'; ctx.lineWidth=1.2;
+  ctx.font='10px sans-serif'; ctx.fillStyle='#666';
+  [['x',4.5,0,0,4,3],['y',0,5.5,0,4,8],['z',0,0,5.5,-13,-4]].forEach(([l,x,y,z,dx,dy])=>{
+    const pt=proj3d(ox,oy,x,y,z,sc);
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(pt[0],pt[1]); ctx.stroke();
+    ctx.fillText(l,pt[0]+dx,pt[1]+dy);
+  });
+  ctx.restore();
+  const Pp=proj3d(ox,oy,1,2,0,sc);
+  const Qp=proj3d(ox,oy,3,4,4,sc);
+  const Rp=proj3d(ox,oy,3,2,2,sc);
+  ctx.save(); ctx.strokeStyle='#3b6bcc'; ctx.lineWidth=2;
+  [[Pp,Qp],[Qp,Rp],[Rp,Pp]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();});
+  ctx.restore();
+  [[Pp,'#3b6bcc','P(1,2,0)',-4,12],[Qp,'#e74c3c','Q(3,4,4)',4,-5],[Rp,'#27ae60','R(3,2,2)',4,4]].forEach(([pt,col,lbl,dx,dy])=>{
+    drawDot(ctx,pt[0],pt[1],col,4);
+    ctx.save(); ctx.font='bold 10px serif'; ctx.fillStyle=col;
+    ctx.fillText(lbl,pt[0]+dx,pt[1]+dy); ctx.restore();
+  });
+}
+
 // 画面回転・リサイズ時にCanvasを再描画
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -4181,6 +4766,8 @@ window.addEventListener('resize', () => {
     if (no4bInit) { drawCosLaw(); drawPerpPt(); }
     if (no5aInit) { drawCompVec(); drawPythagoras(); drawParallelogram(); }
     if (no5bInit) { drawInnerProdComp(); drawPerpLine(); }
+    if (no6aInit) { drawCoord3d(); drawDist3d(); }
+    if (no6bInit) { drawInnerProd3d(); drawPerpLine3d(); }
   }, 150);
 });
 </script>
