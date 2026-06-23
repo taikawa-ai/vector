@@ -461,6 +461,8 @@
     .u-no5b .u-num { color: #0e7a65; }
     .u-no6a .u-num { color: #1565c0; }
     .u-no6b .u-num { color: #0d47a1; }
+    .u-no7a .u-num { color: #283593; }
+    .u-no7b .u-num { color: #1a237e; }
     .u-all  .u-num { color: var(--navy); }
     .u-all  { border-style: dashed; }
 
@@ -531,6 +533,7 @@
     .hero-card.no4::before { background: #8e44ad; }
     .hero-card.no5::before { background: #16a085; }
     .hero-card.no6::before { background: #1565c0; }
+    .hero-card.no7::before { background: #283593; }
 
     .hero-card:hover {
       transform: translateY(-2px);
@@ -608,6 +611,8 @@
     <button onclick="showSection('no5b')">No.5② 成分と内積</button>
     <button onclick="showSection('no6a')">No.6① 空間ベクトル</button>
     <button onclick="showSection('no6b')">No.6② 空間と内積</button>
+    <button onclick="showSection('no7a')">No.7① 空間と1次独立</button>
+    <button onclick="showSection('no7b')">No.7② 正四面体と内積</button>
     <button onclick="showSection('quiz')">練習問題</button>
   </nav>
 </header>
@@ -699,6 +704,17 @@
           <li>3次元の大きさ $|\vec{a}|=\sqrt{x^2+y^2+z^2}$</li>
           <li>空間の内積 $\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3$</li>
           <li>空間の直線・垂線の足・xy平面との交点</li>
+        </ul>
+      </div>
+      <div class="hero-card no7" onclick="showSection('no7a')">
+        <span class="num">7</span>
+        <h3>No.7 空間と四面体</h3>
+        <p>1次独立・四面体の重心・正四面体の内積</p>
+        <ul class="topic-list">
+          <li>空間の1次独立：$\vec{p}=s\vec{a}+t\vec{b}+u\vec{c}$</li>
+          <li>四面体の重心 $\overrightarrow{AG}=\frac{\vec{b}+\vec{c}+\vec{d}}{3}$</li>
+          <li>正四面体の内積：6つの値を準備する</li>
+          <li>垂直の証明・単位ベクトル</li>
         </ul>
       </div>
     </div>
@@ -1828,6 +1844,181 @@
 
     <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
       <button class="btn btn-outline" onclick="showSection('no6a')">← No.6① に戻る</button>
+      <button class="btn btn-accent" onclick="showSection('no7a')">次へ：No.7① 空間と1次独立 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.7a ══════════════ -->
+  <div id="sec-no7a" class="section">
+    <div class="page-title">
+      <div class="tag">No.7①</div>
+      <h1>空間ベクトルの1次独立と四面体の重心</h1>
+      <p>3つのベクトルで空間を張る — 重心・内分も平面と全く同じ！</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>空間の1次独立</h2>
+      <p>平面では「ともに $\vec{0}$ でなく、互いに平行でない」2つのベクトルで任意のベクトルを表せた。空間では <strong>3つ</strong> のベクトルが必要になる。</p>
+      <div class="key-box">
+        <div class="label">空間ベクトルの1次独立</div>
+        <p>「どれも $\vec{0}$ でなく、<strong>同一平面上にのせることができない</strong>」3つのベクトル $\vec{a},\vec{b},\vec{c}$ があれば、どんなベクトル $\vec{p}$ も</p>
+        <div class="math-block">$$\vec{p} = s\vec{a} + t\vec{b} + u\vec{c} \quad (s,t,u\text{ は実数})$$</div>
+        <p>と<strong>ただ1通りに</strong>書き表せる。</p>
+      </div>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="accent-box">
+          <div class="label">平面の場合</div>
+          <p>$\vec{p} = s\vec{a} + t\vec{b}$<br>（2ベクトルで平面を張る）</p>
+          <p>条件：3点 O, A, B が三角形をなす</p>
+        </div>
+        <div class="accent-box">
+          <div class="label">空間の場合</div>
+          <p>$\vec{p} = s\vec{a} + t\vec{b} + u\vec{c}$<br>（3ベクトルで空間を張る）</p>
+          <p>条件：4点 O, A, B, C が四面体をなす</p>
+        </div>
+      </div>
+      <canvas id="canvas-no7a" width="560" height="220"></canvas>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>四面体の重心・内分点（平面と全く同じ公式！）</h2>
+      <p>内分・外分・重心の公式は「平面」が「空間」になっても<strong>全く同じように使える</strong>のがベクトルの強み。</p>
+      <div class="key-box">
+        <div class="label">四面体の重心</div>
+        <p>四面体 ABCD で $\overrightarrow{AB}=\vec{b}$, $\overrightarrow{AC}=\vec{c}$, $\overrightarrow{AD}=\vec{d}$ とおくとき、</p>
+        <div class="math-block">$$\overrightarrow{AG} = \frac{\vec{b}+\vec{c}+\vec{d}}{3}$$</div>
+        <p>（ $\triangle BCD$ の重心 G の公式）</p>
+      </div>
+      <div class="step-box" style="margin-top:0.8rem;">
+        <div class="step-num">1</div>
+        <div>
+          <strong>辺上の内分点</strong>：辺 $AB$ を $m:n$ に内分する点 K<br>
+          $\overrightarrow{AK} = \dfrac{m}{m+n}\,\vec{b}$　（平面のときと同じ！）
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">2</div>
+        <div>
+          <strong>△KLM の重心</strong>：$\overrightarrow{AG'} = \dfrac{\overrightarrow{AK}+\overrightarrow{AL}+\overrightarrow{AM}}{3}$
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">3</div>
+        <div>
+          <strong>共線条件</strong>：$\overrightarrow{AG'} = k\,\overrightarrow{AG}$ が成り立てば A, G, G' は同一直線上
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>例題：四面体の重心の移動</h2>
+      <p>四面体 ABCD で辺 AB, BC, CD をそれぞれ 1:1, 2:1, 5:1 に内分する点を K, L, M とする。$\triangle BCD$ の重心を G、$\triangle KLM$ の重心を G' とする。$\overrightarrow{AB}=\vec{b}$, $\overrightarrow{AC}=\vec{c}$, $\overrightarrow{AD}=\vec{d}$。</p>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div>
+          <p><strong>① G を求める（重心の公式）</strong></p>
+          <div class="math-block">$$\overrightarrow{AG} = \frac{\vec{b}+\vec{c}+\vec{d}}{3}$$</div>
+          <p><strong>② K, L, M の位置ベクトル</strong></p>
+          <div class="math-block">$$\overrightarrow{AK} = \tfrac{1}{2}\vec{b}$$</div>
+          <div class="math-block">$$\overrightarrow{AL} = \tfrac{1}{3}\vec{b}+\tfrac{2}{3}\vec{c}$$</div>
+          <div class="math-block">$$\overrightarrow{AM} = \tfrac{1}{6}\vec{c}+\tfrac{5}{6}\vec{d}$$</div>
+        </div>
+        <div>
+          <p><strong>③ G' を求める（重心の公式）</strong></p>
+          <div class="math-block">$$\overrightarrow{AG'} = \frac{\overrightarrow{AK}+\overrightarrow{AL}+\overrightarrow{AM}}{3} = \frac{5}{18}(\vec{b}+\vec{c}+\vec{d})$$</div>
+          <p><strong>④ 共線条件</strong></p>
+          <div class="math-block">$$\overrightarrow{AG'} = \frac{5}{6}\,\overrightarrow{AG}$$</div>
+          <p>$\therefore$ A, G, G' は同一直線上、$AG':G'G = 5:1$</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no6b')">← No.6② に戻る</button>
+      <button class="btn btn-accent" onclick="showSection('no7b')">次へ：No.7② 正四面体と内積 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ No.7b ══════════════ -->
+  <div id="sec-no7b" class="section">
+    <div class="page-title">
+      <div class="tag">No.7②</div>
+      <h1>正四面体の内積と垂直証明</h1>
+      <p>6つの内積値を準備して計算する — 単位ベクトルも学ぼう</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">①</span>正四面体での内積の準備</h2>
+      <p>空間の計量問題では、基準となる3つのベクトル $\vec{a},\vec{b},\vec{c}$ について <strong>6つの値</strong> を先に計算しておくのがコツ。</p>
+      <div class="key-box">
+        <div class="label">正四面体 OABC（1辺の長さ 1）</div>
+        <p>$\overrightarrow{OA}=\vec{a}$, $\overrightarrow{OB}=\vec{b}$, $\overrightarrow{OC}=\vec{c}$ とおくと</p>
+        <div class="math-block">$$|\vec{a}|=|\vec{b}|=|\vec{c}|=1$$</div>
+        <p>全ての辺が長さ1 なので、$\angle AOB = \angle BOC = \angle COA = 60°$</p>
+        <div class="math-block">$$\vec{a}\cdot\vec{b} = \vec{b}\cdot\vec{c} = \vec{c}\cdot\vec{a} = 1\cdot1\cdot\cos 60° = \frac{1}{2}$$</div>
+        <p>この <strong>6つの値</strong>（$|\vec{a}|,|\vec{b}|,|\vec{c}|,\vec{a}\cdot\vec{b},\vec{b}\cdot\vec{c},\vec{c}\cdot\vec{a}$）を先に求めておけば、後の計算がすべて代入だけで解ける！</p>
+      </div>
+      <canvas id="canvas-no7b" width="560" height="220"></canvas>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">②</span>例題：PQ ⊥ BC の証明</h2>
+      <p>1辺の長さ1の正四面体 OABC で、辺 OA を 1:2 に内分する点を P、辺 BC の中点を Q とする。$\overrightarrow{OA}=\vec{a}$, $\overrightarrow{OB}=\vec{b}$, $\overrightarrow{OC}=\vec{c}$。</p>
+      <div class="step-box">
+        <div class="step-num">1</div>
+        <div>
+          <strong>各ベクトルを $\vec{a},\vec{b},\vec{c}$ で表す</strong>
+          <div class="math-block">$$\overrightarrow{OP} = \frac{1}{3}\vec{a}, \quad \overrightarrow{OQ} = \frac{\vec{b}+\vec{c}}{2}$$</div>
+          <div class="math-block">$$\overrightarrow{PQ} = \overrightarrow{OQ}-\overrightarrow{OP} = -\frac{1}{3}\vec{a}+\frac{1}{2}\vec{b}+\frac{1}{2}\vec{c}$$</div>
+          <div class="math-block">$$\overrightarrow{BC} = \overrightarrow{OC}-\overrightarrow{OB} = -\vec{b}+\vec{c}$$</div>
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">2</div>
+        <div>
+          <strong>内積を計算（6つの値を代入）</strong>
+          <div class="math-block">
+            $$\overrightarrow{PQ}\cdot\overrightarrow{BC}
+            = \left(-\tfrac{1}{3}\vec{a}+\tfrac{1}{2}\vec{b}+\tfrac{1}{2}\vec{c}\right)\cdot\left(-\vec{b}+\vec{c}\right)$$
+          </div>
+          <div class="math-block">
+            $$= \tfrac{1}{3}\vec{a}\cdot\vec{b} - \tfrac{1}{3}\vec{a}\cdot\vec{c}
+              - \tfrac{1}{2}|\vec{b}|^2 + \tfrac{1}{2}\vec{b}\cdot\vec{c}
+              + \tfrac{1}{2}\vec{c}\cdot\vec{b} - \tfrac{1}{2}|\vec{c}|^2$$
+          </div>
+          <div class="math-block">
+            $$= \tfrac{1}{3}\cdot\tfrac{1}{2} - \tfrac{1}{3}\cdot\tfrac{1}{2}
+              - \tfrac{1}{2}\cdot 1 + \tfrac{1}{2}\cdot\tfrac{1}{2}
+              + \tfrac{1}{2}\cdot\tfrac{1}{2} - \tfrac{1}{2}\cdot 1 = 0$$
+          </div>
+          <p>$\overrightarrow{PQ}\cdot\overrightarrow{BC}=0$ より $\text{PQ}\perp\text{BC}$ $\quad\blacksquare$</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">③</span>単位ベクトル</h2>
+      <p>大きさが 1 のベクトルを<strong>単位ベクトル</strong>という。方向情報だけを取り出したいときに使う。</p>
+      <div class="key-box">
+        <div class="label">単位ベクトルの求め方</div>
+        <div class="math-block">$$\vec{e} = \frac{\vec{a}}{|\vec{a}|}$$</div>
+        <p>つまり「大きさで割る」だけ。$|\vec{e}|=1$ になる。</p>
+      </div>
+      <div class="two-col" style="margin-top:0.8rem;">
+        <div class="accent-box">
+          <div class="label">例：$\vec{a}=(2,-2,1)$</div>
+          <p>$|\vec{a}|=\sqrt{4+4+1}=3$</p>
+          <p>単位ベクトル $= \left(\dfrac{2}{3},-\dfrac{2}{3},\dfrac{1}{3}\right)$</p>
+        </div>
+        <div class="accent-box">
+          <div class="label">大きさ $k$ のベクトル</div>
+          <p>$\vec{a}$ と同じ向きで大きさ $k$ のベクトル</p>
+          <p>$= k\cdot\dfrac{\vec{a}}{|\vec{a}|}$</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:space-between; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showSection('no7a')">← No.7① に戻る</button>
       <button class="btn btn-accent" onclick="showSection('quiz')">練習問題に挑戦！ →</button>
     </div>
   </div>
@@ -1910,10 +2101,20 @@
             <span class="u-title">空間と内積</span>
             <span class="u-count">6問</span>
           </button>
+          <button class="quiz-unit-btn u-no7a" onclick="startQuiz('no7a')">
+            <span class="u-num">No.7①</span>
+            <span class="u-title">四面体の重心</span>
+            <span class="u-count">6問</span>
+          </button>
+          <button class="quiz-unit-btn u-no7b" onclick="startQuiz('no7b')">
+            <span class="u-num">No.7②</span>
+            <span class="u-title">正四面体・内積</span>
+            <span class="u-count">6問</span>
+          </button>
           <button class="quiz-unit-btn u-all" onclick="startQuiz('all')">
             <span class="u-num">全</span>
             <span class="u-title">全範囲<br>まとめ</span>
-            <span class="u-count">79問</span>
+            <span class="u-count">91問</span>
           </button>
         </div>
       </div>
@@ -1962,7 +2163,7 @@
 // ═══════════════════════════════════════
 //  Navigation
 // ═══════════════════════════════════════
-const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','no4a','no4b','no5a','no5b','no6a','no6b','quiz'];
+const sectionIds = ['home','no0','no1a','no1b','no2a','no2b','no3a','no3b','no4a','no4b','no5a','no5b','no6a','no6b','no7a','no7b','quiz'];
 
 function showSection(id) {
   sectionIds.forEach(s => document.getElementById('sec-'+s).classList.remove('active'));
@@ -1987,6 +2188,8 @@ function showSection(id) {
   if (id === 'no5b' && !no5bInit) initNo5b();
   if (id === 'no6a' && !no6aInit) initNo6a();
   if (id === 'no6b' && !no6bInit) initNo6b();
+  if (id === 'no7a' && !no7aInit) initNo7a();
+  if (id === 'no7b' && !no7bInit) initNo7b();
   if (id === 'quiz') showQuizMenu();
 }
 
@@ -3074,6 +3277,80 @@ const questions = [
     ans: 0,
     exp: '$\\overrightarrow{AB}=(-8,-12,-4)$、$\\overrightarrow{OP}=(4-8t,4-12t,1-4t)$、$z=0$ より $t=\\frac{1}{4}$、$P(2,1,0)$',
   },
+  // No.7①
+  {
+    q: '四面体 ABCD で $\\overrightarrow{AB}=\\vec{b}$, $\\overrightarrow{AC}=\\vec{c}$, $\\overrightarrow{AD}=\\vec{d}$ とする。$\\triangle BCD$ の重心 G に対して $\\overrightarrow{AG}$ は？',
+    opts: ['$\\dfrac{\\vec{b}+\\vec{c}+\\vec{d}}{3}$', '$\\dfrac{\\vec{b}+\\vec{c}+\\vec{d}}{4}$', '$\\dfrac{\\vec{b}+\\vec{c}+\\vec{d}}{2}$', '$\\vec{b}+\\vec{c}+\\vec{d}$'],
+    ans: 0,
+    exp: '重心の公式：$\\overrightarrow{AG}=\\frac{\\overrightarrow{AB}+\\overrightarrow{AC}+\\overrightarrow{AD}}{3}=\\frac{\\vec{b}+\\vec{c}+\\vec{d}}{3}$',
+  },
+  {
+    q: '辺 AB を 1:1 に内分する点 K. $\\overrightarrow{AK}$ は？（$\\overrightarrow{AB}=\\vec{b}$）',
+    opts: ['$\\dfrac{1}{2}\\vec{b}$', '$\\dfrac{1}{3}\\vec{b}$', '$\\dfrac{2}{3}\\vec{b}$', '$2\\vec{b}$'],
+    ans: 0,
+    exp: '1:1 内分なので $\\overrightarrow{AK}=\\frac{1}{2}\\overrightarrow{AB}=\\frac{1}{2}\\vec{b}$',
+  },
+  {
+    q: '辺 BC を 2:1 に内分する点 L. $\\overrightarrow{AL}$ は？（$\\overrightarrow{AB}=\\vec{b}$, $\\overrightarrow{AC}=\\vec{c}$）',
+    opts: ['$\\dfrac{1}{3}\\vec{b}+\\dfrac{2}{3}\\vec{c}$', '$\\dfrac{2}{3}\\vec{b}+\\dfrac{1}{3}\\vec{c}$', '$\\dfrac{1}{2}(\\vec{b}+\\vec{c})$', '$\\dfrac{1}{3}\\vec{c}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AL}=\\overrightarrow{AB}+\\frac{2}{3}\\overrightarrow{BC}=\\vec{b}+\\frac{2}{3}(\\vec{c}-\\vec{b})=\\frac{1}{3}\\vec{b}+\\frac{2}{3}\\vec{c}$',
+  },
+  {
+    q: '辺 CD を 5:1 に内分する点 M. $\\overrightarrow{AM}$ は？（$\\overrightarrow{AC}=\\vec{c}$, $\\overrightarrow{AD}=\\vec{d}$）',
+    opts: ['$\\dfrac{1}{6}\\vec{c}+\\dfrac{5}{6}\\vec{d}$', '$\\dfrac{5}{6}\\vec{c}+\\dfrac{1}{6}\\vec{d}$', '$\\dfrac{1}{2}(\\vec{c}+\\vec{d})$', '$\\dfrac{2}{3}\\vec{c}+\\dfrac{1}{3}\\vec{d}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AM}=\\overrightarrow{AC}+\\frac{5}{6}\\overrightarrow{CD}=\\vec{c}+\\frac{5}{6}(\\vec{d}-\\vec{c})=\\frac{1}{6}\\vec{c}+\\frac{5}{6}\\vec{d}$',
+  },
+  {
+    q: '$\\triangle KLM$ の重心 G\' の $\\overrightarrow{AG\'}$ は？（AK, AL, AM は前問参照）',
+    opts: ['$\\dfrac{5}{18}(\\vec{b}+\\vec{c}+\\vec{d})$', '$\\dfrac{1}{3}(\\vec{b}+\\vec{c}+\\vec{d})$', '$\\dfrac{5}{9}(\\vec{b}+\\vec{c}+\\vec{d})$', '$\\dfrac{5}{6}(\\vec{b}+\\vec{c}+\\vec{d})$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AG\'}=\\frac{\\overrightarrow{AK}+\\overrightarrow{AL}+\\overrightarrow{AM}}{3}=\\frac{\\frac{1}{2}\\vec{b}+(\\frac{1}{3}\\vec{b}+\\frac{2}{3}\\vec{c})+(\\frac{1}{6}\\vec{c}+\\frac{5}{6}\\vec{d})}{3}=\\frac{5}{18}(\\vec{b}+\\vec{c}+\\vec{d})$',
+  },
+  {
+    q: '$\\overrightarrow{AG\'}=\\frac{5}{6}\\overrightarrow{AG}$ から A, G, G\' は同一直線上にある。$AG\':G\'G$ は？',
+    opts: ['$5:1$', '$1:5$', '$5:6$', '$6:5$'],
+    ans: 0,
+    exp: '$\\overrightarrow{AG\'}=\\frac{5}{6}\\overrightarrow{AG}$ なので G\' は A から G への $\\frac{5}{6}$ の点。$AG\'=\\frac{5}{6}AG$, $G\'G=\\frac{1}{6}AG$ より $AG\':G\'G=5:1$',
+  },
+  // No.7②
+  {
+    q: '1辺の長さ 1 の正四面体 OABC で $\\overrightarrow{OA}=\\vec{a}$, $\\overrightarrow{OB}=\\vec{b}$ とする。$\\vec{a}\\cdot\\vec{b}$ は？',
+    opts: ['$\\dfrac{1}{2}$', '$1$', '$0$', '$\\dfrac{\\sqrt{3}}{2}$'],
+    ans: 0,
+    exp: '全ての辺が長さ1なので $\\angle AOB=60°$。$\\vec{a}\\cdot\\vec{b}=1\\cdot1\\cdot\\cos 60°=\\frac{1}{2}$',
+  },
+  {
+    q: '同じ正四面体で $\\vec{b}\\cdot\\vec{c}$, $\\vec{c}\\cdot\\vec{a}$ の値は？（$\\overrightarrow{OC}=\\vec{c}$）',
+    opts: ['$\\dfrac{1}{2}$', '$0$', '$1$', '$-\\dfrac{1}{2}$'],
+    ans: 0,
+    exp: '全ての辺が等長なので $\\vec{b}\\cdot\\vec{c}=\\vec{c}\\cdot\\vec{a}=\\frac{1}{2}$（対称性より）',
+  },
+  {
+    q: '辺 OA を 1:2 に内分する点 P. $\\overrightarrow{OP}$ を $\\vec{a}$ で表すと？',
+    opts: ['$\\dfrac{1}{3}\\vec{a}$', '$\\dfrac{2}{3}\\vec{a}$', '$\\dfrac{1}{2}\\vec{a}$', '$\\dfrac{1}{4}\\vec{a}$'],
+    ans: 0,
+    exp: '1:2 内分なので $\\overrightarrow{OP}=\\frac{1}{3}\\overrightarrow{OA}=\\frac{1}{3}\\vec{a}$',
+  },
+  {
+    q: '辺 BC の中点 Q. $\\overrightarrow{OQ}$ を $\\vec{b}$, $\\vec{c}$ で表すと？',
+    opts: ['$\\dfrac{\\vec{b}+\\vec{c}}{2}$', '$\\dfrac{\\vec{b}+\\vec{c}}{3}$', '$\\vec{b}+\\dfrac{1}{2}\\vec{c}$', '$\\dfrac{\\vec{b}-\\vec{c}}{2}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{OQ}=\\frac{\\overrightarrow{OB}+\\overrightarrow{OC}}{2}=\\frac{\\vec{b}+\\vec{c}}{2}$',
+  },
+  {
+    q: '$\\overrightarrow{PQ}$ を $\\vec{a}$, $\\vec{b}$, $\\vec{c}$ で表すと？',
+    opts: ['$-\\dfrac{1}{3}\\vec{a}+\\dfrac{1}{2}\\vec{b}+\\dfrac{1}{2}\\vec{c}$', '$\\dfrac{1}{3}\\vec{a}+\\dfrac{1}{2}\\vec{b}+\\dfrac{1}{2}\\vec{c}$', '$-\\dfrac{1}{2}\\vec{a}+\\dfrac{1}{3}\\vec{b}+\\dfrac{1}{3}\\vec{c}$', '$-\\dfrac{1}{3}\\vec{a}+\\vec{b}+\\vec{c}$'],
+    ans: 0,
+    exp: '$\\overrightarrow{PQ}=\\overrightarrow{OQ}-\\overrightarrow{OP}=\\frac{\\vec{b}+\\vec{c}}{2}-\\frac{1}{3}\\vec{a}=-\\frac{1}{3}\\vec{a}+\\frac{1}{2}\\vec{b}+\\frac{1}{2}\\vec{c}$',
+  },
+  {
+    q: '$\\vec{a}=(2,\\ -2,\\ 1)$ と同じ向きの単位ベクトルは？',
+    opts: ['$\\left(\\dfrac{2}{3},\\ -\\dfrac{2}{3},\\ \\dfrac{1}{3}\\right)$', '$\\left(\\dfrac{1}{2},\\ -\\dfrac{1}{2},\\ \\dfrac{1}{4}\\right)$', '$(2,\\ -2,\\ 1)$', '$\\left(\\dfrac{2}{\\sqrt{5}},\\ -\\dfrac{2}{\\sqrt{5}},\\ \\dfrac{1}{\\sqrt{5}}\\right)$'],
+    ans: 0,
+    exp: '$|\\vec{a}|=\\sqrt{4+4+1}=3$。単位ベクトル $=\\frac{\\vec{a}}{|\\vec{a}|}=\\left(\\frac{2}{3},-\\frac{2}{3},\\frac{1}{3}\\right)$',
+  },
 ];
 
 // ═══════════════════════════════════════
@@ -3404,6 +3681,18 @@ const qFigs = {
   // No.6
   67: c => qfig_box3d(c),
   75: c => qfig_tri3d(c),
+  // No.7
+  79: c => qfig_tetra3d(c),
+  80: c => qfig_tetra3d(c),
+  81: c => qfig_tetra3d(c),
+  82: c => qfig_tetra3d(c),
+  83: c => qfig_tetra3d(c),
+  84: c => qfig_tetra3d(c),
+  85: c => qfig_regtetra3d(c),
+  86: c => qfig_regtetra3d(c),
+  87: c => qfig_regtetra3d(c),
+  88: c => qfig_regtetra3d(c),
+  89: c => qfig_regtetra3d(c),
 };
 
 // ── 単元ごとの問題インデックス割り当て ──
@@ -3421,6 +3710,8 @@ const unitMap = {
   no5b: [61,62,63,64,65,66],
   no6a: [67,68,69,70,71,72],
   no6b: [73,74,75,76,77,78],
+  no7a: [79,80,81,82,83,84],
+  no7b: [85,86,87,88,89,90],
 };
 Object.entries(unitMap).forEach(([unit, idxs]) => {
   idxs.forEach(i => { if (questions[i]) questions[i].unit = unit; });
@@ -3444,6 +3735,8 @@ const unitLabel = {
   no5b: 'No.5② 成分と内積',
   no6a: 'No.6① 空間ベクトル',
   no6b: 'No.6② 空間と内積',
+  no7a: 'No.7① 四面体の重心',
+  no7b: 'No.7② 正四面体と内積',
   all:  '全範囲まとめ',
 };
 
@@ -4750,6 +5043,273 @@ function qfig_tri3d(c) {
   });
 }
 
+// ═══════════════════════════════════════
+//  No.7 Canvases
+// ═══════════════════════════════════════
+let no7aInit = false, no7bInit = false;
+
+function initNo7a() {
+  if (no7aInit) return; no7aInit = true;
+  drawTetra3d();
+  MathJax.typesetPromise([document.getElementById('sec-no7a')]);
+}
+
+function initNo7b() {
+  if (no7bInit) return; no7bInit = true;
+  drawRegTetra3d();
+  MathJax.typesetPromise([document.getElementById('sec-no7b')]);
+}
+
+// 四面体 ABCD の図（K, L, M の内分点と重心 G, G'）
+function drawTetra3d() {
+  const { ctx, w, h } = getCtx('canvas-no7a');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.18, oy = h * 0.75, sc = Math.min(w * 0.082, h * 0.13);
+
+  // 四面体の頂点 (x, y, z) — cabinet projection
+  const A3 = [1.5, 0.4, 4.2]; // 上頂点
+  const B3 = [0,   0,   0  ]; // 前左
+  const C3 = [3,   0,   0  ]; // 前右
+  const D3 = [1.5, 4,   0  ]; // 奥
+  const verts = [A3, B3, C3, D3];
+  const P = verts.map(v => proj3d(ox, oy, v[0], v[1], v[2], sc));
+  const [PA, PB, PC, PD] = P;
+
+  // 辺の描画（BD, CD は破線）
+  ctx.save();
+  ctx.strokeStyle = '#b0c4de'; ctx.lineWidth = 1.3; ctx.setLineDash([3,2]);
+  [[1,3],[2,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(P[a][0],P[a][1]); ctx.lineTo(P[b][0],P[b][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.8;
+  [[0,1],[0,2],[0,3],[1,2]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(P[a][0],P[a][1]); ctx.lineTo(P[b][0],P[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // K = AB の中点 (1:1内分)
+  const K3 = [0.75, 0.2, 2.1];
+  const PK = proj3d(ox, oy, K3[0], K3[1], K3[2], sc);
+  // L = BC の 2:1 内分 → B + 2/3 BC = B + 2/3(C-B)
+  const L3 = [2, 0, 0];
+  const PL = proj3d(ox, oy, L3[0], L3[1], L3[2], sc);
+  // M = CD の 5:1 内分 → C + 5/6 CD = C + 5/6(D-C)
+  const M3 = [3 + (5/6)*(1.5-3), (5/6)*4, 0];
+  const PM = proj3d(ox, oy, M3[0], M3[1], M3[2], sc);
+
+  // △KLM の辺（オレンジ）
+  ctx.save();
+  ctx.strokeStyle = '#e67e22'; ctx.lineWidth = 1.6;
+  [[PK,PL],[PL,PM],[PM,PK]].forEach(([p1,p2]) => {
+    ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // G = △BCD の重心
+  const G3 = [(0+3+1.5)/3, (0+0+4)/3, 0];
+  const PG = proj3d(ox, oy, G3[0], G3[1], G3[2], sc);
+  // G' = △KLM の重心
+  const G3p = [(K3[0]+L3[0]+M3[0])/3, (K3[1]+L3[1]+M3[1])/3, (K3[2]+0+0)/3];
+  const PGp = proj3d(ox, oy, G3p[0], G3p[1], G3p[2], sc);
+
+  // A-G 直線（薄い赤）
+  ctx.save();
+  ctx.strokeStyle = 'rgba(231,76,60,0.35)'; ctx.lineWidth = 1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(PA[0],PA[1]); ctx.lineTo(PG[0],PG[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  // 頂点ドット
+  [[PA,'#2980b9'],[PB,'#2980b9'],[PC,'#2980b9'],[PD,'#2980b9']].forEach(([pt,c]) => drawDot(ctx,pt[0],pt[1],c,5));
+  // 内分点ドット
+  [PK, PL, PM].forEach(pt => drawDot(ctx, pt[0], pt[1], '#e67e22', 4));
+  drawDot(ctx, PG[0], PG[1], '#e74c3c', 5);
+  drawDot(ctx, PGp[0], PGp[1], '#27ae60', 5);
+
+  // ラベル
+  ctx.save(); ctx.font = 'bold 13px serif';
+  ctx.fillStyle = '#2980b9';
+  ctx.fillText('A', PA[0]-4, PA[1]-10);
+  ctx.fillText('B', PB[0]-16, PB[1]+4);
+  ctx.fillText('C', PC[0]+6, PC[1]+4);
+  ctx.fillText('D', PD[0]+5, PD[1]+5);
+  ctx.font = '12px serif';
+  ctx.fillStyle = '#e67e22';
+  ctx.fillText('K', PK[0]-16, PK[1]);
+  ctx.fillText('L', PL[0]+5, PL[1]+13);
+  ctx.fillText('M', PM[0]+5, PM[1]+5);
+  ctx.font = 'bold 12px serif';
+  ctx.fillStyle = '#e74c3c'; ctx.fillText('G', PG[0]+5, PG[1]-4);
+  ctx.fillStyle = '#27ae60'; ctx.fillText("G'", PGp[0]+5, PGp[1]-4);
+  ctx.restore();
+}
+
+// 正四面体 OABC（P, Q 付き）
+function drawRegTetra3d() {
+  const { ctx, w, h } = getCtx('canvas-no7b');
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.22, oy = h * 0.72, sc = Math.min(w * 0.100, h * 0.16);
+
+  // 正四面体の頂点（近似）
+  const O3 = [1.5, 0.5, 3.0]; // 上頂点
+  const A3 = [3,   0,   0  ]; // 前右
+  const B3 = [0,   0,   0  ]; // 前左
+  const C3 = [1.5, 3,   0  ]; // 奥
+  const verts = [O3, A3, B3, C3];
+  const Pv = verts.map(v => proj3d(ox, oy, v[0], v[1], v[2], sc));
+  const [PO, PA, PB, PC] = Pv;
+
+  // 辺（OC, BC は破線）
+  ctx.save();
+  ctx.strokeStyle = '#b0c4de'; ctx.lineWidth = 1.3; ctx.setLineDash([3,2]);
+  [[0,3],[2,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.8;
+  [[0,1],[0,2],[1,2],[1,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // P = OA の 1:2 内分 → O + (1/3)(A-O)
+  const P3 = [O3[0]+(1/3)*(A3[0]-O3[0]), O3[1]+(1/3)*(A3[1]-O3[1]), O3[2]+(1/3)*(A3[2]-O3[2])];
+  const PP = proj3d(ox, oy, P3[0], P3[1], P3[2], sc);
+  // Q = BC の中点
+  const Q3 = [(B3[0]+C3[0])/2, (B3[1]+C3[1])/2, (B3[2]+C3[2])/2];
+  const PQ = proj3d(ox, oy, Q3[0], Q3[1], Q3[2], sc);
+
+  // PQ 線（赤破線）
+  ctx.save();
+  ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.8; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(PP[0],PP[1]); ctx.lineTo(PQ[0],PQ[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  // ドット
+  [[PO,'#2980b9'],[PA,'#2980b9'],[PB,'#2980b9'],[PC,'#2980b9']].forEach(([pt,c]) => drawDot(ctx,pt[0],pt[1],c,5));
+  drawDot(ctx, PP[0], PP[1], '#e74c3c', 5);
+  drawDot(ctx, PQ[0], PQ[1], '#27ae60', 5);
+
+  // ラベル
+  ctx.save(); ctx.font = 'bold 13px serif';
+  ctx.fillStyle = '#2980b9';
+  ctx.fillText('O', PO[0]-4, PO[1]-10);
+  ctx.fillText('A', PA[0]+6, PA[1]+4);
+  ctx.fillText('B', PB[0]-16, PB[1]+4);
+  ctx.fillText('C', PC[0]+5, PC[1]+5);
+  ctx.font = 'bold 12px serif';
+  ctx.fillStyle = '#e74c3c'; ctx.fillText('P', PP[0]+5, PP[1]-5);
+  ctx.fillStyle = '#27ae60'; ctx.fillText('Q', PQ[0]+5, PQ[1]+4);
+  ctx.fillStyle = '#888'; ctx.font = '11px sans-serif';
+  ctx.fillText('PQ⊥BC', PP[0]+14, (PP[1]+PQ[1])/2);
+  ctx.restore();
+}
+
+// クイズ図：四面体（No.7①）
+function qfig_tetra3d(c) {
+  const { ctx, w, h } = qfigCtx(c, 200);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.18, oy = h * 0.74, sc = Math.min(w * 0.079, h * 0.12);
+
+  const A3 = [1.5, 0.4, 4.2];
+  const B3 = [0,   0,   0  ];
+  const C3 = [3,   0,   0  ];
+  const D3 = [1.5, 4,   0  ];
+  const V = [A3, B3, C3, D3];
+  const Pv = V.map(v => proj3d(ox, oy, v[0], v[1], v[2], sc));
+  const [PA, PB, PC, PD] = Pv;
+
+  ctx.save();
+  ctx.strokeStyle = '#b0c4de'; ctx.lineWidth = 1.2; ctx.setLineDash([3,2]);
+  [[1,3],[2,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.6;
+  [[0,1],[0,2],[0,3],[1,2]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // △BCD を塗りつぶし
+  ctx.save();
+  ctx.fillStyle = 'rgba(231,76,60,0.08)';
+  ctx.beginPath(); ctx.moveTo(PB[0],PB[1]); ctx.lineTo(PC[0],PC[1]); ctx.lineTo(PD[0],PD[1]); ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  // G = △BCD の重心
+  const G3 = [(0+3+1.5)/3, (0+0+4)/3, 0];
+  const PG = proj3d(ox, oy, G3[0], G3[1], G3[2], sc);
+  drawDot(ctx, PG[0], PG[1], '#e74c3c', 4);
+
+  [[PA,'#2980b9'],[PB,'#2980b9'],[PC,'#2980b9'],[PD,'#2980b9']].forEach(([pt,col]) => drawDot(ctx,pt[0],pt[1],col,4));
+
+  ctx.save(); ctx.font = 'bold 11px serif'; ctx.fillStyle = '#2980b9';
+  ctx.fillText('A', PA[0]-4, PA[1]-8);
+  ctx.fillText('B', PB[0]-14, PB[1]+4);
+  ctx.fillText('C', PC[0]+5, PC[1]+4);
+  ctx.fillText('D', PD[0]+4, PD[1]+5);
+  ctx.fillStyle = '#e74c3c'; ctx.fillText('G', PG[0]+4, PG[1]-4);
+  ctx.restore();
+}
+
+// クイズ図：正四面体（No.7②）
+function qfig_regtetra3d(c) {
+  const { ctx, w, h } = qfigCtx(c, 200);
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+  const ox = w * 0.22, oy = h * 0.70, sc = Math.min(w * 0.095, h * 0.14);
+
+  const O3 = [1.5, 0.5, 3.0];
+  const A3 = [3,   0,   0  ];
+  const B3 = [0,   0,   0  ];
+  const C3 = [1.5, 3,   0  ];
+  const V = [O3, A3, B3, C3];
+  const Pv = V.map(v => proj3d(ox, oy, v[0], v[1], v[2], sc));
+  const [PO, PA, PB, PC] = Pv;
+
+  ctx.save();
+  ctx.strokeStyle = '#b0c4de'; ctx.lineWidth = 1.2; ctx.setLineDash([3,2]);
+  [[0,3],[2,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.6;
+  [[0,1],[0,2],[1,2],[1,3]].forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(Pv[a][0],Pv[a][1]); ctx.lineTo(Pv[b][0],Pv[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // P = OA の 1:2 内分
+  const P3 = [O3[0]+(1/3)*(A3[0]-O3[0]), O3[1]+(1/3)*(A3[1]-O3[1]), O3[2]+(1/3)*(A3[2]-O3[2])];
+  const PP = proj3d(ox, oy, P3[0], P3[1], P3[2], sc);
+  // Q = BC の中点
+  const Q3 = [(B3[0]+C3[0])/2, (B3[1]+C3[1])/2, 0];
+  const PQ = proj3d(ox, oy, Q3[0], Q3[1], Q3[2], sc);
+
+  // PQ（赤破線）
+  ctx.save();
+  ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.6; ctx.setLineDash([4,2]);
+  ctx.beginPath(); ctx.moveTo(PP[0],PP[1]); ctx.lineTo(PQ[0],PQ[1]); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  [[PO,'#2980b9'],[PA,'#2980b9'],[PB,'#2980b9'],[PC,'#2980b9']].forEach(([pt,c]) => drawDot(ctx,pt[0],pt[1],c,4));
+  drawDot(ctx, PP[0], PP[1], '#e74c3c', 4);
+  drawDot(ctx, PQ[0], PQ[1], '#27ae60', 4);
+
+  ctx.save(); ctx.font = 'bold 11px serif'; ctx.fillStyle = '#2980b9';
+  ctx.fillText('O', PO[0]-4, PO[1]-9);
+  ctx.fillText('A', PA[0]+5, PA[1]+4);
+  ctx.fillText('B', PB[0]-13, PB[1]+4);
+  ctx.fillText('C', PC[0]+4, PC[1]+5);
+  ctx.fillStyle = '#e74c3c'; ctx.fillText('P', PP[0]+4, PP[1]-5);
+  ctx.fillStyle = '#27ae60'; ctx.fillText('Q', PQ[0]+4, PQ[1]+4);
+  ctx.restore();
+}
+
 // 画面回転・リサイズ時にCanvasを再描画
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -4768,6 +5328,8 @@ window.addEventListener('resize', () => {
     if (no5bInit) { drawInnerProdComp(); drawPerpLine(); }
     if (no6aInit) { drawCoord3d(); drawDist3d(); }
     if (no6bInit) { drawInnerProd3d(); drawPerpLine3d(); }
+    if (no7aInit) { drawTetra3d(); }
+    if (no7bInit) { drawRegTetra3d(); }
   }, 150);
 });
 </script>
